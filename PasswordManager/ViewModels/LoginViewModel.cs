@@ -31,6 +31,7 @@ namespace PasswordManager.ViewModels
             {
                 validData = true;
             }
+
             return validData;
         }
 
