@@ -29,6 +29,7 @@ namespace PasswordManager.Repositories
             {
                 return;
             }
+
             List<UserModel> users = GetUsersFromJsonFile();
             users.Add(new UserModel { UserName = userModel.UserName, Password = SecretHasher.Hash(userModel.Password) });
             string newData = JsonSerializer.Serialize(users);

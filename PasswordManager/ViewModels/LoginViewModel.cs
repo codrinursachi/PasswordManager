@@ -1,7 +1,10 @@
-﻿using System;
+﻿using PasswordManager.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Security;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -10,20 +13,60 @@ namespace PasswordManager.ViewModels
 {
     class LoginViewModel : ViewModelBase
     {
+        public ICommand LoginCommand { get; }
         private string _username;
         private SecureString _password;
         private string _errorMessage;
         private bool _isViewVisible = true;
+        private UserRepository _userRepository;
 
         public LoginViewModel()
         {
+            _userRepository = new UserRepository();
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteLoginCommand);
+        }
+
+        public string Username
+        {
+            get => _username;
+            set
+            {
+                _username = value;
+                OnPropertyChanged(nameof(Username));
+            }
+        }
+        public SecureString Password
+        {
+            get => _password;
+            set
+            {
+                _password = value;
+                OnPropertyChanged(nameof(Password));
+            }
+        }
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set
+            {
+                _errorMessage = value;
+                OnPropertyChanged(nameof(ErrorMessage));
+            }
+        }
+        public bool IsViewVisible
+        {
+            get => _isViewVisible;
+            set
+            {
+                _isViewVisible = value;
+                OnPropertyChanged(nameof(IsViewVisible));
+            }
         }
 
         private bool CanExecuteLoginCommand(object obj)
         {
             bool validData;
-            if (string.IsNullOrEmpty(Username)||Username.Length<3||Password==null||Password.Length<3)
+            if (string.IsNullOrEmpty(Username) || Username.Length < 3 || Password == null || Password.Length < 3)
             {
                 validData = false;
             }
@@ -37,44 +80,15 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteLoginCommand(object obj)
         {
-            throw new NotImplementedException();
-        }
-
-        public ICommand LoginCommand{get;}
-        public string Username
-        {
-            get => _username; 
-            set
+            var isValidUser = _userRepository.AuthenticateUser(new NetworkCredential(Username, Password));
+            if (isValidUser)
             {
-                _username = value;
-                OnPropertyChanged(nameof(Username));
+                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username), null);
+                IsViewVisible = false;
             }
-        }
-        public SecureString Password
-        {
-            get => _password; 
-            set
+            else
             {
-                _password = value;
-                OnPropertyChanged(nameof(Password));
-            }
-        }
-        public string ErrorMessage
-        {
-            get => _errorMessage; 
-            set
-            {
-                _errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
-            }
-        }
-        public bool IsViewVisible
-        {
-            get => _isViewVisible; 
-            set
-            {
-                _isViewVisible = value;
-                OnPropertyChanged(nameof(IsViewVisible));
+                ErrorMessage = "Invalid username or password";
             }
         }
     }
