@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.Models
 {
-    internal class UserModel
+    public class UserModel
     {
         public string UserName { get; set; }
-        public string Password { get; set; }
+        public string PasswordHash { get; set; }
     }
 }
