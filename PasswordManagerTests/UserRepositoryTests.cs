@@ -31,5 +31,14 @@ namespace PasswordManagerTests
             repository.Add(new UserModel { UserName = "admin", Password = "admin" });
             Assert.True(repository.AuthenticateUser(new NetworkCredential("admin", "admin")));
         }
+
+        [Fact]
+        public void ShouldEditUserPasswordWhenRequested()
+        {
+            UserRepository repository = new();
+            repository.Add(new UserModel { UserName = "admin", Password = "admin" });
+            repository.Edit(new UserModel { UserName="admin", Password="root"});
+            Assert.True(repository.AuthenticateUser(new NetworkCredential("admin", "root")));
+        }
     }
 }
