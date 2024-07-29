@@ -1,4 +1,5 @@
-﻿using PasswordManager.Repositories;
+﻿using PasswordManager.Models;
+using PasswordManager.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,7 @@ namespace PasswordManager.ViewModels
     class LoginViewModel : ViewModelBase
     {
         public ICommand LoginCommand { get; }
+        public ICommand RegisterCommand { get; }
         private string _username;
         private SecureString _password;
         private string _errorMessage;
@@ -23,7 +25,8 @@ namespace PasswordManager.ViewModels
         public LoginViewModel()
         {
             _userRepository = new UserRepository();
-            LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteLoginCommand);
+            LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteOperationCommand);
+            RegisterCommand = new ViewModelCommand(ExecuteRegisterCommand, CanExecuteOperationCommand);
         }
 
         public string Username
@@ -63,7 +66,7 @@ namespace PasswordManager.ViewModels
             }
         }
 
-        private bool CanExecuteLoginCommand(object obj)
+        private bool CanExecuteOperationCommand(object obj)
         {
             bool validData;
             if (string.IsNullOrEmpty(Username) || Username.Length < 3 || Password == null || Password.Length < 3)
@@ -89,6 +92,21 @@ namespace PasswordManager.ViewModels
             else
             {
                 ErrorMessage = "Invalid username or password";
+            }
+        }
+
+        private void ExecuteRegisterCommand(object obj)
+        {
+            _userRepository.Add(new UserModel { UserName = Username, Password = new NetworkCredential("", Password).Password });
+            var isValidUser = _userRepository.AuthenticateUser(new NetworkCredential(Username, Password));
+            if (isValidUser)
+            {
+                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username), null);
+                IsViewVisible = false;
+            }
+            else
+            {
+                ErrorMessage = "Username already taken";
             }
         }
     }
