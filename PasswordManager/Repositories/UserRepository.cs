@@ -30,7 +30,7 @@ namespace PasswordManager.Repositories
                 return;
             }
             List<UserModel> users = GetUsersFromJsonFile();
-            users.Add(new UserModel { UserName=userModel.UserName, Password= SecretHasher.Hash(userModel.Password) });
+            users.Add(new UserModel { UserName = userModel.UserName, Password = SecretHasher.Hash(userModel.Password) });
             string newData = JsonSerializer.Serialize(users);
             File.WriteAllText(fileName, newData);
         }
@@ -43,19 +43,20 @@ namespace PasswordManager.Repositories
                 return false;
             }
 
-            return SecretHasher.Verify(credential.Password, new NetworkCredential("",user.Password).Password);
+            return SecretHasher.Verify(credential.Password, new NetworkCredential("", user.Password).Password);
         }
 
         public void Edit(UserModel userModel)
         {
-            throw new NotImplementedException();
+            var users = GetUsersFromJsonFile();
+            var user = users.FirstOrDefault(u => u.UserName == userModel.UserName);
+            user.Password = SecretHasher.Hash(userModel.Password);
+            File.WriteAllText(fileName, JsonSerializer.Serialize(users));
         }
 
         public UserModel GetByUsername(string username)
         {
-            string jsonString = File.ReadAllText(fileName);
             List<UserModel> users = GetUsersFromJsonFile();
-
             return users.FirstOrDefault(u => u.UserName == username);
         }
 
