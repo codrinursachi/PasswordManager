@@ -63,10 +63,10 @@ namespace PasswordManager.Repositories
             {
                 users = JsonSerializer.Deserialize<List<UserModel>>(jsonString)!;
             }
-            catch
+            catch(JsonException)
             {
-
             }
+
             return users?.FirstOrDefault(u => u.UserName == username);
         }
 
