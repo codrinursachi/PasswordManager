@@ -29,16 +29,21 @@ namespace PasswordManager.Repositories
             {
                 return;
             }
-
             List<UserModel> users = GetUsersFromJsonFile();
-            users.Add(userModel);
+            users.Add(new UserModel { UserName=userModel.UserName, Password= SecretHasher.Hash(userModel.Password) });
             string newData = JsonSerializer.Serialize(users);
             File.WriteAllText(fileName, newData);
         }
 
         public bool AuthenticateUser(NetworkCredential credential)
         {
-            throw new NotImplementedException();
+            var user = GetByUsername(credential.UserName);
+            if (user == null)
+            {
+                return false;
+            }
+
+            return SecretHasher.Verify(credential.Password, new NetworkCredential("",user.Password).Password);
         }
 
         public void Edit(UserModel userModel)
@@ -72,7 +77,10 @@ namespace PasswordManager.Repositories
         {
             List<UserModel> users = [];
             string allUsers = File.ReadAllText(fileName);
-            users = JsonSerializer.Deserialize<List<UserModel>>(allUsers)!;
+            if (allUsers.Length != 0)
+            {
+                users = JsonSerializer.Deserialize<List<UserModel>>(allUsers)!;
+            }
 
             return users;
         }

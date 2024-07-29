@@ -10,7 +10,7 @@ namespace PasswordManagerTests
         public void ShouldAddAndReturnUsersWhenRequested()
         {
             UserRepository repository = new();
-            repository.Add(new UserModel { UserName = "admin", Password = new NetworkCredential("","admin").SecurePassword});
+            repository.Add(new UserModel { UserName = "admin", Password = "admin" });
             Assert.NotNull(repository.GetByUsername("admin"));
             Assert.Null(repository.GetByUsername("admin2"));
         }
@@ -19,7 +19,7 @@ namespace PasswordManagerTests
         public void ShouldRemoveUserWhenRequested()
         {
             UserRepository repository = new();
-            repository.Add(new UserModel { UserName = "admin", Password = new NetworkCredential("", "admin").SecurePassword });
+            repository.Add(new UserModel { UserName = "admin", Password = "admin" });
             repository.Remove("admin");
             Assert.Null(repository.GetByUsername("admin"));
         }
@@ -28,7 +28,7 @@ namespace PasswordManagerTests
         public void ShouldAuthenticateUserWhenRequested()
         {
             UserRepository repository = new();
-            repository.Add(new UserModel { UserName = "admin", Password = new NetworkCredential("", "admin").SecurePassword });
+            repository.Add(new UserModel { UserName = "admin", Password = "admin" });
             Assert.True(repository.AuthenticateUser(new NetworkCredential("admin", "admin")));
         }
     }
