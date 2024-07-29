@@ -19,7 +19,7 @@ namespace PasswordManager.Repositories
         {
             if (!File.Exists(fileName))
             {
-                File.Create(fileName);
+                File.WriteAllText(fileName, JsonSerializer.Serialize(new List<UserModel>()));
             }
         }
 
@@ -29,27 +29,11 @@ namespace PasswordManager.Repositories
             {
                 return;
             }
-            List<UserModel> users = GetUsersFromJsonFile();
 
-            users.Add(new UserModel { UserName = userModel.UserName, Password = SecretHasher.Hash(userModel.Password) });
+            List<UserModel> users = GetUsersFromJsonFile();
+            users.Add(userModel);
             string newData = JsonSerializer.Serialize(users);
             File.WriteAllText(fileName, newData);
-        }
-
-        private List<UserModel> GetUsersFromJsonFile()
-        {
-            List<UserModel> users = new List<UserModel>();
-            try
-            {
-                string allUsers = File.ReadAllText(fileName);
-                users = JsonSerializer.Deserialize<List<UserModel>>(allUsers)!;
-            }
-            catch (JsonException)
-            {
-
-            }
-
-            return users;
         }
 
         public bool AuthenticateUser(NetworkCredential credential)
@@ -82,6 +66,15 @@ namespace PasswordManager.Repositories
             users.Remove(user);
             string newData = JsonSerializer.Serialize(users);
             File.WriteAllText(fileName, newData);
+        }
+
+        private List<UserModel> GetUsersFromJsonFile()
+        {
+            List<UserModel> users = [];
+            string allUsers = File.ReadAllText(fileName);
+            users = JsonSerializer.Deserialize<List<UserModel>>(allUsers)!;
+
+            return users;
         }
     }
 }
