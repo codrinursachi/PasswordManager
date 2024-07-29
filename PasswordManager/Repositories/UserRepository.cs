@@ -29,20 +29,27 @@ namespace PasswordManager.Repositories
             {
                 return;
             }
+            List<UserModel> users = GetUsersFromJsonFile();
+
+            users.Add(new UserModel { UserName = userModel.UserName, Password = SecretHasher.Hash(userModel.Password) });
+            string newData = JsonSerializer.Serialize(users);
+            File.WriteAllText(fileName, newData);
+        }
+
+        private List<UserModel> GetUsersFromJsonFile()
+        {
             List<UserModel> users = new List<UserModel>();
             try
             {
                 string allUsers = File.ReadAllText(fileName);
                 users = JsonSerializer.Deserialize<List<UserModel>>(allUsers)!;
             }
-            catch
+            catch (JsonException)
             {
 
             }
 
-            users.Add(new UserModel { UserName = userModel.UserName, Password = SecretHasher.Hash(userModel.Password) });
-            string newData = JsonSerializer.Serialize<List<UserModel>>(users);
-            File.WriteAllText(fileName, newData);
+            return users;
         }
 
         public bool AuthenticateUser(NetworkCredential credential)
@@ -58,21 +65,23 @@ namespace PasswordManager.Repositories
         public UserModel GetByUsername(string username)
         {
             string jsonString = File.ReadAllText(fileName);
-            List<UserModel> users=null;
-            try
-            {
-                users = JsonSerializer.Deserialize<List<UserModel>>(jsonString)!;
-            }
-            catch(JsonException)
-            {
-            }
+            List<UserModel> users = GetUsersFromJsonFile();
 
-            return users?.FirstOrDefault(u => u.UserName == username);
+            return users.FirstOrDefault(u => u.UserName == username);
         }
 
         public void Remove(string username)
         {
-            throw new NotImplementedException();
+            List<UserModel> users = GetUsersFromJsonFile();
+            var user = users.FirstOrDefault(u => u.UserName == username);
+            if (user == null)
+            {
+                return;
+            }
+
+            users.Remove(user);
+            string newData = JsonSerializer.Serialize(users);
+            File.WriteAllText(fileName, newData);
         }
     }
 }
