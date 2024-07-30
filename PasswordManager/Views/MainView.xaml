@@ -3,12 +3,31 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PasswordManager.Views"
+        xmlns:local="clr-namespace:PasswordManager.Views" xmlns:viewModel="clr-namespace:PasswordManager.ViewModels"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800"
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True">
+
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewModel:AllPasswordsViewModel}">
+            <local:AllPasswordsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:FavoritesViewModel}">
+            <local:AllPasswordsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:LabelsViewModel}">
+            <local:AllPasswordsView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewModel:DirectoryViewModel}">
+            <local:AllPasswordsView/>
+        </DataTemplate>
+    </Window.Resources>
 
     <Border CornerRadius="10"
             BorderThickness="1">
@@ -73,30 +92,35 @@
                     </StackPanel>
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color1}">
+                                 Tag="{StaticResource color1}"
+                                 Command="{Binding ShowAllPasswordsView}"
+                                 IsChecked="True">
 
                         <TextBlock Text="All Passwords" Style="{StaticResource menuButtonText}"/>
 
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color2}">
+                                 Tag="{StaticResource color2}"
+                                 Command="{Binding ShowFavoritesView}">
 
                         <TextBlock Text="Favorites" Style="{StaticResource menuButtonText}"/>
 
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color3}">
+                                 Tag="{StaticResource color3}"
+                                 Command="{Binding ShowLabelsView}">
 
                         <TextBlock Text="Labels" Style="{StaticResource menuButtonText}"/>
 
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color4}">
+                                 Tag="{StaticResource color4}"
+                                 Command="{Binding ShowDirectoryView}">
 
-                        <TextBlock Text="Root" Style="{StaticResource menuButtonText}"/>
+                        <TextBlock Text="Root Directory" Style="{StaticResource menuButtonText}"/>
 
                     </RadioButton>
 
@@ -118,7 +142,8 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
                         <RowDefinition Height="35"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="165*"/>
+                        <RowDefinition Height="29*"/>
                     </Grid.RowDefinitions>
 
                     <StackPanel x:Name="pnlControlBar"
@@ -156,7 +181,18 @@
 
                     </StackPanel>
 
-                    
+                    <TextBlock Text="{Binding Caption}"
+                               Margin="25,0,0,0"
+                               Grid.Row="1"
+                               Foreground="{StaticResource titleColor2}"
+                               FontSize="16"
+                               FontFamily="Montserrat"
+                               FontWeight="Medium"
+                               VerticalAlignment="Center"/>
+
+                    <ContentControl Content="{Binding CurrentChildView}"
+                                    Grid.Row="2" Grid.RowSpan="2"
+                                    Margin="25"/>
 
                 </Grid>
 
