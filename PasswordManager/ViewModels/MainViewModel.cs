@@ -35,7 +35,7 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(Caption));
             }
         }
-        internal ViewModelBase CurrentChildView
+        public ViewModelBase CurrentChildView
         {
             get => _currentChildView;
             set

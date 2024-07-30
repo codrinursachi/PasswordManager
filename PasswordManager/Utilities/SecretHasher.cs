@@ -11,18 +11,17 @@ namespace PasswordManager.Utilities
     {
         private const int _saltSize = 16; // 128 bits
         private const int _keySize = 32; // 256 bits
-        private const int _iterations = 50000;
         private static readonly HashAlgorithmName _algorithm = HashAlgorithmName.SHA256;
 
         private const char segmentDelimiter = ':';
 
-        public static string Hash(string input)
+        public static string Hash(string input, int iterations)
         {
             byte[] salt = RandomNumberGenerator.GetBytes(_saltSize);
             byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
                 input,
                 salt,
-                _iterations,
+                iterations,
                 _algorithm,
                 _keySize
             );
@@ -30,7 +29,7 @@ namespace PasswordManager.Utilities
                 segmentDelimiter,
                 Convert.ToHexString(hash),
                 Convert.ToHexString(salt),
-                _iterations,
+                iterations,
                 _algorithm
             );
         }

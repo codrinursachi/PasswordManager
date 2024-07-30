@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PasswordManager.Views" xmlns:viewModel="clr-namespace:PasswordManager.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800"
+        Title="MainWindow" Height="700" Width="1300"
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True">
@@ -19,13 +19,13 @@
             <local:AllPasswordsView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:FavoritesViewModel}">
-            <local:AllPasswordsView/>
+            <local:FavoritesView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:LabelsViewModel}">
-            <local:AllPasswordsView/>
+            <local:LabelsView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:DirectoryViewModel}">
-            <local:AllPasswordsView/>
+            <local:DirectoryView/>
         </DataTemplate>
     </Window.Resources>
 
@@ -142,8 +142,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
                         <RowDefinition Height="35"/>
-                        <RowDefinition Height="165*"/>
-                        <RowDefinition Height="29*"/>
+                        <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
                     <StackPanel x:Name="pnlControlBar"
@@ -191,7 +190,7 @@
                                VerticalAlignment="Center"/>
 
                     <ContentControl Content="{Binding CurrentChildView}"
-                                    Grid.Row="2" Grid.RowSpan="2"
+                                    Grid.Row="2"
                                     Margin="25"/>
 
                 </Grid>

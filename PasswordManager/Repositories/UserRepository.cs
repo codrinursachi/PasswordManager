@@ -31,7 +31,7 @@ namespace PasswordManager.Repositories
             }
 
             List<UserModel> users = GetUsersFromJsonFile();
-            users.Add(new UserModel { UserName = userModel.UserName, Password = SecretHasher.Hash(userModel.Password) });
+            users.Add(new UserModel { UserName = userModel.UserName, Password = SecretHasher.Hash(userModel.Password,50000) });
             string newData = JsonSerializer.Serialize(users);
             File.WriteAllText(fileName, newData);
         }
@@ -51,7 +51,7 @@ namespace PasswordManager.Repositories
         {
             var users = GetUsersFromJsonFile();
             var user = users.FirstOrDefault(u => u.UserName == userModel.UserName);
-            user.Password = SecretHasher.Hash(userModel.Password);
+            user.Password = SecretHasher.Hash(userModel.Password,50000);
             File.WriteAllText(fileName, JsonSerializer.Serialize(users));
         }
 
