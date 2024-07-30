@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.Models
 {
-    class PasswordModel
+    public class PasswordModel
     {
         public string username;
         public string password;
@@ -15,5 +15,7 @@ namespace PasswordManager.Models
         public DateTime expirationTime;
         public string categoryPath;
         public string tags;
+        public bool favorite;
+        public string database;
     }
 }

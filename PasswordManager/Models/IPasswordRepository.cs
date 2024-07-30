@@ -11,7 +11,7 @@ namespace PasswordManager.Models
     interface IPasswordRepository
     {
         void Add(PasswordModel passwordModel, string encryptionData);
-        void Edit(PasswordModel passwordModel, string encryptionData);
+        void Edit(PasswordModel currentPasswordModel, PasswordModel newPasswordModel, string encryptionData);
         void Remove(PasswordModel passwordModel, string encryptionData);
         ObservableCollection<PasswordModel> GetAllPasswords(string encryptionData);
     }
