@@ -16,7 +16,7 @@ namespace PasswordManager.ViewModels
             ShowAllPasswordsView = new ViewModelCommand(ExecuteShowAllPasswordsView);
             ShowFavoritesView = new ViewModelCommand(ExecuteShowFavoritesView);
             ShowLabelsView = new ViewModelCommand(ExecuteShowLabelsView);
-            ShowDirectoryView = new ViewModelCommand(ExecuteShowDirectoryView);
+            ShowCategoryView = new ViewModelCommand(ExecuteShowCategoryView);
 
             ExecuteShowAllPasswordsView(null);
         }
@@ -24,7 +24,7 @@ namespace PasswordManager.ViewModels
         public ICommand ShowAllPasswordsView { get; }
         public ICommand ShowFavoritesView { get; }
         public ICommand ShowLabelsView { get; }
-        public ICommand ShowDirectoryView { get; }
+        public ICommand ShowCategoryView { get; }
 
         public string Caption
         {
@@ -45,10 +45,10 @@ namespace PasswordManager.ViewModels
             }
         }
 
-        private void ExecuteShowDirectoryView(object obj)
+        private void ExecuteShowCategoryView(object obj)
         {
-            CurrentChildView = new DirectoryViewModel();
-            Caption = "Directories";
+            CurrentChildView = new CategoryViewModel();
+            Caption = "Categories";
         }
 
         private void ExecuteShowLabelsView(object obj)

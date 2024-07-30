@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.ViewModels
 {
-    class DirectoryViewModel:ViewModelBase
+    class CategoryViewModel:ViewModelBase
     {
     }
 }

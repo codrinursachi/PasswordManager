@@ -19,7 +19,7 @@ namespace PasswordManager.Repositories
         {
             if (!File.Exists(fileName))
             {
-                File.WriteAllText(fileName, JsonSerializer.Serialize(new List<UserModel>()));
+                File.Create(fileName);
             }
         }
 
