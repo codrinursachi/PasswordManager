@@ -15,9 +15,9 @@ namespace PasswordManagerTests
         public void ShouldAddAndRetrievePasswordsCorrectly()
         {
             PasswordRepository passwordRepository = new();
-            PasswordModel password = new PasswordModel { username = "admin", password = "admin", database = "default", url = "admin.com" };
-            passwordRepository.Add(password, SecretHasher.Hash("admin", 40000));
-            Assert.NotNull(passwordRepository.GetAllPasswords(SecretHasher.Hash("admin", 40000)).FirstOrDefault(p => p.username == "admin" && p.password == "admin" && p.database == "default" && p.url == "admin.com"));
+            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Database = "default", Url = "admin.com" };
+            passwordRepository.Add(password, "admin");
+            Assert.NotNull(passwordRepository.GetAllPasswords("admin").FirstOrDefault(p => p.Username == "admin" && p.Password == "admin" && p.Database == "default" && p.Url == "admin.com"));
         }
     }
 }
