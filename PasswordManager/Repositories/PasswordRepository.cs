@@ -20,14 +20,18 @@ namespace PasswordManager.Repositories
         public void Add(PasswordModel passwordModel, string encryptionData)
         {
             ObservableCollection<PasswordModel> passwords = GetAllPasswords(encryptionData);
-
-            if (passwords.FirstOrDefault(p => p==passwordModel) != null)
+            if (passwords.FirstOrDefault(p => p == passwordModel) != null)
             {
                 return;
             }
 
             passwords.Add(passwordModel);
-            using (AesCryptoServiceProvider AES = new())
+            WritePasswords(encryptionData, passwords);
+        }
+
+        private void WritePasswords(string encryptionData, ObservableCollection<PasswordModel> passwords)
+        {
+            using (var AES = Aes.Create())
             {
                 UnicodeEncoding UE = new UnicodeEncoding();
                 byte[] passwordBytes = UE.GetBytes(encryptionData);
@@ -36,7 +40,7 @@ namespace PasswordManager.Repositories
                 AES.Key = aesKey;
                 AES.IV = aesIV;
                 ICryptoTransform encryptor = AES.CreateEncryptor();
-                using (FileStream fileStream = new(fileName, FileMode.Open, FileAccess.Write))
+                using (FileStream fileStream = new(fileName, FileMode.Create, FileAccess.Write))
                 {
                     using (CryptoStream cryptoStream = new(fileStream, encryptor, CryptoStreamMode.Write))
                     {
@@ -59,7 +63,7 @@ namespace PasswordManager.Repositories
                 return;
             }
 
-            passwords.Remove(currentPasswordModel);
+            Remove(currentPasswordModel, encryptionData);
             Add(newPasswordModel, encryptionData);
         }
 
@@ -67,7 +71,7 @@ namespace PasswordManager.Repositories
         {
             UnicodeEncoding UE = new UnicodeEncoding();
             ObservableCollection<PasswordModel> passwords = new();
-            using (AesCryptoServiceProvider AES = new())
+            using (var AES = Aes.Create())
             {
                 byte[] passwordBytes = UE.GetBytes(encryptionData);
                 byte[] aesKey = SHA256.HashData(passwordBytes);
@@ -96,7 +100,9 @@ namespace PasswordManager.Repositories
 
         public void Remove(PasswordModel passwordModel, string encryptionData)
         {
-            throw new NotImplementedException();
+            ObservableCollection<PasswordModel> passwords = GetAllPasswords(encryptionData);
+            passwords.Remove(passwordModel);
+            WritePasswords(encryptionData, passwords);
         }
     }
 }
