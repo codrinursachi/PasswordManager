@@ -21,7 +21,7 @@ namespace PasswordManager.Repositories
         {
             ObservableCollection<PasswordModel> passwords = GetAllPasswords(encryptionData);
 
-            if (passwords.FirstOrDefault(p => p.Username == passwordModel.Username && p.Url == passwordModel.Url) != null)
+            if (passwords.FirstOrDefault(p => p==passwordModel) != null)
             {
                 return;
             }
