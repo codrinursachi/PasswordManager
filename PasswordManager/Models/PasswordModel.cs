@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.Models
 {
-    public class PasswordModel
+    public record PasswordModel
     {
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;

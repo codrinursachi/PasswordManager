@@ -19,38 +19,23 @@ namespace PasswordManager.Repositories
 
         public void Add(PasswordModel passwordModel, string encryptionData)
         {
-            UnicodeEncoding UE = new UnicodeEncoding();
-            ObservableCollection<PasswordModel> passwords = new();
-            using (AesCryptoServiceProvider AES = new AesCryptoServiceProvider())
+            ObservableCollection<PasswordModel> passwords = GetAllPasswords(encryptionData);
+
+            if (passwords.FirstOrDefault(p => p.Username == passwordModel.Username && p.Url == passwordModel.Url) != null)
             {
+                return;
+            }
+
+            passwords.Add(passwordModel);
+            using (AesCryptoServiceProvider AES = new())
+            {
+                UnicodeEncoding UE = new UnicodeEncoding();
                 byte[] passwordBytes = UE.GetBytes(encryptionData);
                 byte[] aesKey = SHA256.HashData(passwordBytes);
                 byte[] aesIV = MD5.HashData(passwordBytes);
                 AES.Key = aesKey;
                 AES.IV = aesIV;
                 ICryptoTransform encryptor = AES.CreateEncryptor();
-                ICryptoTransform decryptor = AES.CreateDecryptor();
-                using (FileStream fileStream = new(fileName, FileMode.OpenOrCreate, FileAccess.Read))
-                {
-                    using (CryptoStream cryptoStream = new(fileStream, decryptor, CryptoStreamMode.Read))
-                    {
-                        using (StreamReader streamReader = new(cryptoStream))
-                        {
-                            if (File.ReadAllText(fileName).Length > 0)
-                            {
-                                string data = streamReader.ReadToEnd();
-                                passwords = JsonSerializer.Deserialize<ObservableCollection<PasswordModel>>(data);
-                            }
-                        }
-                    }
-                }
-
-                if (passwords.FirstOrDefault(p => p.Username == passwordModel.Username && p.Url == passwordModel.Url) != null)
-                {
-                    return;
-                }
-
-                passwords.Add(passwordModel);
                 using (FileStream fileStream = new(fileName, FileMode.Open, FileAccess.Write))
                 {
                     using (CryptoStream cryptoStream = new(fileStream, encryptor, CryptoStreamMode.Write))
@@ -67,7 +52,15 @@ namespace PasswordManager.Repositories
 
         public void Edit(PasswordModel currentPasswordModel, PasswordModel newPasswordModel, string encryptionData)
         {
-            throw new NotImplementedException();
+            ObservableCollection<PasswordModel> passwords = GetAllPasswords(encryptionData);
+            var currentPassword = passwords.FirstOrDefault(p => p == currentPasswordModel);
+            if (currentPassword == null)
+            {
+                return;
+            }
+
+            passwords.Remove(currentPasswordModel);
+            Add(newPasswordModel, encryptionData);
         }
 
         public ObservableCollection<PasswordModel> GetAllPasswords(string encryptionData)
