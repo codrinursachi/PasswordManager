@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PasswordManager.Views" xmlns:viewModel="clr-namespace:PasswordManager.ViewModels"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="1300"
+        Title="MainWindow" Height="700" Width="1600"
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True"
@@ -193,21 +193,26 @@
                                    FontFamily="Montserrat"
                                    FontWeight="Medium"
                                    VerticalAlignment="Center"/>
-                        <Button x:Name="btnAddPass"
-                                Grid.Column="1"
-                                Style="{StaticResource actionButton}"
-                                Margin="0,0,25,0"
-                                HorizontalAlignment="Right"
-                                Click="btnAddPass_Click">
-                            <TextBlock Text="+ Add Password"
-                                       Foreground="{StaticResource titleColor2}"
-                                       FontSize="16"
-                                       FontFamily="Montserrat"
-                                       FontWeight="Medium"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Right"/>                            
-                        </Button>
-                        
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+
+                            <Button x:Name="btnAddPass"
+        Style="{StaticResource actionButton}"
+        Margin="0,0,25,0"
+        Click="btnAddPass_Click">
+                                <TextBlock Text="+ Add Password"
+               Foreground="{StaticResource titleColor2}"
+               FontSize="16"
+               FontFamily="Montserrat"
+               FontWeight="Medium"/>
+                            </Button>
+
+                            
+
+                        </StackPanel>
+
+
                     </Grid>
 
                     <ContentControl Content="{Binding CurrentChildView}"

@@ -17,7 +17,7 @@ namespace PasswordManager.ViewModels
         public ICommand LoginCommand { get; }
         public ICommand RegisterCommand { get; }
         private string _username;
-        private SecureString _password;
+        private string _password;
         private string _errorMessage;
         private bool _isViewVisible = true;
         private UserRepository _userRepository;
@@ -38,7 +38,7 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(Username));
             }
         }
-        public SecureString Password
+        public string Password
         {
             get => _password;
             set
@@ -86,6 +86,7 @@ namespace PasswordManager.ViewModels
             var isValidUser = _userRepository.AuthenticateUser(new NetworkCredential(Username, Password));
             if (isValidUser)
             {
+                App.Current.Properties["pass"] = Password;
                 Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username), null);
                 IsViewVisible = false;
             }
@@ -97,10 +98,11 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteRegisterCommand(object obj)
         {
-            _userRepository.Add(new UserModel { UserName = Username, Password = new NetworkCredential("", Password).Password });
+            _userRepository.Add(new UserModel { UserName = Username, Password = Password });
             var isValidUser = _userRepository.AuthenticateUser(new NetworkCredential(Username, Password));
             if (isValidUser)
             {
+                App.Current.Properties["pass"] = Password;
                 Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username), null);
                 IsViewVisible = false;
             }

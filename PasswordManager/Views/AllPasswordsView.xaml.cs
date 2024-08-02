@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PasswordManager.Models;
+using PasswordManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,11 @@ namespace PasswordManager.Views
         public AllPasswordsView()
         {
             InitializeComponent();
+        }
+
+        private void cpyClipboard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Clipboard.SetDataObject(((PasswordModel)allPwd.SelectedItem).Password);
         }
     }
 }
