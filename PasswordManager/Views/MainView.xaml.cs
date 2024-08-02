@@ -57,5 +57,11 @@ namespace PasswordManager.Views
         {
             this.WindowState = WindowState.Minimized;
         }
+
+        private void btnAddPass_Click(object sender, RoutedEventArgs e)
+        {
+            PasswordCreationView passwordCreationView = new();
+            passwordCreationView.Load();
+        }
     }
 }

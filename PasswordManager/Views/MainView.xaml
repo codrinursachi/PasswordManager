@@ -8,7 +8,8 @@
         Title="MainWindow" Height="700" Width="1300"
         WindowStyle="None"
         Background="Transparent"
-        AllowsTransparency="True">
+        AllowsTransparency="True"
+        WindowStartupLocation="CenterScreen">
 
     <Window.DataContext>
         <viewModel:MainViewModel/>
@@ -141,7 +142,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
-                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="55"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -179,15 +180,35 @@
                         </Button>
 
                     </StackPanel>
-
-                    <TextBlock Text="{Binding Caption}"
-                               Margin="25,0,0,0"
-                               Grid.Row="1"
-                               Foreground="{StaticResource titleColor2}"
-                               FontSize="16"
-                               FontFamily="Montserrat"
-                               FontWeight="Medium"
-                               VerticalAlignment="Center"/>
+                    <Grid Grid.Row="1" VerticalAlignment="Bottom">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="{Binding Caption}"
+                                   Margin="25,0,0,0"
+                                   Grid.Column="0"
+                                   Foreground="{StaticResource titleColor2}"
+                                   FontSize="16"
+                                   FontFamily="Montserrat"
+                                   FontWeight="Medium"
+                                   VerticalAlignment="Center"/>
+                        <Button x:Name="btnAddPass"
+                                Grid.Column="1"
+                                Style="{StaticResource actionButton}"
+                                Margin="0,0,25,0"
+                                HorizontalAlignment="Right"
+                                Click="btnAddPass_Click">
+                            <TextBlock Text="+ Add Password"
+                                       Foreground="{StaticResource titleColor2}"
+                                       FontSize="16"
+                                       FontFamily="Montserrat"
+                                       FontWeight="Medium"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Right"/>                            
+                        </Button>
+                        
+                    </Grid>
 
                     <ContentControl Content="{Binding CurrentChildView}"
                                     Grid.Row="2"

@@ -29,31 +29,6 @@ namespace PasswordManager.Repositories
             WritePasswords(encryptionData, passwords);
         }
 
-        private void WritePasswords(string encryptionData, ObservableCollection<PasswordModel> passwords)
-        {
-            using (var AES = Aes.Create())
-            {
-                UnicodeEncoding UE = new UnicodeEncoding();
-                byte[] passwordBytes = UE.GetBytes(encryptionData);
-                byte[] aesKey = SHA256.HashData(passwordBytes);
-                byte[] aesIV = MD5.HashData(passwordBytes);
-                AES.Key = aesKey;
-                AES.IV = aesIV;
-                ICryptoTransform encryptor = AES.CreateEncryptor();
-                using (FileStream fileStream = new(fileName, FileMode.Create, FileAccess.Write))
-                {
-                    using (CryptoStream cryptoStream = new(fileStream, encryptor, CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter streamWriter = new(cryptoStream))
-                        {
-                            string data = JsonSerializer.Serialize(passwords);
-                            streamWriter.Write(data);
-                        }
-                    }
-                }
-            }
-        }
-
         public void Edit(PasswordModel currentPasswordModel, PasswordModel newPasswordModel, string encryptionData)
         {
             ObservableCollection<PasswordModel> passwords = GetAllPasswords(encryptionData);
@@ -103,6 +78,31 @@ namespace PasswordManager.Repositories
             ObservableCollection<PasswordModel> passwords = GetAllPasswords(encryptionData);
             passwords.Remove(passwordModel);
             WritePasswords(encryptionData, passwords);
+        }
+
+        private void WritePasswords(string encryptionData, ObservableCollection<PasswordModel> passwords)
+        {
+            using (var AES = Aes.Create())
+            {
+                UnicodeEncoding UE = new UnicodeEncoding();
+                byte[] passwordBytes = UE.GetBytes(encryptionData);
+                byte[] aesKey = SHA256.HashData(passwordBytes);
+                byte[] aesIV = MD5.HashData(passwordBytes);
+                AES.Key = aesKey;
+                AES.IV = aesIV;
+                ICryptoTransform encryptor = AES.CreateEncryptor();
+                using (FileStream fileStream = new(fileName, FileMode.Create, FileAccess.Write))
+                {
+                    using (CryptoStream cryptoStream = new(fileStream, encryptor, CryptoStreamMode.Write))
+                    {
+                        using (StreamWriter streamWriter = new(cryptoStream))
+                        {
+                            string data = JsonSerializer.Serialize(passwords);
+                            streamWriter.Write(data);
+                        }
+                    }
+                }
+            }
         }
     }
 }
