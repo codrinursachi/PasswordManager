@@ -19,7 +19,7 @@ namespace PasswordManager.ViewModels
         {
             RefreshCommand = new ViewModelCommand(ExecuteRefreshCommand);
             passwordRepository = new PasswordRepository();
-            Passwords = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString());
+            Passwords = new(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).OrderBy(p => p.Url));
         }
 
         private void ExecuteRefreshCommand(object obj)

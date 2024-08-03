@@ -3,10 +3,58 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:PasswordManager.Views"
+             xmlns:local="clr-namespace:PasswordManager.Views" xmlns:viewmodels="clr-namespace:PasswordManager.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:FavoritesViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button x:Name="btnRefresh"
+                HorizontalAlignment="Left"
+Grid.Row="0" 
+                Style="{StaticResource actionButton}"
+Margin="0"
+Command="{Binding RefreshCommand}">
+            <TextBlock Text="Refresh"
+       Foreground="{StaticResource titleColor2}"
+       FontSize="16"
+       FontFamily="Montserrat"
+       FontWeight="Medium"
+       VerticalAlignment="Center"
+       />
+        </Button>
+        
+        <ListView x:Name="allFavPwd"
+    Grid.Row="1"
+    ItemsSource="{Binding Passwords}">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Favorite" Width="50">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox x:Name="favChk" IsChecked="{Binding Favorite}" Cursor="Hand" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Url" Width="150" DisplayMemberBinding="{Binding Url}" />
+                    <GridViewColumn Header="Username" Width="120" DisplayMemberBinding="{Binding Username}" />
+                    <GridViewColumn Header="Password" Width="120" DisplayMemberBinding="{Binding Password}" />
+                    <GridViewColumn Header="Expiration" Width="60" DisplayMemberBinding="{Binding ExpirationDate}" />
+                    <GridViewColumn Header="Category" Width="120" DisplayMemberBinding="{Binding CategoryPath}" />
+                    <GridViewColumn Header="Tags" Width="120" DisplayMemberBinding="{Binding Tags}" />
+                    <GridViewColumn Header="Notes" Width="120" DisplayMemberBinding="{Binding Notes}" />
+
+                    <GridViewColumn Header="Actions" Width="150" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock x:Name="cpyClipboard" Text="Copy" MouseLeftButtonDown="cpyClipboard_MouseLeftButtonDown"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </UserControl>
