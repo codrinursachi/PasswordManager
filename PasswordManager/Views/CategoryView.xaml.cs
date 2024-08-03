@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PasswordManager.Models;
+using PasswordManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +25,20 @@ namespace PasswordManager.Views
         public DirectoryView()
         {
             InitializeComponent();
+        }
+
+        private void cpyClipboard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Clipboard.SetDataObject(((PasswordModel)pwdInCategory.SelectedItem).Password);
+        }
+
+        private void Categories_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var viewModel = (CategoryViewModel)this.DataContext;
+            if (viewModel != null)
+            {
+                viewModel.Filter = e.NewValue as CategoryNodeModel;
+            }
         }
     }
 }
