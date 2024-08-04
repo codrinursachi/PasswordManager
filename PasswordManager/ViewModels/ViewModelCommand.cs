@@ -32,7 +32,7 @@ namespace PasswordManager.ViewModels
 
         public bool CanExecute(object? parameter)
         {
-            return _canExecuteAction == null?true:_canExecuteAction(parameter);
+            return _canExecuteAction == null || _canExecuteAction(parameter);
         }
 
         public void Execute(object? parameter)

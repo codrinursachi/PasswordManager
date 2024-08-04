@@ -26,10 +26,5 @@ namespace PasswordManager.Views
         {
             InitializeComponent();
         }
-
-        private void cpyClipboard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            Clipboard.SetDataObject(((PasswordModel)allPwd.SelectedItem).Password);
-        }
     }
 }

@@ -70,7 +70,7 @@ namespace PasswordManager.Repositories
                 }
             }
 
-            return passwords;
+            return new(passwords.OrderBy(p => p.Url));
         }
 
         public void Remove(PasswordModel passwordModel, string encryptionData)

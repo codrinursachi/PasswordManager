@@ -10,6 +10,6 @@ namespace PasswordManager.Models
     {
         public string Name { get; set; }
         public CategoryNodeModel Parent { get; set; }
-        public List<CategoryNodeModel> Children { get; set; } = new List<CategoryNodeModel>();
+        public List<CategoryNodeModel> Children { get; set; } = [];
     }
 }
