@@ -14,6 +14,7 @@ namespace PasswordManager.ViewModels
     {
         private ViewModelBase _currentChildView;
         private string _caption;
+        private string _selectedDB;
         public MainViewModel()
         {
             ShowAllPasswordsView = new ViewModelCommand(ExecuteShowAllPasswordsView);

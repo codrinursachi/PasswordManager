@@ -35,9 +35,9 @@ namespace PasswordManager.CustomControls
             set { SetValue(PasswordListProperty, value); }
         }
 
-        private void cpyClipboard_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void cpyClipboard_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Clipboard.SetDataObject(((PasswordModel)pwdList.SelectedItem).Password);
+            Clipboard.SetDataObject(((PasswordToShowDTO)pwdList.SelectedItem).Password);
         }
     }
 }

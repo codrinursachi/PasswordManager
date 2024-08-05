@@ -30,7 +30,7 @@ namespace PasswordManager.Views
         private void Tags_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var viewModel = (TagsViewModel)this.DataContext;
-            if (Tags.SelectedItems != null)
+            if (viewModel != null && Tags.SelectedItems != null)
             {
                 List<string> tags = [];
                 foreach (var tag in Tags.SelectedItems)
