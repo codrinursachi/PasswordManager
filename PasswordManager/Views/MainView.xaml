@@ -22,8 +22,8 @@
         <DataTemplate DataType="{x:Type viewModel:FavoritesViewModel}">
             <local:FavoritesView/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:LabelsViewModel}">
-            <local:LabelsView/>
+        <DataTemplate DataType="{x:Type viewModel:TagsViewModel}">
+            <local:TagsView/>
         </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:CategoryViewModel}">
             <local:DirectoryView/>
@@ -113,7 +113,7 @@
                                  Tag="{StaticResource color3}"
                                  Command="{Binding ShowLabelsView}">
 
-                        <TextBlock Text="Labels" Style="{StaticResource menuButtonText}"/>
+                        <TextBlock Text="Tags" Style="{StaticResource menuButtonText}"/>
 
                     </RadioButton>
 

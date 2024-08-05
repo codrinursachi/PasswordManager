@@ -20,7 +20,7 @@ namespace PasswordManager.ViewModels
             PasswordRepository passwordRepository = new();
             var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories = [rootNode];
-            Passwords = new(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).OrderBy(p => p.Url).Select(p => p.ToPasswordToShow()));
+            Passwords = new(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()));
         }
 
         public List<CategoryNodeModel> Categories { get; }

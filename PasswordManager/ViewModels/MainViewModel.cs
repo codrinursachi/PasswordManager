@@ -56,7 +56,7 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteShowLabelsView(object obj)
         {
-            CurrentChildView = new LabelsViewModel();
+            CurrentChildView = new TagsViewModel();
             Caption = "Labels";
         }
 
