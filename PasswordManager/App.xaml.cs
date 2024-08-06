@@ -1,6 +1,7 @@
 ﻿using PasswordManager.Views;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Windows;
 
 namespace PasswordManager
@@ -23,6 +24,16 @@ namespace PasswordManager
                     loginView.Close();
                 }
             };
+        }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+
+            if ((bool)App.Current.Properties["timeout"]==true)
+            {
+                Process.Start(Process.GetCurrentProcess().MainModule.FileName);
+            }
         }
     }
 

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -25,6 +26,7 @@ namespace PasswordManager.Views
         {
             InitializeComponent();
             ((PasswordCreationViewModel)this.DataContext).CloseAction = Close;
+            datePicker.DisplayDate = DateTime.Today;
         }
 
         public void Load()
@@ -50,6 +52,33 @@ namespace PasswordManager.Views
         private void pnlControlBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
+        }
+
+        private void datePicker_GotMouseCapture(object sender, MouseEventArgs e)
+        {
+            datePicker.Foreground = Brushes.DarkGray;
+            datePicker.SelectedDate = DateTime.Today;
+        }
+
+        private void datePicker_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Back || e.Key == Key.Delete)
+            {
+                if (string.IsNullOrEmpty(datePicker.Text))
+                {
+                    datePicker.SelectedDate = default(DateTime);
+                    datePicker.Foreground = Brushes.Transparent;
+                }
+            }
+        }
+
+        private void txtTag_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Return)
+            {
+                txtTag.Text = txtTag.Text[^1] == ';' ? txtTag.Text : txtTag.Text + ";";
+                txtTag.CaretIndex = txtTag.Text.Length;
+            }
         }
     }
 }

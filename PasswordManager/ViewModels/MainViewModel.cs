@@ -3,10 +3,13 @@ using PasswordManager.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
@@ -15,6 +18,7 @@ namespace PasswordManager.ViewModels
         private ViewModelBase _currentChildView;
         private string _caption;
         private string _selectedDB;
+        private DispatcherTimer _timer;
         public MainViewModel()
         {
             ShowAllPasswordsView = new ViewModelCommand(ExecuteShowAllPasswordsView);
@@ -23,6 +27,14 @@ namespace PasswordManager.ViewModels
             ShowCategoryView = new ViewModelCommand(ExecuteShowCategoryView);
 
             ExecuteShowAllPasswordsView(null);
+            SetupTimer();
+            InputManager.Current.PreProcessInput += OnActivity;
+        }
+
+        private void OnActivity(object sender, PreProcessInputEventArgs e)
+        {
+            _timer.Stop();
+            _timer.Start();
         }
 
         public ICommand ShowAllPasswordsView { get; }
@@ -48,7 +60,20 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(CurrentChildView));
             }
         }
+        private void SetupTimer()
+        {
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(60);
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
+        }
 
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            App.Current.Properties["timeout"] = true;
+            _timer.Stop();
+            Application.Current.Shutdown();
+        }
         private void ExecuteShowCategoryView(object obj)
         {
             CurrentChildView = new CategoryViewModel();
@@ -58,7 +83,7 @@ namespace PasswordManager.ViewModels
         private void ExecuteShowLabelsView(object obj)
         {
             CurrentChildView = new TagsViewModel();
-            Caption = "Labels";
+            Caption = "Tags";
         }
 
         private void ExecuteShowFavoritesView(object obj)
