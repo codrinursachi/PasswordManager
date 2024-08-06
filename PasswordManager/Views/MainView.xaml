@@ -216,7 +216,7 @@
 
                     </Grid>
 
-                    <ContentControl Content="{Binding CurrentChildView}"
+                    <ContentControl x:Name="childView" Content="{Binding CurrentChildView}"
                                     Grid.Row="2"
                                     Margin="25"/>
 

@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
@@ -16,13 +17,27 @@ namespace PasswordManager.ViewModels
     {
         IPasswordRepository passwordRepository;
         string _searchFilter;
+        private DispatcherTimer _timer;
+
         public AllPasswordsViewModel()
         {
-            RefreshCommand = new ViewModelCommand(ExecuteRefreshCommand);
             passwordRepository = new PasswordRepository();
             Passwords = new(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).OrderBy(p => p.Url).Select(p => p.ToPasswordToShow()));
+            SetupTimer();
         }
-        public ICommand RefreshCommand { get; }
+
+        private void SetupTimer()
+        {
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            Refresh(null);
+        }
         public ObservableCollection<PasswordToShowDTO> Passwords { get; private set; }
         public string SearchFilter
         {
@@ -31,11 +46,11 @@ namespace PasswordManager.ViewModels
             {
                 _searchFilter = value;
                 OnPropertyChanged(nameof(SearchFilter));
-                ExecuteRefreshCommand(null);
+                Refresh(null);
             }
         }
 
-        private void ExecuteRefreshCommand(object obj)
+        private void Refresh(object obj)
         {
             Passwords.Clear();
             foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).OrderBy(p => p.Url).Select(p => p.ToPasswordToShow()))
@@ -57,7 +72,7 @@ namespace PasswordManager.ViewModels
                 {
                     searchData.AddRange(password.Url.Split());
                 }
-                if (SearchFilter == null||searchData.ToHashSet().IsSupersetOf(SearchFilter.Split()))
+                if (string.IsNullOrEmpty(SearchFilter)||searchData.ToHashSet().IsSupersetOf(SearchFilter.Split()))
                 {
                     Passwords.Add(password);
                 }

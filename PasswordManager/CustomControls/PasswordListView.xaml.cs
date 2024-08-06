@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace PasswordManager.CustomControls
 {
@@ -24,9 +25,30 @@ namespace PasswordManager.CustomControls
     public partial class PasswordListView : UserControl
     {
         public static readonly DependencyProperty PasswordListProperty = DependencyProperty.Register("PasswordList", typeof(ObservableCollection<PasswordToShowDTO>), typeof(PasswordListView));
+        private string _storedPass;
+        private DispatcherTimer _timer;
+
         public PasswordListView()
         {
-            InitializeComponent();
+            InitializeComponent();            
+        }
+
+        private void SetupTimer()
+        {
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(5);
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            if (Clipboard.GetText()==_storedPass)
+            {
+                Clipboard.Clear();
+            }
+
+            _timer.Stop();
         }
 
         public ObservableCollection<PasswordToShowDTO> PasswordList
@@ -37,7 +59,9 @@ namespace PasswordManager.CustomControls
 
         private void cpyClipboard_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            Clipboard.SetDataObject(((PasswordToShowDTO)pwdList.SelectedItem).Password);
+            _storedPass=((PasswordToShowDTO)pwdList.SelectedItem).Password;
+            Clipboard.SetDataObject(_storedPass);
+            SetupTimer();
         }
     }
 }

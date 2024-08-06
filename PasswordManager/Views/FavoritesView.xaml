@@ -11,23 +11,8 @@
             <RowDefinition Height="45"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0" Orientation="Horizontal">
-            
-        <Button x:Name="btnRefresh"
-                HorizontalAlignment="Left"
-                Style="{StaticResource actionButton}"
-Margin="0"
-Command="{Binding RefreshCommand}">
-            <TextBlock Text="Refresh"
-       Foreground="{StaticResource titleColor2}"
-       FontSize="16"
-       FontFamily="Montserrat"
-       FontWeight="Medium"
-       VerticalAlignment="Center"
-       />
-        </Button>
-            <customcontrols:PasswordSearch SearchCriteria="{Binding SearchFilter, Mode=TwoWay}"/>
-        </StackPanel>
+        <customcontrols:PasswordSearch Grid.Row="0" 
+                                           SearchCriteria="{Binding SearchFilter, Mode=TwoWay}"/>
 
         <customcontrols:PasswordListView PasswordList="{Binding Passwords}"
                                          Grid.Row="1"/>

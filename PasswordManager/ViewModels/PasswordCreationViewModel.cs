@@ -113,12 +113,13 @@ namespace PasswordManager.ViewModels
             }
         }
         public ObservableCollection<string> DatabaseItems { get; }
-
+        public Action CloseAction { get; set; }
         private void ExecuteAddPasswordCommand(object obj)
         {
             PasswordModel newPassword = new() { Username = Username, Password = Password, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = Tags, Favorite = Favorite, Database = Database, Notes = Notes };
             var repository = new PasswordRepository();
             repository.Add(newPassword, App.Current.Properties["pass"].ToString());
+            CloseAction.Invoke();
         }
     }
 }
