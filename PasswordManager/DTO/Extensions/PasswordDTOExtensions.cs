@@ -13,6 +13,7 @@ namespace PasswordManager.DTO.Extensions
         {
             return new PasswordToShowDTO
             {
+                Id = passwordModel.Id,
                 Favorite = passwordModel.Favorite,
                 Url = passwordModel.Url,
                 Username = passwordModel.Username,

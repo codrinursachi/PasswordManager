@@ -19,8 +19,9 @@ namespace PasswordManager.Repositories
 
         public void Add(PasswordModel passwordModel, string encryptionData)
         {
+            File.Delete(fileName);
             List<PasswordModel> passwords = GetAllPasswords(encryptionData);
-            passwordModel.id = passwords.Count == 0 ? 1 : passwords.Max(p => p.id) + 1;
+            passwordModel.Id = passwords.Count == 0 ? 1 : passwords.Max(p => p.Id) + 1;
             passwords.Add(passwordModel);
             WritePasswords(encryptionData, passwords);
         }
@@ -28,7 +29,7 @@ namespace PasswordManager.Repositories
         public void Edit(int id, PasswordModel newPasswordModel, string encryptionData)
         {
             List<PasswordModel> passwords = GetAllPasswords(encryptionData);
-            var currentPassword = passwords.FirstOrDefault(p => p.id == id);
+            var currentPassword = passwords.FirstOrDefault(p => p.Id == id);
             if (currentPassword == null)
             {
                 return;
@@ -52,13 +53,13 @@ namespace PasswordManager.Repositories
 
         public PasswordModel GetPasswordById(int id, string encryptionData)
         {
-            return GetPasswordsFromFile(encryptionData).FirstOrDefault(p => p.id == id);
+            return GetPasswordsFromFile(encryptionData).FirstOrDefault(p => p.Id == id);
         }
 
         public void Remove(int id, string encryptionData)
         {
             List<PasswordModel> passwords = GetAllPasswords(encryptionData);
-            passwords.Remove(passwords.First(p => p.id == id));
+            passwords.Remove(passwords.First(p => p.Id == id));
             WritePasswords(encryptionData, passwords);
         }
 

@@ -1,5 +1,7 @@
 ﻿using PasswordManager.DTO;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
+using PasswordManager.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -59,7 +61,7 @@ namespace PasswordManager.CustomControls
 
         private void cpyClipboard_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            _storedPass=((PasswordToShowDTO)pwdList.SelectedItem).Password;
+            _storedPass= GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
             Clipboard.SetDataObject(_storedPass);
             SetupTimer();
         }
