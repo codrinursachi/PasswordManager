@@ -37,7 +37,7 @@ namespace PasswordManagerTests
             PasswordModel passwordEdit = new PasswordModel { Username = "root", Password = "root", Database = "default", Url = "admin.com" };
             passwordRepository.Add(password, "admin");
             passwordRepository.Edit(password.id, passwordEdit,"admin");
-            Assert.NotNull(passwordRepository.GetAllPasswords("admin").FirstOrDefault(p=>p==passwordEdit));
+            Assert.Equal(passwordRepository.GetPasswordById(passwordEdit.id,"admin"),passwordEdit);
         }
 
         [Fact]
