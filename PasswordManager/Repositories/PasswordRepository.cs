@@ -20,7 +20,7 @@ namespace PasswordManager.Repositories
         public void Add(PasswordModel passwordModel, string encryptionData)
         {
             List<PasswordModel> passwords = GetAllPasswords(encryptionData);
-            passwordModel.id = passwords.Count==0?1:passwords.Max(p => p.id) + 1;
+            passwordModel.id = passwords.Count == 0 ? 1 : passwords.Max(p => p.id) + 1;
             passwords.Add(passwordModel);
             WritePasswords(encryptionData, passwords);
         }
@@ -39,6 +39,30 @@ namespace PasswordManager.Repositories
         }
 
         public List<PasswordModel> GetAllPasswords(string encryptionData)
+        {
+            List<PasswordModel> passwords = GetPasswordsFromFile(encryptionData);
+
+            foreach (var password in passwords)
+            {
+                password.Password = "********";
+            }
+
+            return new(passwords.OrderBy(p => p.Url));
+        }
+
+        public PasswordModel GetPasswordById(int id, string encryptionData)
+        {
+            return GetPasswordsFromFile(encryptionData).FirstOrDefault(p => p.id == id);
+        }
+
+        public void Remove(int id, string encryptionData)
+        {
+            List<PasswordModel> passwords = GetAllPasswords(encryptionData);
+            passwords.Remove(passwords.First(p => p.id == id));
+            WritePasswords(encryptionData, passwords);
+        }
+
+        private List<PasswordModel> GetPasswordsFromFile(string encryptionData)
         {
             UnicodeEncoding UE = new UnicodeEncoding();
             List<PasswordModel> passwords = new();
@@ -64,26 +88,9 @@ namespace PasswordManager.Repositories
                         }
                     }
                 }
-
-                foreach(var password in passwords)
-                {
-                    password.Password = "********";
-                }
             }
 
-            return new(passwords.OrderBy(p => p.Url));
-        }
-
-        public PasswordModel GetPasswordById(int id, string encryptionData)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Remove(int id, string encryptionData)
-        {
-            List<PasswordModel> passwords = GetAllPasswords(encryptionData);
-            passwords.Remove(passwords.First(p=>p.id==id));
-            WritePasswords(encryptionData, passwords);
+            return passwords;
         }
 
         private void WritePasswords(string encryptionData, List<PasswordModel> passwords)

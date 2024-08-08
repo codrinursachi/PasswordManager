@@ -13,7 +13,7 @@ namespace PasswordManager.Models
         void Add(PasswordModel passwordModel, string encryptionData);
         void Edit(int id, PasswordModel newPasswordModel, string encryptionData);
         void Remove(int id, string encryptionData);
-        PasswordModel GetPasswordById(int id);
+        PasswordModel GetPasswordById(int id, string encryptionData);
         List<PasswordModel> GetAllPasswords(string encryptionData);
     }
 }
