@@ -52,8 +52,8 @@ namespace PasswordManager.ViewModels
 
         private void Refresh(object obj)
         {
-            Passwords.Clear();
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).OrderBy(p => p.Url).Select(p => p.ToPasswordToShow()))
+            HashSet<PasswordToShowDTO> results = new();
+            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()))
             {
                 List<string> searchData = [];
                 if (password.CategoryPath != null)
@@ -70,9 +70,17 @@ namespace PasswordManager.ViewModels
                 }
                 if (password.Url != null)
                 {
-                    searchData.AddRange(password.Url.Split());
+                    searchData.Add(password.Url);
                 }
-                if (string.IsNullOrEmpty(SearchFilter)||searchData.ToHashSet().IsSupersetOf(SearchFilter.Split()))
+                if (string.IsNullOrEmpty(SearchFilter) || searchData.ToHashSet().IsSupersetOf(SearchFilter.Split()))
+                {
+                    results.Add(password);
+                }
+            }
+            if (results.Except(Passwords).Count() > 0)
+            {
+                Passwords.Clear();
+                foreach (var password in results)
                 {
                     Passwords.Add(password);
                 }

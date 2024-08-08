@@ -17,7 +17,16 @@ namespace PasswordManagerTests
             PasswordRepository passwordRepository = new();
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Database = "default", Url = "admin.com" };
             passwordRepository.Add(password, "admin");
-            Assert.NotNull(passwordRepository.GetAllPasswords("admin").FirstOrDefault(p => p==password));
+            Assert.NotNull(passwordRepository.GetAllPasswords("admin").FirstOrDefault(p => p.id==password.id));
+        }
+
+        [Fact]
+        public void ShouldRetrievePasswordById()
+        {
+            PasswordRepository passwordRepository = new();
+            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Database = "default", Url = "admin.com" };
+            passwordRepository.Add(password, "admin");
+            Assert.NotNull(passwordRepository.GetPasswordById(password.id,"admin").FirstOrDefault(p => p.id == password.id));
         }
 
         [Fact]
@@ -27,7 +36,7 @@ namespace PasswordManagerTests
             PasswordModel password = new PasswordModel { Username = "admin1", Password = "admin", Database = "default", Url = "admin.com" };
             PasswordModel passwordEdit = new PasswordModel { Username = "root", Password = "root", Database = "default", Url = "admin.com" };
             passwordRepository.Add(password, "admin");
-            passwordRepository.Edit(password, passwordEdit,"admin");
+            passwordRepository.Edit(password.id, passwordEdit,"admin");
             Assert.NotNull(passwordRepository.GetAllPasswords("admin").FirstOrDefault(p=>p==passwordEdit));
         }
 
@@ -37,7 +46,7 @@ namespace PasswordManagerTests
             PasswordRepository passwordRepository = new();
             PasswordModel password = new PasswordModel { Username = "admin2", Password = "admin", Database = "default", Url = "admin.com" };
             passwordRepository.Add(password, "admin");
-            passwordRepository.Remove(password, "admin");
+            passwordRepository.Remove(password.id, "admin");
             Assert.Null(passwordRepository.GetAllPasswords("admin").FirstOrDefault(p => p==password));
         }
     }

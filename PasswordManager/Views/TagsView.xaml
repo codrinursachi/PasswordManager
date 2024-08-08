@@ -11,7 +11,9 @@
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <ListView x:Name="Tags" ItemsSource="{Binding Tags}" Height="auto" Width="auto" SelectionMode="Extended" SelectionChanged="Tags_SelectionChanged"/>
+        <ListView x:Name="Tags" ItemsSource="{Binding Tags}" Height="auto" Width="auto" SelectionMode="Multiple" SelectionChanged="Tags_SelectionChanged" 
+                  Background="Transparent"
+                  Foreground="White"/>
 
         <customcontrols:PasswordListView PasswordList="{Binding Passwords}"
                                          Grid.Column="1"/>

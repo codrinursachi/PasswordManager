@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.DTO
 {
-    public class PasswordToShowDTO
+    public record PasswordToShowDTO
     {
         public string Username { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;

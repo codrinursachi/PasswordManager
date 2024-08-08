@@ -19,33 +19,29 @@ namespace PasswordManager.Repositories
 
         public void Add(PasswordModel passwordModel, string encryptionData)
         {
-            ObservableCollection<PasswordModel> passwords = GetAllPasswords(encryptionData);
-            if (passwords.FirstOrDefault(p => p == passwordModel) != null)
-            {
-                return;
-            }
-
+            List<PasswordModel> passwords = GetAllPasswords(encryptionData);
+            passwordModel.id = passwords.Count==0?1:passwords.Max(p => p.id) + 1;
             passwords.Add(passwordModel);
             WritePasswords(encryptionData, passwords);
         }
 
-        public void Edit(PasswordModel currentPasswordModel, PasswordModel newPasswordModel, string encryptionData)
+        public void Edit(int id, PasswordModel newPasswordModel, string encryptionData)
         {
-            ObservableCollection<PasswordModel> passwords = GetAllPasswords(encryptionData);
-            var currentPassword = passwords.FirstOrDefault(p => p == currentPasswordModel);
+            List<PasswordModel> passwords = GetAllPasswords(encryptionData);
+            var currentPassword = passwords.FirstOrDefault(p => p.id == id);
             if (currentPassword == null)
             {
                 return;
             }
 
-            Remove(currentPasswordModel, encryptionData);
+            Remove(id, encryptionData);
             Add(newPasswordModel, encryptionData);
         }
 
-        public ObservableCollection<PasswordModel> GetAllPasswords(string encryptionData)
+        public List<PasswordModel> GetAllPasswords(string encryptionData)
         {
             UnicodeEncoding UE = new UnicodeEncoding();
-            ObservableCollection<PasswordModel> passwords = new();
+            List<PasswordModel> passwords = new();
             using (var AES = Aes.Create())
             {
                 byte[] passwordBytes = UE.GetBytes(encryptionData);
@@ -63,24 +59,34 @@ namespace PasswordManager.Repositories
                             string data = streamReader.ReadToEnd();
                             if (data.Length > 0)
                             {
-                                passwords = JsonSerializer.Deserialize<ObservableCollection<PasswordModel>>(data);
+                                passwords = JsonSerializer.Deserialize<List<PasswordModel>>(data);
                             }
                         }
                     }
+                }
+
+                foreach(var password in passwords)
+                {
+                    password.Password = "********";
                 }
             }
 
             return new(passwords.OrderBy(p => p.Url));
         }
 
-        public void Remove(PasswordModel passwordModel, string encryptionData)
+        public PasswordModel GetPasswordById(int id, string encryptionData)
         {
-            ObservableCollection<PasswordModel> passwords = GetAllPasswords(encryptionData);
-            passwords.Remove(passwordModel);
+            throw new NotImplementedException();
+        }
+
+        public void Remove(int id, string encryptionData)
+        {
+            List<PasswordModel> passwords = GetAllPasswords(encryptionData);
+            passwords.Remove(passwords.First(p=>p.id==id));
             WritePasswords(encryptionData, passwords);
         }
 
-        private void WritePasswords(string encryptionData, ObservableCollection<PasswordModel> passwords)
+        private void WritePasswords(string encryptionData, List<PasswordModel> passwords)
         {
             using (var AES = Aes.Create())
             {

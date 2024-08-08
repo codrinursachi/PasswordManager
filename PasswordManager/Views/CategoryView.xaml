@@ -11,11 +11,13 @@
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TreeView x:Name="Categories" ItemsSource="{Binding Categories}" Height="auto" Width="auto" SelectedItemChanged="Categories_SelectedItemChanged">
+        <TreeView x:Name="Categories" ItemsSource="{Binding Categories}" Height="auto" Width="auto" SelectedItemChanged="Categories_SelectedItemChanged"
+                  Background="Transparent">
 
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <TextBlock x:Name="categoryItem" Text="{Binding Name}"/>
+                    <TextBlock x:Name="categoryItem" Text="{Binding Name}"
+                                Foreground="White"/>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
