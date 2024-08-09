@@ -52,6 +52,10 @@ namespace PasswordManager.ViewModels
 
         private void Refresh(object obj)
         {
+            if ((bool)App.Current.Properties["ShouldRefresh"] == false)
+            {
+                return;
+            }
             Passwords.Clear();
             foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p=>p.Favorite).Select(p => p.ToPasswordToShow()))
             {

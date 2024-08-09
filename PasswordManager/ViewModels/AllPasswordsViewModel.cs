@@ -22,23 +22,23 @@ namespace PasswordManager.ViewModels
         public AllPasswordsViewModel()
         {
             passwordRepository = new PasswordRepository();
-            Passwords = new(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).OrderBy(p => p.Url).Select(p => p.ToPasswordToShow()));
+            Passwords = new(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()));
             SetupTimer();
         }
 
         private void SetupTimer()
         {
             _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Interval = TimeSpan.FromSeconds(3);
             _timer.Tick += Timer_Tick;
             _timer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            Refresh(null);
+            Refresh();
         }
-        public ObservableCollection<PasswordToShowDTO> Passwords { get; private set; }
+        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; }
         public string SearchFilter
         {
             get => _searchFilter;
@@ -46,12 +46,18 @@ namespace PasswordManager.ViewModels
             {
                 _searchFilter = value;
                 OnPropertyChanged(nameof(SearchFilter));
-                Refresh(null);
+                App.Current.Properties["ShouldRefresh"] = true;
+                Refresh();
             }
         }
 
-        private void Refresh(object obj)
+        private void Refresh()
         {
+            if ((bool)App.Current.Properties["ShouldRefresh"] == false)
+            {
+                return;
+            }
+            App.Current.Properties["ShouldRefresh"] = false;
             HashSet<PasswordToShowDTO> results = new();
             foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()))
             {
@@ -77,7 +83,7 @@ namespace PasswordManager.ViewModels
                     results.Add(password);
                 }
             }
-            if (results.Except(Passwords).Count() > 0)
+            if (results.Except(Passwords).Any()||Passwords.Except(results).Any())
             {
                 Passwords.Clear();
                 foreach (var password in results)

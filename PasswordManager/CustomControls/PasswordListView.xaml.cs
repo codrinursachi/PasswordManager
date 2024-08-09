@@ -1,5 +1,4 @@
 ﻿using PasswordManager.DTO;
-using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Utilities;
 using System;
@@ -64,6 +63,12 @@ namespace PasswordManager.CustomControls
             _storedPass= GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
             Clipboard.SetDataObject(_storedPass);
             SetupTimer();
+        }
+
+        private void showPwd_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ((PasswordToShowDTO)pwdList.SelectedItem).Password = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
+            pwdList.Items.Refresh();
         }
     }
 }

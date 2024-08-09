@@ -19,7 +19,6 @@ namespace PasswordManager.Repositories
 
         public void Add(PasswordModel passwordModel, string encryptionData)
         {
-            File.Delete(fileName);
             List<PasswordModel> passwords = GetAllPasswords(encryptionData);
             passwordModel.Id = passwords.Count == 0 ? 1 : passwords.Max(p => p.Id) + 1;
             passwords.Add(passwordModel);

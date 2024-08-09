@@ -24,13 +24,15 @@ namespace PasswordManager
                     loginView.Close();
                 }
             };
+
+            App.Current.Properties["ShouldRefresh"] = false;
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
 
-            if ((bool)App.Current.Properties["timeout"]==true)
+            if ((bool)App.Current.Properties["timeout"])
             {
                 Process.Start(Process.GetCurrentProcess().MainModule.FileName);
             }
