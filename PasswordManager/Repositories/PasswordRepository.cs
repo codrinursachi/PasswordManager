@@ -19,7 +19,7 @@ namespace PasswordManager.Repositories
 
         public void Add(PasswordModel passwordModel, string encryptionData)
         {
-            List<PasswordModel> passwords = GetAllPasswords(encryptionData);
+            List<PasswordModel> passwords = GetPasswordsFromFile(encryptionData);
             passwordModel.Id = passwords.Count == 0 ? 1 : passwords.Max(p => p.Id) + 1;
             passwords.Add(passwordModel);
             WritePasswords(encryptionData, passwords);

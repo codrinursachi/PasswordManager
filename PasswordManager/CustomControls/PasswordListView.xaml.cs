@@ -69,6 +69,15 @@ namespace PasswordManager.CustomControls
         {
             ((PasswordToShowDTO)pwdList.SelectedItem).Password = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
             pwdList.Items.Refresh();
+            ClearPass();            
+        }
+
+        private async Task ClearPass()
+        {
+            var passToClear = (PasswordToShowDTO)pwdList.SelectedItem;
+            await Task.Delay(TimeSpan.FromSeconds(5));
+            passToClear.Password= "********";
+            pwdList.Items.Refresh();
         }
     }
 }

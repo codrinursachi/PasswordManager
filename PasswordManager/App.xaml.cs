@@ -26,6 +26,7 @@ namespace PasswordManager
             };
 
             App.Current.Properties["ShouldRefresh"] = false;
+            App.Current.Properties["timeout"] = false;
         }
 
         protected override void OnExit(ExitEventArgs e)
