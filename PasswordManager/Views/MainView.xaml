@@ -197,7 +197,7 @@
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right">
 
-                            <ComboBox x:Name="dtbSelector"/>
+                            <ComboBox x:Name="dtbSelector" ItemsSource="{Binding Databases}" SelectedIndex="{Binding SelectedDb}" MouseLeftButtonDown="dtbSelector_MouseLeftButtonDown"/>
                             <Button x:Name="btnAddPass"
         Style="{StaticResource actionButton}"
         Margin="0,0,25,0"

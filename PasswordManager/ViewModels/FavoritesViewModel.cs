@@ -16,13 +16,13 @@ namespace PasswordManager.ViewModels
     class FavoritesViewModel:ViewModelBase
     {
         string _searchFilter;
-        IPasswordRepository passwordRepository;
         private DispatcherTimer _timer;
 
         public FavoritesViewModel()
         {
-            passwordRepository = new PasswordRepository();
-            Passwords = new(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p => p.Favorite).Select(p=>p.ToPasswordToShow()));
+            App.Current.Properties["ShouldRefresh"] = true;
+            Passwords = new();
+            Refresh();
             SetupTimer();
         }
         public ObservableCollection<PasswordToShowDTO> Passwords { get; }
@@ -33,7 +33,7 @@ namespace PasswordManager.ViewModels
             {
                 _searchFilter = value;
                 OnPropertyChanged(nameof(SearchFilter));
-                Refresh(null);
+                Refresh();
             }
         }
 
@@ -47,16 +47,17 @@ namespace PasswordManager.ViewModels
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            Refresh(null);
+            Refresh();
         }
 
-        private void Refresh(object obj)
+        private void Refresh()
         {
             if ((bool)App.Current.Properties["ShouldRefresh"] == false)
             {
                 return;
             }
             Passwords.Clear();
+            var passwordRepository = new PasswordRepository();
             foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p=>p.Favorite).Select(p => p.ToPasswordToShow()))
             {
                 List<string> searchData = [];

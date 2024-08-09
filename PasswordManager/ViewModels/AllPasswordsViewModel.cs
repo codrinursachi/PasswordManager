@@ -15,14 +15,13 @@ namespace PasswordManager.ViewModels
 {
     class AllPasswordsViewModel : ViewModelBase
     {
-        IPasswordRepository passwordRepository;
         string _searchFilter;
         private DispatcherTimer _timer;
 
         public AllPasswordsViewModel()
         {
-            passwordRepository = new PasswordRepository();
-            Passwords = new(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()));
+            Passwords = new();
+            Refresh();
             SetupTimer();
         }
 
@@ -57,6 +56,8 @@ namespace PasswordManager.ViewModels
             {
                 return;
             }
+
+            var passwordRepository = new PasswordRepository();
             App.Current.Properties["ShouldRefresh"] = false;
             HashSet<PasswordToShowDTO> results = new();
             foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()))

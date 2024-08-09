@@ -3,6 +3,7 @@ using PasswordManager.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security;
@@ -116,7 +117,8 @@ namespace PasswordManager.ViewModels
         public Action CloseAction { get; set; }
         private void ExecuteAddPasswordCommand(object obj)
         {
-            PasswordModel newPassword = new() { Username = Username, Password = Password, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = Tags, Favorite = Favorite, Database = Database, Notes = Notes };
+            App.Current.Properties["SelectedDb"] = Database;
+            PasswordModel newPassword = new() { Username = Username, Password = Password, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = Tags, Favorite = Favorite, Notes = Notes };
             var repository = new PasswordRepository();
             repository.Add(newPassword, App.Current.Properties["pass"].ToString());
             App.Current.Properties["ShouldRefresh"] = true;

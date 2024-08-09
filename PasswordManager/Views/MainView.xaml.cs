@@ -1,4 +1,5 @@
-﻿using System.Runtime.InteropServices;
+﻿using PasswordManager.ViewModels;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -62,6 +63,12 @@ namespace PasswordManager.Views
         {
             PasswordCreationView passwordCreationView = new();
             passwordCreationView.Load();
+        }
+
+        private void dtbSelector_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            ((MainViewModel)this.DataContext).GetDatabases();
+            App.Current.Properties["ShouldRefresh"] = true;
         }
     }
 }

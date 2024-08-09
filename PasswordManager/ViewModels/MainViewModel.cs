@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,7 +18,7 @@ namespace PasswordManager.ViewModels
     {
         private ViewModelBase _currentChildView;
         private string _caption;
-        private string _selectedDB;
+        private int _selectedDb;
         private DispatcherTimer _timer;
         public MainViewModel()
         {
@@ -25,7 +26,9 @@ namespace PasswordManager.ViewModels
             ShowFavoritesView = new ViewModelCommand(ExecuteShowFavoritesView);
             ShowLabelsView = new ViewModelCommand(ExecuteShowLabelsView);
             ShowCategoryView = new ViewModelCommand(ExecuteShowCategoryView);
-
+            Databases = new();
+            GetDatabases();
+            SelectedDb = 0;
             ExecuteShowAllPasswordsView(null);
             SetupTimer();
             InputManager.Current.PreProcessInput += OnActivity;
@@ -60,6 +63,30 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(CurrentChildView));
             }
         }
+
+        public ObservableCollection<string> Databases { get; set; }
+
+        public int SelectedDb
+        {
+            get => _selectedDb;
+            set
+            {
+                _selectedDb = value;
+                App.Current.Properties["SelectedDb"] = Databases[_selectedDb];
+                App.Current.Properties["ShouldRefresh"] = true;
+            }
+        }
+
+        public void GetDatabases()
+        {
+            Databases.Clear();
+            foreach (var db in (Directory.GetFiles(".").Where(file => Path.GetFileName(file).StartsWith(Thread.CurrentPrincipal?.Identity?.Name)).Select(p => p = p.Remove(0, (@".\" + Thread.CurrentPrincipal?.Identity?.Name).Length))))
+            {
+                Databases.Add(db);
+            }
+            App.Current.Properties["Databases"] = Databases;
+        }
+
         private void SetupTimer()
         {
             _timer = new DispatcherTimer();
