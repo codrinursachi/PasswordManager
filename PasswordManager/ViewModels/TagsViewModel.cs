@@ -18,7 +18,7 @@ namespace PasswordManager.ViewModels
         public TagsViewModel()
         {
             IPasswordRepository passwordRepository = new PasswordRepository();
-            var tags = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p => p.Tags != null).Select(p => p.Tags.Split(';'));
+            var tags = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p => p.Tags != null).Select(p => p.Tags.Split());
             foreach (var itemTags in tags)
             {
                 foreach (var tag in itemTags)
@@ -55,7 +55,7 @@ namespace PasswordManager.ViewModels
             }
             else
             {
-                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()).Where(p=>p.Tags!=null&&p.Tags.Split(';').ToHashSet().IsSupersetOf(Filter)))
+                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()).Where(p=>p.Tags!=null&&p.Tags.Split().ToHashSet().IsSupersetOf(Filter)))
                 {
                     Passwords.Add(password);
                 }

@@ -76,7 +76,7 @@ namespace PasswordManager.Views
         {
             if (e.Key == Key.Return)
             {
-                txtTag.Text = txtTag.Text[^1] == ';' ? txtTag.Text : txtTag.Text + ";";
+                txtTag.Text = txtTag.Text[^1] == ' ' ? txtTag.Text : txtTag.Text + " ";
                 txtTag.CaretIndex = txtTag.Text.Length;
             }
         }

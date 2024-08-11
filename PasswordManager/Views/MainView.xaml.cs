@@ -68,6 +68,7 @@ namespace PasswordManager.Views
         private void dtbSelector_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             ((MainViewModel)this.DataContext).GetDatabases();
+            CollectionViewSource.GetDefaultView(dtbSelector).Refresh();
             App.Current.Properties["ShouldRefresh"] = true;
         }
     }

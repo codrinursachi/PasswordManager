@@ -29,7 +29,11 @@ namespace PasswordManager.ViewModels
         public PasswordCreationViewModel()
         {
             var passwordRepository = new PasswordRepository();
-            DatabaseItems = new ObservableCollection<string>(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.Database).ToHashSet());
+            DatabaseItems = new List<string>();
+            foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name)))
+            {
+                DatabaseItems.Add(db[(Thread.CurrentPrincipal.Identity.Name + "\\").Length..]);
+            }
             AddPasswordCommand = new ViewModelCommand(ExecuteAddPasswordCommand);
         }
 
@@ -39,7 +43,6 @@ namespace PasswordManager.ViewModels
             set
             {
                 _username = value;
-                OnPropertyChanged(nameof(Username));
             }
         }
         public string Password
@@ -48,7 +51,6 @@ namespace PasswordManager.ViewModels
             set
             {
                 _password = value;
-                OnPropertyChanged(nameof(Password));
             }
         }
         public string Url
@@ -57,7 +59,6 @@ namespace PasswordManager.ViewModels
             set
             {
                 _url = value;
-                OnPropertyChanged(nameof(Url));
             }
         }
         public DateTime ExpirationDate
@@ -66,7 +67,6 @@ namespace PasswordManager.ViewModels
             set
             {
                 _expirationDate = value;
-                OnPropertyChanged(nameof(ExpirationDate));
             }
         }
         public string CategoryPath
@@ -93,7 +93,6 @@ namespace PasswordManager.ViewModels
             set
             {
                 _favorite = value;
-                OnPropertyChanged(nameof(Favorite));
             }
         }
         public string Database
@@ -110,10 +109,9 @@ namespace PasswordManager.ViewModels
             set
             {
                 _notes = value;
-                OnPropertyChanged(nameof(Notes));
             }
         }
-        public ObservableCollection<string> DatabaseItems { get; }
+        public List<string> DatabaseItems { get; }
         public Action CloseAction { get; set; }
         private void ExecuteAddPasswordCommand(object obj)
         {

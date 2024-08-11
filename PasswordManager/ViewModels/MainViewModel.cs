@@ -63,8 +63,16 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(CurrentChildView));
             }
         }
-
-        public ObservableCollection<string> Databases { get; set; }
+        private ObservableCollection<string> _databases;
+        public ObservableCollection<string> Databases
+        {
+            get => _databases; 
+            set
+            {
+                _databases = value;
+                OnPropertyChanged(nameof(Databases));
+            }
+        }
 
         public int SelectedDb
         {
@@ -80,11 +88,10 @@ namespace PasswordManager.ViewModels
         public void GetDatabases()
         {
             Databases.Clear();
-            foreach (var db in (Directory.GetFiles(".").Where(file => Path.GetFileName(file).StartsWith(Thread.CurrentPrincipal?.Identity?.Name)).Select(p => p = p.Remove(0, (@".\" + Thread.CurrentPrincipal?.Identity?.Name).Length))))
+            foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name)))
             {
-                Databases.Add(db);
+                Databases.Add(db[(Thread.CurrentPrincipal.Identity.Name+"\\").Length..]);
             }
-            App.Current.Properties["Databases"] = Databases;
         }
 
         private void SetupTimer()

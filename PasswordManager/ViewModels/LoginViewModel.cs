@@ -1,7 +1,9 @@
-﻿using PasswordManager.Models;
+﻿using Microsoft.Win32;
+using PasswordManager.Models;
 using PasswordManager.Repositories;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security;
@@ -104,6 +106,9 @@ namespace PasswordManager.ViewModels
             {
                 App.Current.Properties["pass"] = Password;
                 Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username), null);
+                Directory.CreateDirectory(Thread.CurrentPrincipal.Identity.Name);
+                Directory.CreateDirectory(Thread.CurrentPrincipal.Identity.Name+"\\Backups");
+                File.Create(Thread.CurrentPrincipal.Identity.Name+"\\" + "default").Close();
                 IsViewVisible = false;
             }
             else
