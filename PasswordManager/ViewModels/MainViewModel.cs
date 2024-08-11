@@ -1,5 +1,6 @@
 ﻿using PasswordManager.Models;
 using PasswordManager.Repositories;
+using PasswordManager.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -27,6 +28,7 @@ namespace PasswordManager.ViewModels
             ShowFavoritesView = new ViewModelCommand(ExecuteShowFavoritesView);
             ShowLabelsView = new ViewModelCommand(ExecuteShowLabelsView);
             ShowCategoryView = new ViewModelCommand(ExecuteShowCategoryView);
+            ShowPasswordGeneratorView = new ViewModelCommand(ExecuteShowPasswordGenerator);
             Databases = new();
             GetDatabases();
             SelectedDb = 0;
@@ -40,6 +42,7 @@ namespace PasswordManager.ViewModels
         public ICommand ShowFavoritesView { get; }
         public ICommand ShowLabelsView { get; }
         public ICommand ShowCategoryView { get; }
+        public ICommand ShowPasswordGeneratorView { get; }
 
         public string Caption
         {
@@ -154,6 +157,13 @@ namespace PasswordManager.ViewModels
             _timer.Stop();
             Application.Current.Shutdown();
         }
+
+        private void ExecuteShowPasswordGenerator(object obj)
+        {
+            var PasswordGen=new PasswordGeneratorView();
+            PasswordGen.Load();
+        }
+
         private void ExecuteShowCategoryView(object obj)
         {
             CurrentChildView = new CategoryViewModel();

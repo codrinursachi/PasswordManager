@@ -26,7 +26,6 @@ namespace PasswordManager.Views
         {
             InitializeComponent();
             ((PasswordCreationViewModel)this.DataContext).CloseAction = UnLoad;
-            datePicker.DisplayDate = DateTime.Today;
         }
 
         public void Load()

@@ -197,16 +197,26 @@
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right">
 
-                            <ComboBox x:Name="dtbSelector" ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged}" SelectedIndex="{Binding SelectedDb}" MouseLeftButtonUp="dtbSelector_MouseLeftButtonDown"/>
-                            <Button x:Name="btnAddPass"
+                            <ComboBox x:Name="dtbSelector" ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" SelectedIndex="{Binding SelectedDb}" MouseLeftButtonUp="dtbSelector_MouseLeftButtonDown"/>
+                            <Button x:Name="generatePass"
         Style="{StaticResource actionButton}"
-        Margin="0,0,25,0"
-        Click="btnAddPass_Click">
-                                <TextBlock Text="+ Add Password"
+        Margin="25,0,25,0"
+        Command="{Binding ShowPasswordGeneratorView}">
+                                <TextBlock Text="Generate Password"
                Foreground="{StaticResource titleColor2}"
                FontSize="16"
                FontFamily="Montserrat"
                FontWeight="Medium"/>
+                            </Button>
+                            <Button x:Name="btnAddPass"
+                                    Style="{StaticResource actionButton}"
+                                    Margin="0,0,25,0"
+                                    Click="btnAddPass_Click">
+                                <TextBlock Text="+ Add Password"
+                                           Foreground="{StaticResource titleColor2}"
+                                           FontSize="16"
+                                           FontFamily="Montserrat"
+                                           FontWeight="Medium"/>
                             </Button>
 
 
