@@ -57,7 +57,7 @@ namespace PasswordManager.ViewModels
             while (node.Parent.Name != "Categories")
             {
                 node = node.Parent;
-                path.Add(node.Name + "/");
+                path.Add(node.Name + "\\");
             }
 
             path.Reverse();
@@ -66,7 +66,7 @@ namespace PasswordManager.ViewModels
                 filter += item;
             }
 
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..])|| p.CategoryPath[filter.Length]=='/')).Select(p => p.ToPasswordToShow()))
+            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..])|| p.CategoryPath[filter.Length]=='\\')).Select(p => p.ToPasswordToShow()))
             {
                 Passwords.Add(password);
             }
@@ -77,7 +77,7 @@ namespace PasswordManager.ViewModels
             var root = new CategoryNodeModel { Name = "Categories" };
             foreach (var path in paths)
             {
-                var parts = path.Split('/');
+                var parts = path.Split('\\');
                 var current = root;
                 foreach (var part in parts)
                 {

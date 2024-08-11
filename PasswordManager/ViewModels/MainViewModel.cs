@@ -16,6 +16,7 @@ namespace PasswordManager.ViewModels
 {
     class MainViewModel : ViewModelBase
     {
+        private ObservableCollection<string> _databases;
         private ViewModelBase _currentChildView;
         private string _caption;
         private int _selectedDb;
@@ -32,12 +33,7 @@ namespace PasswordManager.ViewModels
             ExecuteShowAllPasswordsView(null);
             SetupTimer();
             InputManager.Current.PreProcessInput += OnActivity;
-        }
-
-        private void OnActivity(object sender, PreProcessInputEventArgs e)
-        {
-            _timer.Stop();
-            _timer.Start();
+            CreateBackupIfNecessary();
         }
 
         public ICommand ShowAllPasswordsView { get; }
@@ -63,10 +59,9 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(CurrentChildView));
             }
         }
-        private ObservableCollection<string> _databases;
         public ObservableCollection<string> Databases
         {
-            get => _databases; 
+            get => _databases;
             set
             {
                 _databases = value;
@@ -90,8 +85,59 @@ namespace PasswordManager.ViewModels
             Databases.Clear();
             foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name)))
             {
-                Databases.Add(db[(Thread.CurrentPrincipal.Identity.Name+"\\").Length..]);
+                Databases.Add(db[(Thread.CurrentPrincipal.Identity.Name + "\\").Length..]);
             }
+        }
+
+        private void CreateBackupIfNecessary()
+        {
+            foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name)))
+            {
+                if (CheckBackup(db))
+                {
+                    CreateBackup(db);
+                }
+            }
+        }
+
+        private void CreateBackup(string db)
+        {
+            File.Copy(db, Thread.CurrentPrincipal.Identity.Name + "\\Backups\\" + db[(Thread.CurrentPrincipal.Identity.Name + "\\").Length..] + "_" + DateTime.Now.ToShortDateString());
+        }
+
+        private bool CheckBackup(string DbName)
+        {
+            int backupCount = 0;
+            DateTime latestBackupTime = default;
+            DateTime oldestBackupTime = DateTime.Now;
+            string oldestBackup = string.Empty;
+
+            foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name + "\\Backups")))
+            {
+                if (db.StartsWith(DbName))
+                {
+                    backupCount++;
+                    latestBackupTime = File.GetCreationTime(DbName) > latestBackupTime ? File.GetCreationTime(DbName) : latestBackupTime;
+                    if (File.GetCreationTime(db) < oldestBackupTime)
+                    {
+                        oldestBackupTime = File.GetCreationTime(DbName);
+                        oldestBackup = db;
+                    }
+                }
+            }
+
+            if (backupCount >= 5)
+            {
+                File.Delete(oldestBackup);
+            }
+
+            return latestBackupTime < DateTime.Now - TimeSpan.FromDays(7);
+        }
+
+        private void OnActivity(object sender, PreProcessInputEventArgs e)
+        {
+            _timer.Stop();
+            _timer.Start();
         }
 
         private void SetupTimer()

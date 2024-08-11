@@ -20,7 +20,7 @@ namespace PasswordManager.ViewModels
         string _password;
         string _url;
         DateTime _expirationDate;
-        string _categoryPath;
+        List<string> _categoryPaths;
         string _tags;
         bool _favorite;
         string _database;
@@ -35,6 +35,7 @@ namespace PasswordManager.ViewModels
                 DatabaseItems.Add(db[(Thread.CurrentPrincipal.Identity.Name + "\\").Length..]);
             }
             AddPasswordCommand = new ViewModelCommand(ExecuteAddPasswordCommand);
+            CategoryPaths = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
 
         public string Username
@@ -69,13 +70,15 @@ namespace PasswordManager.ViewModels
                 _expirationDate = value;
             }
         }
-        public string CategoryPath
+        public string CategoryPath{ get; set; }
+
+        public List<string> CategoryPaths
         {
-            get => _categoryPath;
+            get => _categoryPaths;
             set
             {
-                _categoryPath = value;
-                OnPropertyChanged(nameof(CategoryPath));
+                _categoryPaths = value;
+                OnPropertyChanged(nameof(CategoryPaths));
             }
         }
         public string Tags
