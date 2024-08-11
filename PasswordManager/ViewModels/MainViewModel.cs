@@ -93,7 +93,7 @@ namespace PasswordManager.ViewModels
         {
             foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name)))
             {
-                if (CheckBackup(db))
+                if (CheckBackup(db[(Thread.CurrentPrincipal.Identity.Name + "\\").Length..]))
                 {
                     CreateBackup(db);
                 }
@@ -112,12 +112,12 @@ namespace PasswordManager.ViewModels
             DateTime oldestBackupTime = DateTime.Now;
             string oldestBackup = string.Empty;
 
-            foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name + "\\Backups")))
+            foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name + "\\Backups\\")))
             {
-                if (db.StartsWith(DbName))
+                if (db[(Thread.CurrentPrincipal.Identity.Name + "\\Backups\\").Length..].StartsWith(DbName))
                 {
                     backupCount++;
-                    latestBackupTime = File.GetCreationTime(DbName) > latestBackupTime ? File.GetCreationTime(DbName) : latestBackupTime;
+                    latestBackupTime = File.GetCreationTime(db) > latestBackupTime ? File.GetCreationTime(db) : latestBackupTime;
                     if (File.GetCreationTime(db) < oldestBackupTime)
                     {
                         oldestBackupTime = File.GetCreationTime(DbName);
