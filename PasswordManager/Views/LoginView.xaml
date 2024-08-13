@@ -3,10 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PasswordManager.Views" 
-        xmlns:viewModel="clr-namespace:PasswordManager.ViewModels" xmlns:customcontrols="clr-namespace:PasswordManager.CustomControls"
+        xmlns:local="clr-namespace:PasswordManager.Views"
+        xmlns:viewModel="clr-namespace:PasswordManager.ViewModels"
+        xmlns:customcontrols="clr-namespace:PasswordManager.CustomControls"
         mc:Ignorable="d"
-        Title="LoginView" Height="550" Width="800"
+        Title="LoginView"
+        Height="550"
+        Width="800"
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
@@ -23,7 +26,9 @@
     </Window.Resources>
 
     <Window.Visibility>
-        <Binding Path="IsViewVisible" Mode="TwoWay" Converter="{StaticResource BooleanToVisibility}"/>
+        <Binding Path="IsViewVisible"
+                 Mode="TwoWay"
+                 Converter="{StaticResource BooleanToVisibility}"/>
     </Window.Visibility>
 
     <Border CornerRadius="12">
@@ -34,17 +39,24 @@
                 BorderThickness="1"
                 Opacity="0.95">
             <Border.BorderBrush>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="{StaticResource winBorderColor1}" Offset="0"/>
-                    <GradientStop Color="{StaticResource winBorderColor2}" Offset="0.75"/>
-                    <GradientStop Color="{StaticResource winBorderColor3}" Offset="1"/>
+                <LinearGradientBrush StartPoint="0,0"
+                                     EndPoint="1,1">
+                    <GradientStop Color="{StaticResource winBorderColor1}"
+                                  Offset="0"/>
+                    <GradientStop Color="{StaticResource winBorderColor2}"
+                                  Offset="0.75"/>
+                    <GradientStop Color="{StaticResource winBorderColor3}"
+                                  Offset="1"/>
                 </LinearGradientBrush>
             </Border.BorderBrush>
 
             <Border.Background>
-                <LinearGradientBrush StartPoint="0,1" EndPoint="1,0">
-                    <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0"/>
-                    <GradientStop Color="{StaticResource primaryBackColor2}" Offset="0.75"/>
+                <LinearGradientBrush StartPoint="0,1"
+                                     EndPoint="1,0">
+                    <GradientStop Color="{StaticResource primaryBackColor1}"
+                                  Offset="0"/>
+                    <GradientStop Color="{StaticResource primaryBackColor2}"
+                                  Offset="0.75"/>
                 </LinearGradientBrush>
             </Border.Background>
 
@@ -94,20 +106,28 @@
                             Grid.Row="1"
                             Orientation="Vertical"
                             Margin="0,35,0,0">
-                    <Border CornerRadius="50" Width="100" Height="100">
+                    <Border CornerRadius="50"
+                            Width="100"
+                            Height="100">
                         <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="{StaticResource winBorderColor1}" Offset="0"/>
-                                <GradientStop Color="{StaticResource winBorderColor2}" Offset="0.75"/>
-                                <GradientStop Color="{StaticResource winBorderColor3}" Offset="1"/>
+                            <LinearGradientBrush StartPoint="0,0"
+                                                 EndPoint="1,1">
+                                <GradientStop Color="{StaticResource winBorderColor1}"
+                                              Offset="0"/>
+                                <GradientStop Color="{StaticResource winBorderColor2}"
+                                              Offset="0.75"/>
+                                <GradientStop Color="{StaticResource winBorderColor3}"
+                                              Offset="1"/>
                             </LinearGradientBrush>
                         </Border.Background>
 
-                        <Border CornerRadius="50" Width="100" Height="100">
+                        <Border CornerRadius="50"
+                                Width="100"
+                                Height="100">
                             <Border.Background>
 
                                 <ImageBrush ImageSource="/Images/Logo.png"
-                                        Opacity="0.2"/>
+                                            Opacity="0.2"/>
 
                             </Border.Background>
 
@@ -174,7 +194,7 @@
 
                     <Button x:Name="btnRegister"
                             Command="{Binding RegisterCommand}"
-                            Style="{StaticResource actionButton}"                            
+                            Style="{StaticResource actionButton}"
                             Content="Register"/>
 
                 </StackPanel>

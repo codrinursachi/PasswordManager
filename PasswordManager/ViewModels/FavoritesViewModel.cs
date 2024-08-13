@@ -1,5 +1,6 @@
 ﻿using PasswordManager.DTO;
 using PasswordManager.DTO.Extensions;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
 using System;
@@ -13,14 +14,13 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class FavoritesViewModel:ViewModelBase
+    class FavoritesViewModel:ViewModelBase,IStopTimer
     {
         string _searchFilter;
         private DispatcherTimer _timer;
 
         public FavoritesViewModel()
         {
-            App.Current.Properties["ShouldRefresh"] = true;
             Passwords = new();
             Refresh();
             SetupTimer();
@@ -35,6 +35,11 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(SearchFilter));
                 Refresh();
             }
+        }
+
+        public void Stop()
+        {
+            _timer.Stop();
         }
 
         private void SetupTimer()

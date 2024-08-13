@@ -1,5 +1,6 @@
 ﻿using PasswordManager.DTO;
 using PasswordManager.DTO.Extensions;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
 using System;
@@ -9,22 +10,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class CategoryViewModel : ViewModelBase
+    class CategoryViewModel : ViewModelBase, IStopTimer
     {
         private CategoryNodeModel _filter;
+        private DispatcherTimer _timer;
+
         public CategoryViewModel()
         {
             PasswordRepository passwordRepository = new();
             var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
-            Categories = [rootNode];
-            Passwords = new(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()));
+            Categories.Add(rootNode);
+            SetupTimer();
         }
 
-        public List<CategoryNodeModel> Categories { get; }
-        public ObservableCollection<PasswordToShowDTO> Passwords { get; }
+        public ObservableCollection<CategoryNodeModel> Categories { get; set; } = new();
+        public ObservableCollection<PasswordToShowDTO> Passwords { get; } = new();
         public CategoryNodeModel Filter
         {
             get => _filter;
@@ -32,17 +36,41 @@ namespace PasswordManager.ViewModels
             {
                 _filter = value;
                 OnPropertyChanged(nameof(Filter));
-                FilterPwd();
+                App.Current.Properties["ShouldRefresh"] = true;
             }
+        }
+
+        public void Stop()
+        {
+            _timer.Stop();
+        }
+
+        private void SetupTimer()
+        {
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            FilterPwd();
         }
 
         private void FilterPwd()
         {
+            if (!(bool)App.Current.Properties["ShouldRefresh"])
+            {
+                return;
+            }
+
+            App.Current.Properties["ShouldRefresh"] = false;
             Passwords.Clear();
             PasswordRepository passwordRepository = new();
             if (Filter == null || Filter.Parent == null)
             {
-                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p=>p.ToPasswordToShow()))
+                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()))
                 {
                     Passwords.Add(password);
                 }
@@ -66,7 +94,7 @@ namespace PasswordManager.ViewModels
                 filter += item;
             }
 
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..])|| p.CategoryPath[filter.Length]=='\\')).Select(p => p.ToPasswordToShow()))
+            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')).Select(p => p.ToPasswordToShow()))
             {
                 Passwords.Add(password);
             }
@@ -94,6 +122,7 @@ namespace PasswordManager.ViewModels
 
             return root;
         }
+
     }
 }
 

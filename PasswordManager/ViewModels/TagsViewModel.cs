@@ -1,5 +1,6 @@
 ﻿using PasswordManager.DTO;
 using PasswordManager.DTO.Extensions;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
 using System;
@@ -8,45 +9,66 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class TagsViewModel : ViewModelBase
+    class TagsViewModel : ViewModelBase, IStopTimer
     {
         private List<string> _filter = new();
+        private DispatcherTimer _timer;
 
         public TagsViewModel()
         {
-            IPasswordRepository passwordRepository = new PasswordRepository();
-            var tags = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p => p.Tags != null).Select(p => p.Tags.Split());
-            foreach (var itemTags in tags)
-            {
-                foreach (var tag in itemTags)
-                {
-                    Tags.Add(tag);
-                }
-            }
-
-            Passwords = new(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()));
+            SetupTimer();
         }
 
-        public ObservableCollection<PasswordToShowDTO> Passwords { get; }
-        public HashSet<string> Tags { get; } = new();
+        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = new();
+        public ObservableCollection<string> Tags
+        {
+            get; set;
+        } = new();
         public List<string> Filter
         {
             get => _filter;
             set
             {
                 _filter = value;
-                FilterPwd();
+                App.Current.Properties["ShouldRefresh"] = true;
             }
+        }
+
+        public void Stop()
+        {
+            _timer.Stop();
+        }
+
+        private void SetupTimer()
+        {
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += Timer_Tick;
+            _timer.Start();
+        }
+
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            FilterPwd();
         }
 
         private void FilterPwd()
         {
+            if (!(bool)App.Current.Properties["ShouldRefresh"])
+            {
+                return;
+            }
+
+            UpdateTags();
+            App.Current.Properties["ShouldRefresh"] = false;
             IPasswordRepository passwordRepository = new PasswordRepository();
             Passwords.Clear();
-            if (Filter.Count==0)
+
+            if (Filter.Count == 0)
             {
                 foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()))
                 {
@@ -55,9 +77,32 @@ namespace PasswordManager.ViewModels
             }
             else
             {
-                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()).Where(p=>p.Tags!=null&&p.Tags.Split().ToHashSet().IsSupersetOf(Filter)))
+                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()).Where(p => p.Tags != null && p.Tags.Split().ToHashSet().IsSupersetOf(Filter)))
                 {
                     Passwords.Add(password);
+                }
+            }
+        }
+
+        private void UpdateTags()
+        {
+            IPasswordRepository passwordRepository = new PasswordRepository();
+            var tags = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p => p.Tags != null).Select(p => p.Tags.Split());
+            HashSet<string> result = new();
+            foreach (var itemTags in tags)
+            {
+                foreach (var tag in itemTags)
+                {
+                    result.Add(tag);
+                }
+            }
+
+            if (!result.IsSupersetOf(Tags) || !Tags.ToHashSet().IsSupersetOf(result))
+            {
+                Tags.Clear();
+                foreach (var tag in result)
+                {
+                    Tags.Add(tag);
                 }
             }
         }

@@ -1,4 +1,5 @@
-﻿using PasswordManager.Models;
+﻿using PasswordManager.Interfaces;
+using PasswordManager.Models;
 using PasswordManager.Repositories;
 using PasswordManager.Views;
 using System;
@@ -58,8 +59,10 @@ namespace PasswordManager.ViewModels
             get => _currentChildView;
             set
             {
+                ((IStopTimer)_currentChildView)?.Stop();
                 _currentChildView = value;
                 OnPropertyChanged(nameof(CurrentChildView));
+                App.Current.Properties["ShouldRefresh"] = true;
             }
         }
         public ObservableCollection<string> Databases

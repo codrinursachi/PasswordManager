@@ -15,6 +15,10 @@ namespace PasswordManager
         {
             var loginView = new LoginView();
             loginView.Show();
+            if (e.Args.Length > 0 && e.Args[0] == "--start-minimized")
+            {
+                loginView.WindowState = WindowState.Minimized;
+            }
             loginView.IsVisibleChanged += (s, ev) =>
             {
                 if (loginView.IsVisible == false && loginView.IsLoaded)
@@ -25,7 +29,7 @@ namespace PasswordManager
                 }
             };
 
-            App.Current.Properties["ShouldRefresh"] = false;
+            App.Current.Properties["ShouldRefresh"] = true;
             App.Current.Properties["timeout"] = false;
         }
 
@@ -35,7 +39,7 @@ namespace PasswordManager
 
             if ((bool)App.Current.Properties["timeout"])
             {
-                Process.Start(Process.GetCurrentProcess().MainModule.FileName);
+                Process.Start(Process.GetCurrentProcess().MainModule.FileName, "--start-minimized");
             }
         }
     }

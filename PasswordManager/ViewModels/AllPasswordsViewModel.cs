@@ -1,5 +1,6 @@
 ﻿using PasswordManager.DTO;
 using PasswordManager.DTO.Extensions;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
 using System;
@@ -13,7 +14,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class AllPasswordsViewModel : ViewModelBase
+    class AllPasswordsViewModel : ViewModelBase, IStopTimer
     {
         string _searchFilter;
         private DispatcherTimer _timer;
@@ -23,6 +24,22 @@ namespace PasswordManager.ViewModels
             Passwords = new();
             Refresh();
             SetupTimer();
+        }
+        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; }
+        public string SearchFilter
+        {
+            get => _searchFilter;
+            set
+            {
+                _searchFilter = value;
+                App.Current.Properties["ShouldRefresh"] = true;
+                Refresh();
+            }
+        }
+
+        public void Stop()
+        {
+            _timer.Stop();
         }
 
         private void SetupTimer()
@@ -37,18 +54,6 @@ namespace PasswordManager.ViewModels
         {
             Refresh();
         }
-        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; }
-        public string SearchFilter
-        {
-            get => _searchFilter;
-            set
-            {
-                _searchFilter = value;
-                OnPropertyChanged(nameof(SearchFilter));
-                App.Current.Properties["ShouldRefresh"] = true;
-                Refresh();
-            }
-        }
 
         private void Refresh()
         {
@@ -59,7 +64,7 @@ namespace PasswordManager.ViewModels
 
             var passwordRepository = new PasswordRepository();
             App.Current.Properties["ShouldRefresh"] = false;
-            HashSet<PasswordToShowDTO> results = new();
+            Passwords.Clear();
             foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()))
             {
                 List<string> searchData = [];
@@ -80,14 +85,6 @@ namespace PasswordManager.ViewModels
                     searchData.Add(password.Url);
                 }
                 if (string.IsNullOrEmpty(SearchFilter) || searchData.ToHashSet().IsSupersetOf(SearchFilter.Split()))
-                {
-                    results.Add(password);
-                }
-            }
-            if (results.Except(Passwords).Any()||Passwords.Except(results).Any())
-            {
-                Passwords.Clear();
-                foreach (var password in results)
                 {
                     Passwords.Add(password);
                 }

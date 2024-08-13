@@ -42,6 +42,7 @@ namespace PasswordManager.ViewModels
             {
                 pass.Append(symbols[Random.Shared.Next(symbols.Length)]);
             }
+
             char[] shuffledArray = pass.ToString().ToCharArray();
             Random.Shared.Shuffle(shuffledArray);
             GeneratedPassword = new(shuffledArray);
