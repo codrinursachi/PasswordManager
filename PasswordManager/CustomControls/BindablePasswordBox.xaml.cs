@@ -21,8 +21,8 @@ namespace PasswordManager.CustomControls
     /// </summary>
     public partial class BindablePasswordBox : UserControl
     {
-        public static readonly DependencyProperty PasswordProperty = 
-            DependencyProperty.Register("Password",typeof(string),typeof(BindablePasswordBox));
+        public static readonly DependencyProperty PasswordProperty =
+            DependencyProperty.Register("Password", typeof(string), typeof(BindablePasswordBox));
         public BindablePasswordBox()
         {
             InitializeComponent();
@@ -36,7 +36,7 @@ namespace PasswordManager.CustomControls
 
         public string Password
         {
-            get { return (string)GetValue(PasswordProperty);}
+            get { return (string)GetValue(PasswordProperty); }
             set { SetValue(PasswordProperty, value); }
         }
     }

@@ -31,7 +31,7 @@ namespace PasswordManager.CustomControls
 
         public PasswordListView()
         {
-            InitializeComponent();            
+            InitializeComponent();
         }
 
         private void SetupTimer()
@@ -44,7 +44,7 @@ namespace PasswordManager.CustomControls
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if (Clipboard.GetText()==_storedPass)
+            if (Clipboard.GetText() == _storedPass)
             {
                 Clipboard.Clear();
             }
@@ -60,7 +60,7 @@ namespace PasswordManager.CustomControls
 
         private void cpyClipboard_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            _storedPass= GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
+            _storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
             Clipboard.SetDataObject(_storedPass);
             SetupTimer();
         }
@@ -69,14 +69,14 @@ namespace PasswordManager.CustomControls
         {
             ((PasswordToShowDTO)pwdList.SelectedItem).Password = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
             pwdList.Items.Refresh();
-            ClearPass();            
+            ClearPass();
         }
 
         private async Task ClearPass()
         {
             var passToClear = (PasswordToShowDTO)pwdList.SelectedItem;
             await Task.Delay(TimeSpan.FromSeconds(5));
-            passToClear.Password= "********";
+            passToClear.Password = "********";
             pwdList.Items.Refresh();
         }
     }

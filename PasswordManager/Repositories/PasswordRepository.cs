@@ -15,7 +15,7 @@ namespace PasswordManager.Repositories
 {
     public class PasswordRepository : IPasswordRepository
     {
-        readonly string fileName = ".\\"+Thread.CurrentPrincipal.Identity.Name+"\\"+App.Current.Properties["SelectedDb"]?.ToString();
+        readonly string fileName = ".\\" + Thread.CurrentPrincipal.Identity.Name + "\\" + App.Current.Properties["SelectedDb"]?.ToString();
 
         public void Add(PasswordModel passwordModel, string encryptionData)
         {

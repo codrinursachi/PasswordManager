@@ -1,82 +1,123 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
-    <Style x:Key="menuButton" TargetType="RadioButton">
-        <Setter Property="Height" Value="50"/>
-        <Setter Property="Margin" Value="-5,0,0,5"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{StaticResource plainTextColor3}"/>
-        <Setter Property="BorderBrush" Value="Transparent"/>
+    <Style x:Key="menuButton"
+           TargetType="RadioButton">
+        <Setter Property="Height"
+                Value="50"/>
+        <Setter Property="Margin"
+                Value="-5,0,0,5"/>
+        <Setter Property="Background"
+                Value="Transparent"/>
+        <Setter Property="Foreground"
+                Value="{StaticResource plainTextColor3}"/>
+        <Setter Property="BorderBrush"
+                Value="Transparent"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RadioButton">
                     <Border Background="{TemplateBinding Background}"
                             BorderThickness="4,0,0,0"
                             BorderBrush="{TemplateBinding BorderBrush}">
-                        <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Left"
+                                          VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Margin" Value="0,0,0,5"/>
-                <Setter Property="Background" Value="{StaticResource panelOverColor}"/>
-                <Setter Property="Foreground" Value="{StaticResource titleColor3}"/>
-                <Setter Property="BorderBrush" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Margin"
+                        Value="0,0,0,5"/>
+                <Setter Property="Background"
+                        Value="{StaticResource panelOverColor}"/>
+                <Setter Property="Foreground"
+                        Value="{StaticResource titleColor3}"/>
+                <Setter Property="BorderBrush"
+                        Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
             </Trigger>
-            <Trigger Property="IsChecked" Value="True">
-                <Setter Property="Margin" Value="0,0,0,5"/>
-                <Setter Property="Background" Value="{StaticResource panelActiveColor}"/>
-                <Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
-                <Setter Property="BorderBrush" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
+            <Trigger Property="IsChecked"
+                     Value="True">
+                <Setter Property="Margin"
+                        Value="0,0,0,5"/>
+                <Setter Property="Background"
+                        Value="{StaticResource panelActiveColor}"/>
+                <Setter Property="Foreground"
+                        Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
+                <Setter Property="BorderBrush"
+                        Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="menuButtonText" TargetType="TextBlock">
-        <Setter Property="Foreground" Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
-        <Setter Property="FontFamily" Value="Montserrat"/>
-        <Setter Property="FontWeight" Value="Medium"/>
-        <Setter Property="FontSize" Value="13.5"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="20,0,0,0"/>
+    <Style x:Key="menuButtonText"
+           TargetType="TextBlock">
+        <Setter Property="Foreground"
+                Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
+        <Setter Property="FontFamily"
+                Value="Montserrat"/>
+        <Setter Property="FontWeight"
+                Value="Medium"/>
+        <Setter Property="FontSize"
+                Value="13.5"/>
+        <Setter Property="VerticalAlignment"
+                Value="Center"/>
+        <Setter Property="Margin"
+                Value="20,0,0,0"/>
     </Style>
 
-    <Style x:Key="controlButton" TargetType="Button">
-        <Setter Property="Width" Value="35"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="Foreground" Value="{StaticResource plainTextColor3}"/>
+    <Style x:Key="controlButton"
+           TargetType="Button">
+        <Setter Property="Width"
+                Value="35"/>
+        <Setter Property="Background"
+                Value="Transparent"/>
+        <Setter Property="Foreground"
+                Value="{StaticResource plainTextColor3}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
                     <Border Background="{TemplateBinding Background}"
                             CornerRadius="4">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="{StaticResource panelActiveColor}"/>
-                <Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="{StaticResource panelActiveColor}"/>
+                <Setter Property="Foreground"
+                        Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="actionButton" TargetType="Button">
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontSize" Value="12"/>
-        <Setter Property="FontFamily" Value="Montserrat"/>
-        <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="Margin" Value="0,30,0,0"/>
-        <Setter Property="Background" Value="#462AD8"/>
+    <Style x:Key="actionButton"
+           TargetType="Button">
+        <Setter Property="BorderThickness"
+                Value="0"/>
+        <Setter Property="Foreground"
+                Value="White"/>
+        <Setter Property="FontSize"
+                Value="12"/>
+        <Setter Property="FontFamily"
+                Value="Montserrat"/>
+        <Setter Property="Cursor"
+                Value="Hand"/>
+        <Setter Property="Margin"
+                Value="0,30,0,0"/>
+        <Setter Property="Background"
+                Value="#462AD8"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <Border Width="150" Height="40"
+                    <Border Width="150"
+                            Height="40"
                             CornerRadius="20"
                             Background="{TemplateBinding Background}">
                         <ContentPresenter VerticalAlignment="Center"
@@ -86,8 +127,10 @@
             </Setter.Value>
         </Setter>
         <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#28AEED"/>
+            <Trigger Property="IsMouseOver"
+                     Value="True">
+                <Setter Property="Background"
+                        Value="#28AEED"/>
             </Trigger>
         </Style.Triggers>
     </Style>

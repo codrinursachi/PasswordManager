@@ -107,8 +107,8 @@ namespace PasswordManager.ViewModels
                 App.Current.Properties["pass"] = Password;
                 Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username), null);
                 Directory.CreateDirectory(Thread.CurrentPrincipal.Identity.Name);
-                Directory.CreateDirectory(Thread.CurrentPrincipal.Identity.Name+"\\Backups");
-                File.Create(Thread.CurrentPrincipal.Identity.Name+"\\" + "default").Close();
+                Directory.CreateDirectory(Thread.CurrentPrincipal.Identity.Name + "\\Backups");
+                File.Create(Thread.CurrentPrincipal.Identity.Name + "\\" + "default").Close();
                 IsViewVisible = false;
             }
             else

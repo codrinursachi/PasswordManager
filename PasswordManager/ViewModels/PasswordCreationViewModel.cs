@@ -70,7 +70,7 @@ namespace PasswordManager.ViewModels
                 _expirationDate = value;
             }
         }
-        public string CategoryPath{ get; set; }
+        public string CategoryPath { get; set; }
 
         public List<string> CategoryPaths
         {
@@ -107,7 +107,8 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(Database));
             }
         }
-        public string Notes { 
+        public string Notes
+        {
             get => _notes;
             set
             {

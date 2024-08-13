@@ -18,7 +18,6 @@ namespace PasswordManager.ViewModels
 {
     class MainViewModel : ViewModelBase
     {
-        private ObservableCollection<string> _databases;
         private ViewModelBase _currentChildView;
         private string _caption;
         private int _selectedDb;
@@ -65,15 +64,7 @@ namespace PasswordManager.ViewModels
                 App.Current.Properties["ShouldRefresh"] = true;
             }
         }
-        public ObservableCollection<string> Databases
-        {
-            get => _databases;
-            set
-            {
-                _databases = value;
-                OnPropertyChanged(nameof(Databases));
-            }
-        }
+        public ObservableCollection<string> Databases { get; set; }
 
         public int SelectedDb
         {
@@ -81,6 +72,7 @@ namespace PasswordManager.ViewModels
             set
             {
                 _selectedDb = value;
+                OnPropertyChanged(nameof(SelectedDb));
                 App.Current.Properties["SelectedDb"] = Databases[_selectedDb];
                 App.Current.Properties["ShouldRefresh"] = true;
             }
@@ -163,7 +155,7 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteShowPasswordGenerator(object obj)
         {
-            var PasswordGen=new PasswordGeneratorView();
+            var PasswordGen = new PasswordGeneratorView();
             PasswordGen.Load();
         }
 

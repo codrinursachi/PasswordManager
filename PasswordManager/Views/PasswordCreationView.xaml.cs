@@ -75,14 +75,5 @@ namespace PasswordManager.Views
                 }
             }
         }
-
-        private void txtTag_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Return)
-            {
-                txtTag.Text = txtTag.Text[^1] == ' ' ? txtTag.Text : txtTag.Text + " ";
-                txtTag.CaretIndex = txtTag.Text.Length;
-            }
-        }
     }
 }
