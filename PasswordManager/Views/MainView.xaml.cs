@@ -62,7 +62,9 @@ namespace PasswordManager.Views
         private void btnAddPass_Click(object sender, RoutedEventArgs e)
         {
             PasswordCreationView passwordCreationView = new();
-            passwordCreationView.Load();
+            Overlay.Visibility = Visibility.Visible;
+            passwordCreationView.ShowDialog();
+            Overlay.Visibility=Visibility.Hidden;
         }
 
         private void dtbSelector_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

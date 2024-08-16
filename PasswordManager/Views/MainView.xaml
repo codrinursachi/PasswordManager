@@ -225,6 +225,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
     </Window.Resources>
 
     <Border CornerRadius="10"
@@ -423,25 +424,16 @@
                                       MouseLeftButtonUp="dtbSelector_MouseLeftButtonDown"
                                       OverridesDefaultStyle="True"/>
                             <Button x:Name="generatePass"
-                                    Style="{StaticResource actionButton}"
+                                    Style="{StaticResource Windows11ButtonStyle}"
                                     Margin="25,0,25,0"
-                                    Command="{Binding ShowPasswordGeneratorView}">
-                                <TextBlock Text="Generate Password"
-                                           Foreground="{StaticResource titleColor2}"
-                                           FontSize="16"
-                                           FontFamily="Montserrat"
-                                           FontWeight="Medium"/>
-                            </Button>
+                                    Command="{Binding ShowPasswordGeneratorView}"
+                                    Content="Generate Password"/>
                             <Button x:Name="btnAddPass"
-                                    Style="{StaticResource actionButton}"
+                                    Style="{StaticResource Windows11ButtonStyle}"
                                     Margin="0,0,25,0"
-                                    Click="btnAddPass_Click">
-                                <TextBlock Text="+ Add Password"
-                                           Foreground="{StaticResource titleColor2}"
-                                           FontSize="16"
-                                           FontFamily="Montserrat"
-                                           FontWeight="Medium"/>
-                            </Button>
+                                    Click="btnAddPass_Click"
+                                    Content="+ Add Password"/>
+
 
 
 
@@ -459,6 +451,7 @@
 
             </Border>
 
+            <Border x:Name="Overlay" Background="Black" Opacity="0.5" Grid.ColumnSpan="2" Visibility="Hidden"/>
         </Grid>
 
     </Border>

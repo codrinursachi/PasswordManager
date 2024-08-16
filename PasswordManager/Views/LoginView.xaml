@@ -189,12 +189,12 @@
 
                     <Button x:Name="btnLogin"
                             Command="{Binding LoginCommand}"
-                            Style="{StaticResource actionButton}"
+                            Style="{StaticResource Windows11ButtonStyle}"
                             Content="Log In"/>
 
                     <Button x:Name="btnRegister"
                             Command="{Binding RegisterCommand}"
-                            Style="{StaticResource actionButton}"
+                            Style="{StaticResource Windows11ButtonStyle}"
                             Content="Register"/>
 
                 </StackPanel>
