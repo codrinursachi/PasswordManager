@@ -34,7 +34,7 @@ namespace PasswordManager.ViewModels
             SelectedDb = 0;
             ExecuteShowAllPasswordsView(null);
             SetupTimer();
-            InputManager.Current.PreProcessInput += OnActivity;
+            //InputManager.Current.PreProcessInput += OnActivity;
             CreateBackupIfNecessary();
         }
 
@@ -132,13 +132,13 @@ namespace PasswordManager.ViewModels
             return latestBackupTime < DateTime.Now - TimeSpan.FromDays(7);
         }
 
-        private void OnActivity(object sender, PreProcessInputEventArgs e)
+        public void OnActivity(object? sender, EventArgs e)
         {
             _timer.Stop();
             _timer.Start();
         }
 
-        private void SetupTimer()
+        public void SetupTimer()
         {
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(60);

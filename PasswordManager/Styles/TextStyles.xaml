@@ -4,7 +4,7 @@
     <Style x:Key="inputLabel"
            TargetType="TextBlock">
         <Setter Property="Foreground"
-                Value="DarkGray"/>
+                Value="{StaticResource TextBrush}"/>
         <Setter Property="FontSize"
                 Value="12"/>
         <Setter Property="FontWeight"
@@ -24,7 +24,7 @@
         <Setter Property="FontFamily"
                 Value="Montserrat"/>
         <Setter Property="Foreground"
-                Value="White"/>
+                Value="{StaticResource TextBrush}"/>
         <Setter Property="CaretBrush"
                 Value="LightGray"/>
         <Setter Property="BorderBrush"
@@ -37,8 +37,6 @@
                 Value="Center"/>
         <Setter Property="Margin"
                 Value="0,5,0,0"/>
-        <Setter Property="Padding"
-                Value="20,0,0,0"/>
         <Setter Property="Background"
                 Value="Transparent"/>
     </Style>

@@ -10,15 +10,15 @@ namespace PasswordManager.ViewModels
     class PasswordGeneratorViewModel : ViewModelBase
     {
         private string alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        private string symbols = "!\";#$%&'()*+,-./:;<=>?@[]^_`{|}~";
+        private string symbols = """!\";#$%&'()*+,-./:;<=>?@[]^_`{|}~""";
         public string _generatedPassword;
         public PasswordGeneratorViewModel()
         {
             GeneratePasswordCommand = new ViewModelCommand(ExecuteGeneratePasswordCommand);
         }
 
-        public int AlphaNumCount { get; set; }
-        public int SymbolsCount { get; set; }
+        public int AlphaNumCount { get; set; } = 5;
+        public int SymbolsCount { get; set; } = 5;
         public string GeneratedPassword
         {
             get => _generatedPassword;

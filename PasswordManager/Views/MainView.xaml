@@ -44,7 +44,7 @@
                     x:Name="Border"
                     Grid.ColumnSpan="2"
                     CornerRadius="0"
-                    Background="Transparent"
+                    Background="White"
                     BorderBrush="#FF97A0A5"
                     BorderThickness="1"/>
                 <Border
@@ -57,7 +57,7 @@
                 <Path
                     x:Name="Arrow"
                     Grid.Column="1"
-                    Fill="White"
+                    Fill="{StaticResource TextBrush}"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"/>
@@ -89,7 +89,7 @@
             <Setter Property="MinHeight"
                     Value="20"/>
             <Setter Property="Foreground"
-                    Value="White"/>
+                    Value="{StaticResource TextBrush}"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type ComboBox}">
@@ -117,8 +117,8 @@
                                      VerticalAlignment="Center"
                                      Margin="3,3,23,3"
                                      Focusable="True"
-                                     Background="Transparent"
-                                     Foreground="{StaticResource plainTextColor1}"
+                                     Background="White"
+                                     Foreground="{StaticResource TextBrush}"
                                      Visibility="Hidden"
                                      IsReadOnly="{TemplateBinding IsReadOnly}"/>
                             <Popup
@@ -135,7 +135,7 @@
                                       MaxHeight="{TemplateBinding MaxDropDownHeight}">
                                     <Border
                                         x:Name="DropDownBorder"
-                                        Background="{StaticResource panelColor}"
+                                        Background="White"
                                         BorderThickness="1"
                                         BorderBrush="#888888"/>
                                     <ScrollViewer Margin="4,6,4,6"
@@ -197,7 +197,7 @@
             <Setter Property="SnapsToDevicePixels"
                     Value="true"/>
             <Setter Property="Foreground"
-                    Value="White"/>
+                    Value="{StaticResource TextBrush}"/>
             <Setter Property="OverridesDefaultStyle"
                     Value="true"/>
             <Setter Property="Template">
@@ -229,18 +229,9 @@
     </Window.Resources>
 
     <Border CornerRadius="10"
-            BorderThickness="1">
-        <Border.BorderBrush>
-            <LinearGradientBrush StartPoint="0,0"
-                                 EndPoint="1,1">
-                <GradientStop Color="{StaticResource winBorderColor1}"
-                              Offset="0"/>
-                <GradientStop Color="{StaticResource winBorderColor2}"
-                              Offset="0.75"/>
-                <GradientStop Color="{StaticResource winBorderColor3}"
-                              Offset="1"/>
-            </LinearGradientBrush>
-        </Border.BorderBrush>
+            BorderThickness="1"
+            Background="{StaticResource BackgroundBrush}">
+
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -251,15 +242,7 @@
             <Border CornerRadius="10,0,0,10"
                     Grid.Column="0">
 
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="0,0"
-                                         EndPoint="1,0.7">
-                        <GradientStop Color="{StaticResource secondaryBackColor1}"
-                                      Offset="0"/>
-                        <GradientStop Color="{StaticResource secondaryBackColor2}"
-                                      Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
+
 
                 <StackPanel>
 
@@ -296,7 +279,7 @@
                         </Border>
 
                         <TextBlock Text="Password Manager"
-                                   Foreground="{StaticResource titleColor2}"
+                                   Foreground="{DynamicResource TextBrush}"
                                    FontSize="20"
                                    FontFamily="Montserrat"
                                    FontWeight="Medium"
@@ -349,15 +332,7 @@
             <Border CornerRadius="0,10,10,0"
                     Grid.Column="1">
 
-                <Border.Background>
-                    <LinearGradientBrush StartPoint="1,1"
-                                         EndPoint="0,0">
-                        <GradientStop Color="{StaticResource primaryBackColor1}"
-                                      Offset="0"/>
-                        <GradientStop Color="{StaticResource primaryBackColor2}"
-                                      Offset="1"/>
-                    </LinearGradientBrush>
-                </Border.Background>
+                
 
                 <Grid>
                     <Grid.RowDefinitions>
@@ -377,7 +352,7 @@
 
                         <Button x:Name="btnClose"
                                 Style="{StaticResource controlButton}"
-                                Tag="{StaticResource color4}"
+                                Tag="#E81123"
                                 Content="X"
                                 Click="btnClose_Click">
 
@@ -385,7 +360,7 @@
 
                         <Button x:Name="btnMaximize"
                                 Style="{StaticResource controlButton}"
-                                Tag="{StaticResource color6}"
+                                Tag="#D3D3D6"
                                 Content="▢"
                                 Click="btnMaximize_Click">
 
@@ -393,7 +368,7 @@
 
                         <Button x:Name="btnMinimize"
                                 Style="{StaticResource controlButton}"
-                                Tag="{StaticResource color8}"
+                                Tag="#D3D3D6"
                                 Content="_"
                                 Click="btnMinimize_Click">
 
@@ -403,20 +378,21 @@
                     <Grid Grid.Row="1"
                           VerticalAlignment="Bottom">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
+                            <ColumnDefinition Width="99*"/>
+                            <ColumnDefinition Width="238*"/>
+                            <ColumnDefinition Width="337*"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="{Binding Caption}"
                                    Margin="25,0,0,0"
                                    Grid.Column="0"
-                                   Foreground="{StaticResource titleColor2}"
+                                   Foreground="{StaticResource TextBrush}"
                                    FontSize="16"
                                    FontFamily="Montserrat"
                                    FontWeight="Medium"
-                                   VerticalAlignment="Center"/>
-                        <StackPanel Grid.Column="1"
+                                   VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                        <StackPanel Grid.Column="2"
                                     Orientation="Horizontal"
-                                    HorizontalAlignment="Right">
+                                    HorizontalAlignment="Left" Margin="237,0,0,0">
 
                             <ComboBox x:Name="dtbSelector"
                                       ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -451,7 +427,7 @@
 
             </Border>
 
-            <Border x:Name="Overlay" Background="Black" Opacity="0.5" Grid.ColumnSpan="2" Visibility="Hidden"/>
+            <Border x:Name="Overlay" Background="Black" Opacity="0.5" Grid.ColumnSpan="2" Visibility="Hidden" CornerRadius="10"/>
         </Grid>
 
     </Border>

@@ -24,6 +24,8 @@ namespace PasswordManager.Views
         public MainView()
         {
             InitializeComponent();
+            this.MouseMove += ((MainViewModel)this.DataContext).OnActivity;
+            this.KeyDown += ((MainViewModel)this.DataContext).OnActivity;
         }
 
         private void pnlControlBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

@@ -21,7 +21,7 @@ namespace PasswordManager
             }
             loginView.IsVisibleChanged += (s, ev) =>
             {
-                if (loginView.IsVisible == false && loginView.IsLoaded)
+                if (loginView.IsVisible == false && loginView.IsLoaded&& Thread.CurrentPrincipal!=null)
                 {
                     var mainView = new MainView();
                     mainView.Show();
