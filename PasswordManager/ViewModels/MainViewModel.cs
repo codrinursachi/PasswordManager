@@ -24,25 +24,24 @@ namespace PasswordManager.ViewModels
         private DispatcherTimer _timer;
         public MainViewModel()
         {
-            ShowAllPasswordsView = new ViewModelCommand(ExecuteShowAllPasswordsView);
-            ShowFavoritesView = new ViewModelCommand(ExecuteShowFavoritesView);
-            ShowLabelsView = new ViewModelCommand(ExecuteShowLabelsView);
-            ShowCategoryView = new ViewModelCommand(ExecuteShowCategoryView);
-            ShowPasswordGeneratorView = new ViewModelCommand(ExecuteShowPasswordGenerator);
+            ShowAllPasswordsViewCommand = new ViewModelCommand(ExecuteShowAllPasswordsViewCommand);
+            ShowFavoritesViewCommand = new ViewModelCommand(ExecuteShowFavoritesViewCommand);
+            ShowLabelsViewCommand = new ViewModelCommand(ExecuteShowLabelsViewCommand);
+            ShowCategoryViewCommand = new ViewModelCommand(ExecuteShowCategoryViewCommand);
+            ShowPasswordGeneratorViewCommand = new ViewModelCommand(ExecuteShowPasswordGeneratorCommand);
             Databases = new();
             GetDatabases();
             SelectedDb = 0;
-            ExecuteShowAllPasswordsView(null);
+            ExecuteShowAllPasswordsViewCommand(null);
             SetupTimer();
-            //InputManager.Current.PreProcessInput += OnActivity;
             CreateBackupIfNecessary();
         }
 
-        public ICommand ShowAllPasswordsView { get; }
-        public ICommand ShowFavoritesView { get; }
-        public ICommand ShowLabelsView { get; }
-        public ICommand ShowCategoryView { get; }
-        public ICommand ShowPasswordGeneratorView { get; }
+        public ICommand ShowAllPasswordsViewCommand { get; }
+        public ICommand ShowFavoritesViewCommand { get; }
+        public ICommand ShowLabelsViewCommand { get; }
+        public ICommand ShowCategoryViewCommand { get; }
+        public ICommand ShowPasswordGeneratorViewCommand { get; }
 
         public string Caption
         {
@@ -153,31 +152,31 @@ namespace PasswordManager.ViewModels
             Application.Current.Shutdown();
         }
 
-        private void ExecuteShowPasswordGenerator(object obj)
+        private void ExecuteShowPasswordGeneratorCommand(object obj)
         {
             var PasswordGen = new PasswordGeneratorView();
             PasswordGen.Load();
         }
 
-        private void ExecuteShowCategoryView(object obj)
+        private void ExecuteShowCategoryViewCommand(object obj)
         {
             CurrentChildView = new CategoryViewModel();
             Caption = "Categories";
         }
 
-        private void ExecuteShowLabelsView(object obj)
+        private void ExecuteShowLabelsViewCommand(object obj)
         {
             CurrentChildView = new TagsViewModel();
             Caption = "Tags";
         }
 
-        private void ExecuteShowFavoritesView(object obj)
+        private void ExecuteShowFavoritesViewCommand(object obj)
         {
             CurrentChildView = new FavoritesViewModel();
             Caption = "Favorites";
         }
 
-        private void ExecuteShowAllPasswordsView(object obj)
+        private void ExecuteShowAllPasswordsViewCommand(object obj)
         {
             CurrentChildView = new AllPasswordsViewModel();
             Caption = "All Passwords";

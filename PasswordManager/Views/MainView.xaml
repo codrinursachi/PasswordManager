@@ -402,7 +402,7 @@
                             <Button x:Name="generatePass"
                                     Style="{StaticResource Windows11ButtonStyle}"
                                     Margin="25,0,25,0"
-                                    Command="{Binding ShowPasswordGeneratorView}"
+                                    Command="{Binding ShowPasswordGeneratorViewCommand}"
                                     Content="Generate Password"/>
                             <Button x:Name="btnAddPass"
                                     Style="{StaticResource Windows11ButtonStyle}"

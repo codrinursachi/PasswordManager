@@ -31,7 +31,7 @@
             </TreeView.ItemTemplate>
         </TreeView>
 
-        <customcontrols:PasswordListView PasswordList="{Binding Passwords}"
+        <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
                                          Grid.Column="1"/>
     </Grid>
 </UserControl>

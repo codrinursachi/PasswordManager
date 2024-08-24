@@ -23,13 +23,13 @@ namespace PasswordManager.CustomControls
     /// <summary>
     /// Interaction logic for PasswordListView.xaml
     /// </summary>
-    public partial class PasswordListView : UserControl
+    public partial class PasswordDataGrid : UserControl
     {
-        public static readonly DependencyProperty PasswordListProperty = DependencyProperty.Register("PasswordList", typeof(ObservableCollection<PasswordToShowDTO>), typeof(PasswordListView));
+        public static readonly DependencyProperty PasswordListProperty = DependencyProperty.Register("PasswordList", typeof(ObservableCollection<PasswordToShowDTO>), typeof(PasswordDataGrid));
         private string _storedPass;
         private DispatcherTimer _timer;
 
-        public PasswordListView()
+        public PasswordDataGrid()
         {
             InitializeComponent();
         }
@@ -61,8 +61,11 @@ namespace PasswordManager.CustomControls
         private void cpyClipboard_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
+            if (_storedPass != null)
+            {
             Clipboard.SetDataObject(_storedPass);
             SetupTimer();
+            }
         }
 
         private void showPwd_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
