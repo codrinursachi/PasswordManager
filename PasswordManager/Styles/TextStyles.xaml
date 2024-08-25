@@ -10,7 +10,7 @@
         <Setter Property="FontWeight"
                 Value="Medium"/>
         <Setter Property="FontFamily"
-                Value="Montserrat"/>
+                Value="Segoe UI"/>
         <Setter Property="Margin"
                 Value="0,15,0,0"/>
     </Style>
@@ -22,55 +22,21 @@
         <Setter Property="FontWeight"
                 Value="Medium"/>
         <Setter Property="FontFamily"
-                Value="Montserrat"/>
+                Value="Segoe UI"/>
+        <Setter Property="Background"
+                Value="White"/>
         <Setter Property="Foreground"
                 Value="{StaticResource TextBrush}"/>
 
         <Setter Property="BorderBrush"
-                Value="DarkGray"/>
+                Value="{StaticResource AccentBrush}"/>
         <Setter Property="BorderThickness"
                 Value="0,0,0,1"/>
-        <Setter Property="Height"
-                Value="28"/>
+<Setter Property="Height"
+                Value="25"/>
         <Setter Property="VerticalContentAlignment"
                 Value="Center"/>
-        <Setter Property="Margin"
-                Value="0,5,0,0"/>
-        <Setter Property="Background"
-                Value="Transparent"/>
     </Style>
 
-    <Style x:Key="checkbox"
-           TargetType="CheckBox">
-        <Setter Property="FontSize"
-                Value="13"/>
-        <Setter Property="FontWeight"
-                Value="Medium"/>
-        <Setter Property="FontFamily"
-                Value="Montserrat"/>
-        <Setter Property="Foreground"
-                Value="White"/>
-        <Setter Property="BorderBrush"
-                Value="DarkGray"/>
-        <Setter Property="BorderThickness"
-                Value="1"/>
-        <Setter Property="Height"
-                Value="28"/>
-        <Setter Property="VerticalContentAlignment"
-                Value="Center"/>
-        <Setter Property="Margin"
-                Value="0,5,0,0"/>
-        <Setter Property="Background"
-                Value="Transparent"/>
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver"
-                     Value="True">
-                <Setter Property="Background"
-                        Value="#28AEED"/>
-            </Trigger>
-        </Style.Triggers>
-    </Style>
-
-
-
+    
 </ResourceDictionary>

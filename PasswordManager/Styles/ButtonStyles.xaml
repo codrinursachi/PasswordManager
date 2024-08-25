@@ -50,7 +50,7 @@
         <Setter Property="Foreground"
                 Value="{Binding Path=Foreground, RelativeSource={RelativeSource AncestorType=RadioButton}}"/>
         <Setter Property="FontFamily"
-                Value="Montserrat"/>
+                Value="Segoe UI"/>
         <Setter Property="FontWeight"
                 Value="Medium"/>
         <Setter Property="FontSize"
@@ -98,7 +98,7 @@
         <Setter Property="FontSize"
                 Value="12"/>
         <Setter Property="FontFamily"
-                Value="Montserrat"/>
+                Value="Segoe UI"/>
         <Setter Property="Cursor"
                 Value="Hand"/>
         <Setter Property="Margin"

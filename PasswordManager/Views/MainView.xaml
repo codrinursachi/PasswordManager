@@ -43,10 +43,10 @@
                 <Border
                     x:Name="Border"
                     Grid.ColumnSpan="2"
-                    CornerRadius="0"
+                    CornerRadius="5"
                     Background="White"
                     BorderBrush="#FF97A0A5"
-                    BorderThickness="1"/>
+                    BorderThickness="0.5"/>
                 <Border
                     Grid.Column="0"
                     CornerRadius="0"
@@ -57,7 +57,7 @@
                 <Path
                     x:Name="Arrow"
                     Grid.Column="1"
-                    Fill="{StaticResource TextBrush}"
+                    Fill="Black"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"/>
@@ -281,7 +281,7 @@
                         <TextBlock Text="Password Manager"
                                    Foreground="{DynamicResource TextBrush}"
                                    FontSize="20"
-                                   FontFamily="Montserrat"
+                                   FontFamily="Segoe UI"
                                    FontWeight="Medium"
                                    VerticalAlignment="Center"
                                    Margin="10,0,0,0"/>
@@ -381,7 +381,7 @@ Margin="25,0,0,0"
 Grid.Row="1"
 Foreground="{StaticResource TextBrush}"
 FontSize="16"
-FontFamily="Montserrat"
+FontFamily="Segoe UI"
 FontWeight="Medium"
 VerticalAlignment="Center" HorizontalAlignment="Left"/>
                     <Grid Grid.Row="2"

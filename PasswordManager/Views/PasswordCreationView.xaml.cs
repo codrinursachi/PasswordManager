@@ -60,7 +60,7 @@ namespace PasswordManager.Views
 
         private void datePicker_GotMouseCapture(object sender, MouseEventArgs e)
         {
-            datePicker.Foreground = Brushes.DarkGray;
+            datePicker.Foreground = Brushes.Black;
             datePicker.SelectedDate = DateTime.Today;
         }
 
