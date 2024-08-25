@@ -11,80 +11,39 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository
     {
-        readonly string fileName = "UserLogin.json";
+        readonly string fileName;
 
         public UserRepository()
         {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            fileName = Path.Combine(path, "UserLogin.json");
             if (!File.Exists(fileName))
             {
                 File.Create(fileName);
             }
         }
 
-        public void Add(UserModel userModel)
+        public void Add(string password)
         {
-            if (GetByUsername(userModel.UserName) != null)
+            var passwordHash = SecretHasher.Hash(password, 50000);
+            File.WriteAllText(fileName,passwordHash);
+        }
+
+        public bool AuthenticateUser(string password)
+        {
+            string passwordHash = File.ReadAllText(fileName);
+            if (string.IsNullOrEmpty(passwordHash))
             {
-                return;
+                Add(password);
             }
 
-            List<UserModel> users = GetUsersFromJsonFile();
-            users.Add(new UserModel { UserName = userModel.UserName, Password = SecretHasher.Hash(userModel.Password, 50000) });
-            string newData = JsonSerializer.Serialize(users);
-            File.WriteAllText(fileName, newData);
-        }
-
-        public bool AuthenticateUser(NetworkCredential credential)
-        {
-            var user = GetByUsername(credential.UserName);
-            if (user == null)
-            {
-                return false;
-            }
-
-            return SecretHasher.Verify(credential.Password, new NetworkCredential("", user.Password).Password);
-        }
-
-        public void Edit(UserModel userModel)
-        {
-            var users = GetUsersFromJsonFile();
-            var user = users.FirstOrDefault(u => u.UserName == userModel.UserName);
-            user.Password = SecretHasher.Hash(userModel.Password, 50000);
-            File.WriteAllText(fileName, JsonSerializer.Serialize(users));
-        }
-
-        public UserModel GetByUsername(string username)
-        {
-            List<UserModel> users = GetUsersFromJsonFile();
-            return users.FirstOrDefault(u => u.UserName == username);
-        }
-
-        public void Remove(string username)
-        {
-            List<UserModel> users = GetUsersFromJsonFile();
-            var user = users.FirstOrDefault(u => u.UserName == username);
-            if (user == null)
-            {
-                return;
-            }
-
-            users.Remove(user);
-            string newData = JsonSerializer.Serialize(users);
-            File.WriteAllText(fileName, newData);
-        }
-
-        private List<UserModel> GetUsersFromJsonFile()
-        {
-            List<UserModel> users = [];
-            string allUsers = File.ReadAllText(fileName);
-            if (allUsers.Length != 0)
-            {
-                users = JsonSerializer.Deserialize<List<UserModel>>(allUsers)!;
-            }
-
-            return users;
+            return SecretHasher.Verify(password, passwordHash);
         }
     }
 }
