@@ -17,7 +17,6 @@ namespace PasswordManager.ViewModels
     class LoginViewModel : ViewModelBase
     {
         public ICommand LoginCommand { get; }
-        public ICommand RegisterCommand { get; }
         private string _username;
         private string _password;
         private string _errorMessage;
@@ -28,18 +27,8 @@ namespace PasswordManager.ViewModels
         {
             _userRepository = new UserRepository();
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteOperationCommand);
-            RegisterCommand = new ViewModelCommand(ExecuteRegisterCommand, CanExecuteOperationCommand);
         }
 
-        public string Username
-        {
-            get => _username;
-            set
-            {
-                _username = value;
-                OnPropertyChanged(nameof(Username));
-            }
-        }
         public string Password
         {
             get => _password;
@@ -71,7 +60,7 @@ namespace PasswordManager.ViewModels
         private bool CanExecuteOperationCommand(object obj)
         {
             bool validData;
-            if (string.IsNullOrEmpty(Username) || Username.Length < 3 || Password == null || Password.Length < 3)
+            if (Password == null || Password.Length < 3)
             {
                 validData = false;
             }
@@ -85,35 +74,15 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteLoginCommand(object obj)
         {
-            var isValidUser = _userRepository.AuthenticateUser(new NetworkCredential(Username, Password));
+            var isValidUser = _userRepository.AuthenticateUser(Password);
             if (isValidUser)
             {
                 App.Current.Properties["pass"] = Password;
-                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username), null);
                 IsViewVisible = false;
             }
             else
             {
-                ErrorMessage = "Invalid username or password";
-            }
-        }
-
-        private void ExecuteRegisterCommand(object obj)
-        {
-            _userRepository.Add(new UserModel { UserName = Username, Password = Password });
-            var isValidUser = _userRepository.AuthenticateUser(new NetworkCredential(Username, Password));
-            if (isValidUser)
-            {
-                App.Current.Properties["pass"] = Password;
-                Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username), null);
-                Directory.CreateDirectory(Thread.CurrentPrincipal.Identity.Name);
-                Directory.CreateDirectory(Thread.CurrentPrincipal.Identity.Name + "\\Backups");
-                File.Create(Thread.CurrentPrincipal.Identity.Name + "\\" + "default").Close();
-                IsViewVisible = false;
-            }
-            else
-            {
-                ErrorMessage = "Username already taken";
+                ErrorMessage = "Invalid password";
             }
         }
     }
