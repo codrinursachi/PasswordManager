@@ -30,12 +30,13 @@ namespace PasswordManager.ViewModels
         {
             var passwordRepository = new PasswordRepository();
             DatabaseItems = new List<string>();
-            foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name)))
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
+            foreach (var db in Directory.GetFiles(path))
             {
-                DatabaseItems.Add(db[(Thread.CurrentPrincipal.Identity.Name + "\\").Length..]);
+                DatabaseItems.Add(db[(path + "\\").Length..^".json".Length]);
             }
             AddPasswordCommand = new ViewModelCommand(ExecuteAddPasswordCommand);
-            CategoryPaths = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
+            CategoryPaths = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString()+".json").Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
 
         public string Username
@@ -122,7 +123,7 @@ namespace PasswordManager.ViewModels
             App.Current.Properties["SelectedDb"] = Database;
             PasswordModel newPassword = new() { Username = Username, Password = Password, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = Tags, Favorite = Favorite, Notes = Notes };
             var repository = new PasswordRepository();
-            repository.Add(newPassword, App.Current.Properties["pass"].ToString());
+            repository.Add(newPassword, App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json");
             App.Current.Properties["ShouldRefresh"] = true;
             CloseAction.Invoke();
         }

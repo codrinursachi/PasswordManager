@@ -15,32 +15,32 @@ namespace PasswordManager.Repositories
 {
     public class PasswordRepository : IPasswordRepository
     {
-        readonly string fileName = ".\\" + Thread.CurrentPrincipal.Identity.Name + "\\" + App.Current.Properties["SelectedDb"]?.ToString();
+        readonly string pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
 
-        public void Add(PasswordModel passwordModel, string encryptionData)
+        public void Add(PasswordModel passwordModel, string encryptionData, string dataBaseName)
         {
-            List<PasswordModel> passwords = GetPasswordsFromFile(encryptionData);
+            List<PasswordModel> passwords = GetPasswordsFromFile(encryptionData,dataBaseName);
             passwordModel.Id = passwords.Count == 0 ? 1 : passwords.Max(p => p.Id) + 1;
             passwords.Add(passwordModel);
-            WritePasswords(encryptionData, passwords);
+            WritePasswords(encryptionData, passwords, dataBaseName);
         }
 
-        public void Edit(int id, PasswordModel newPasswordModel, string encryptionData)
+        public void Edit(int id, PasswordModel newPasswordModel, string encryptionData, string dataBaseName)
         {
-            List<PasswordModel> passwords = GetAllPasswords(encryptionData);
+            List<PasswordModel> passwords = GetAllPasswords(encryptionData,dataBaseName);
             var currentPassword = passwords.FirstOrDefault(p => p.Id == id);
             if (currentPassword == null)
             {
                 return;
             }
 
-            Remove(id, encryptionData);
-            Add(newPasswordModel, encryptionData);
+            Remove(id, encryptionData, dataBaseName);
+            Add(newPasswordModel, encryptionData, dataBaseName);
         }
 
-        public List<PasswordModel> GetAllPasswords(string encryptionData)
+        public List<PasswordModel> GetAllPasswords(string encryptionData, string dataBaseName)
         {
-            List<PasswordModel> passwords = GetPasswordsFromFile(encryptionData);
+            List<PasswordModel> passwords = GetPasswordsFromFile(encryptionData,dataBaseName);
 
             foreach (var password in passwords)
             {
@@ -50,20 +50,21 @@ namespace PasswordManager.Repositories
             return new(passwords.OrderBy(p => p.Url));
         }
 
-        public PasswordModel GetPasswordById(int id, string encryptionData)
+        public PasswordModel GetPasswordById(int id, string encryptionData, string dataBaseName)
         {
-            return GetPasswordsFromFile(encryptionData).FirstOrDefault(p => p.Id == id);
+            return GetPasswordsFromFile(encryptionData, dataBaseName).FirstOrDefault(p => p.Id == id);
         }
 
-        public void Remove(int id, string encryptionData)
+        public void Remove(int id, string encryptionData, string dataBaseName)
         {
-            List<PasswordModel> passwords = GetAllPasswords(encryptionData);
+            List<PasswordModel> passwords = GetAllPasswords(encryptionData, dataBaseName);
             passwords.Remove(passwords.First(p => p.Id == id));
-            WritePasswords(encryptionData, passwords);
+            WritePasswords(encryptionData, passwords, dataBaseName);
         }
 
-        private List<PasswordModel> GetPasswordsFromFile(string encryptionData)
+        private List<PasswordModel> GetPasswordsFromFile(string encryptionData, string dataBaseName)
         {
+            var fileName = Path.Combine(pathToDb, dataBaseName);
             UnicodeEncoding UE = new UnicodeEncoding();
             List<PasswordModel> passwords = new();
             using (var AES = Aes.Create())
@@ -93,11 +94,12 @@ namespace PasswordManager.Repositories
             return passwords;
         }
 
-        private void WritePasswords(string encryptionData, List<PasswordModel> passwords)
+        private void WritePasswords(string encryptionData, List<PasswordModel> passwords, string dataBaseName)
         {
+            var fileName = Path.Combine(pathToDb, dataBaseName);
+            UnicodeEncoding UE = new UnicodeEncoding();
             using (var AES = Aes.Create())
             {
-                UnicodeEncoding UE = new UnicodeEncoding();
                 byte[] passwordBytes = UE.GetBytes(encryptionData);
                 byte[] aesKey = SHA256.HashData(passwordBytes);
                 byte[] aesIV = MD5.HashData(passwordBytes);

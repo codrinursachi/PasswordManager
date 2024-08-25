@@ -22,7 +22,7 @@ namespace PasswordManager.ViewModels
         public CategoryViewModel()
         {
             PasswordRepository passwordRepository = new();
-            var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
+            var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json").Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories.Add(rootNode);
             SetupTimer();
         }
@@ -70,7 +70,7 @@ namespace PasswordManager.ViewModels
             PasswordRepository passwordRepository = new();
             if (Filter == null || Filter.Parent == null)
             {
-                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()))
+                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json").Select(p => p.ToPasswordToShow()))
                 {
                     Passwords.Add(password);
                 }
@@ -94,7 +94,7 @@ namespace PasswordManager.ViewModels
                 filter += item;
             }
 
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')).Select(p => p.ToPasswordToShow()))
+            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString()+".json").Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')).Select(p => p.ToPasswordToShow()))
             {
                 Passwords.Add(password);
             }

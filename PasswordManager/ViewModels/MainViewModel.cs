@@ -60,7 +60,7 @@ namespace PasswordManager.ViewModels
                 ((IStopTimer)_currentChildView)?.Stop();
                 _currentChildView = value;
                 OnPropertyChanged(nameof(CurrentChildView));
-                App.Current.Properties["ShouldRefresh"] = true;
+                //App.Current.Properties["ShouldRefresh"] = true;
             }
         }
         public ObservableCollection<string> Databases { get; set; }
@@ -79,18 +79,34 @@ namespace PasswordManager.ViewModels
 
         public void GetDatabases()
         {
-            Databases.Clear();
-            foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name)))
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
+            if (!Directory.Exists(path))
             {
-                Databases.Add(db[(Thread.CurrentPrincipal.Identity.Name + "\\").Length..]);
+                Directory.CreateDirectory(path);
+            }
+            Databases.Clear();
+            foreach (var db in (Directory.GetFiles(path)))
+            {
+                Databases.Add(db[(path + "\\").Length..^".json".Length]);
+            }
+            if(Databases.Count == 0)
+            {
+                File.Create(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", "default.json"));
+                Databases.Add("default");
             }
         }
 
         private void CreateBackupIfNecessary()
         {
-            foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name)))
+            var pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
+            var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
+            if (!Directory.Exists(pathToBackups))
             {
-                if (CheckBackup(db[(Thread.CurrentPrincipal.Identity.Name + "\\").Length..]))
+                Directory.CreateDirectory(pathToBackups);
+            }
+            foreach (var db in (Directory.GetFiles(pathToDb)))
+            {
+                if (CheckBackup(db[(pathToDb + "\\").Length..]))
                 {
                     CreateBackup(db);
                 }
@@ -99,7 +115,9 @@ namespace PasswordManager.ViewModels
 
         private void CreateBackup(string db)
         {
-            File.Copy(db, Thread.CurrentPrincipal.Identity.Name + "\\Backups\\" + db[(Thread.CurrentPrincipal.Identity.Name + "\\").Length..] + "_" + DateTime.Now.ToShortDateString());
+            var pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
+            var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
+            File.Copy(db, pathToBackups+"\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToShortDateString());
         }
 
         private bool CheckBackup(string DbName)
@@ -109,9 +127,10 @@ namespace PasswordManager.ViewModels
             DateTime oldestBackupTime = DateTime.Now;
             string oldestBackup = string.Empty;
 
-            foreach (var db in (Directory.GetFiles(Thread.CurrentPrincipal.Identity.Name + "\\Backups\\")))
+            var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
+            foreach (var db in Directory.GetFiles(pathToBackups))
             {
-                if (db[(Thread.CurrentPrincipal.Identity.Name + "\\Backups\\").Length..].StartsWith(DbName))
+                if (db[(pathToBackups + "\\").Length..].StartsWith(DbName+"_"))
                 {
                     backupCount++;
                     latestBackupTime = File.GetCreationTime(db) > latestBackupTime ? File.GetCreationTime(db) : latestBackupTime;

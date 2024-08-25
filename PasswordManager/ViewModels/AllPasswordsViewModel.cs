@@ -65,7 +65,7 @@ namespace PasswordManager.ViewModels
             var passwordRepository = new PasswordRepository();
             App.Current.Properties["ShouldRefresh"] = false;
             Passwords.Clear();
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString()).Select(p => p.ToPasswordToShow()))
+            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(),App.Current.Properties["SelectedDb"].ToString()+".json").Select(p => p.ToPasswordToShow()))
             {
                 List<string> searchData = [];
                 if (password.CategoryPath != null)
