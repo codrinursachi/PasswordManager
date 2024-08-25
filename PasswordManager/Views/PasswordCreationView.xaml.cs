@@ -75,5 +75,38 @@ namespace PasswordManager.Views
                 }
             }
         }
+
+        private void txtTag_KeyUp(object sender, KeyEventArgs e)
+        {
+            string tag;
+            if (e.Key == Key.Space)
+            {
+                tag = ((TextBox)sender).Text.Trim();
+                ((PasswordCreationViewModel)this.DataContext).CompletedTags.Add(tag);
+                ((TextBox)sender).Text = "";
+            }
+        }
+
+        private void txtTag_LostFocus(object sender, RoutedEventArgs e)
+        {
+            string tag;
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+            {
+                return;
+            }
+
+            tag = ((TextBox)sender).Text.Trim();
+            ((PasswordCreationViewModel)this.DataContext).CompletedTags.Add(tag);
+            ((TextBox)sender).Text = "";
+        }
+
+        private void Tags_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (Tags.SelectedItem == null)
+            {
+                return;
+            }
+            ((PasswordCreationViewModel)this.DataContext).CompletedTags.Remove(Tags.SelectedItem.ToString());
+        }
     }
 }
