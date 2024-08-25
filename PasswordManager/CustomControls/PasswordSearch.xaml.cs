@@ -31,5 +31,17 @@ namespace PasswordManager.CustomControls
             get { return (string)GetValue(searchCriteriaProperty); }
             set { SetValue(searchCriteriaProperty, value); }
         }
+
+        private void searchBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(string.IsNullOrEmpty(searchBar.Text))
+            {
+                placeholder.Visibility=Visibility.Visible;
+            }
+            else
+            {
+                placeholder.Visibility = Visibility.Hidden;
+            }
+        }
     }
 }

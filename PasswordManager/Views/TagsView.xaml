@@ -10,9 +10,10 @@
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <Grid>
+    <Grid HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="15"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <ListView x:Name="Tags"
@@ -21,10 +22,10 @@
                   Width="auto"
                   SelectionMode="Multiple"
                   SelectionChanged="Tags_SelectionChanged"
-                  Background="Transparent"
-                  Foreground="White"/>
+                  Background="White"
+                  Foreground="{StaticResource TextBrush}"/>
 
         <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
-                                         Grid.Column="1"/>
+                                         Grid.Column="2"/>
     </Grid>
 </UserControl>

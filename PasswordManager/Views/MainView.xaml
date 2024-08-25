@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="MainWindow"
         Height="700"
-        Width="1600"
+        Width="1700"
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True"
@@ -290,7 +290,7 @@
 
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color1}"
-                                 Command="{Binding ShowAllPasswordsView}"
+                                 Command="{Binding ShowAllPasswordsViewCommand}"
                                  IsChecked="True">
 
                         <TextBlock Text="All Passwords"
@@ -300,7 +300,7 @@
 
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color2}"
-                                 Command="{Binding ShowFavoritesView}">
+                                 Command="{Binding ShowFavoritesViewCommand}">
 
                         <TextBlock Text="Favorites"
                                    Style="{StaticResource menuButtonText}"/>
@@ -309,7 +309,7 @@
 
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color3}"
-                                 Command="{Binding ShowLabelsView}">
+                                 Command="{Binding ShowLabelsViewCommand}">
 
                         <TextBlock Text="Tags"
                                    Style="{StaticResource menuButtonText}"/>
@@ -318,7 +318,7 @@
 
                     <RadioButton Style="{StaticResource menuButton}"
                                  Tag="{StaticResource color4}"
-                                 Command="{Binding ShowCategoryView}">
+                                 Command="{Binding ShowCategoryViewCommand}">
 
                         <TextBlock Text="Categories"
                                    Style="{StaticResource menuButtonText}"/>
@@ -332,11 +332,12 @@
             <Border CornerRadius="0,10,10,0"
                     Grid.Column="1">
 
-                
+
 
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
+                        <RowDefinition Height="55"/>
                         <RowDefinition Height="55"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
@@ -375,24 +376,27 @@
                         </Button>
 
                     </StackPanel>
-                    <Grid Grid.Row="1"
-                          VerticalAlignment="Bottom">
+                    <TextBlock Text="{Binding Caption}"
+Margin="25,0,0,0"
+Grid.Row="1"
+Foreground="{StaticResource TextBrush}"
+FontSize="16"
+FontFamily="Montserrat"
+FontWeight="Medium"
+VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                    <Grid Grid.Row="2"
+                          VerticalAlignment="Center">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="99*"/>
-                            <ColumnDefinition Width="238*"/>
-                            <ColumnDefinition Width="337*"/>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="15"/>
+                            <ColumnDefinition Width="1071"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="{Binding Caption}"
-                                   Margin="25,0,0,0"
-                                   Grid.Column="0"
-                                   Foreground="{StaticResource TextBrush}"
-                                   FontSize="16"
-                                   FontFamily="Montserrat"
-                                   FontWeight="Medium"
-                                   VerticalAlignment="Center" Grid.ColumnSpan="2"/>
+                        
                         <StackPanel Grid.Column="2"
                                     Orientation="Horizontal"
-                                    HorizontalAlignment="Left" Margin="237,0,0,0">
+                                    HorizontalAlignment="Right">
+
+
 
                             <ComboBox x:Name="dtbSelector"
                                       ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
@@ -420,7 +424,7 @@
 
                     <ContentControl x:Name="childView"
                                     Content="{Binding CurrentChildView}"
-                                    Grid.Row="2"
+                                    Grid.Row="3"
                                     Margin="25"/>
 
                 </Grid>
