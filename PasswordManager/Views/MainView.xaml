@@ -47,13 +47,7 @@
                     Background="White"
                     BorderBrush="#FF97A0A5"
                     BorderThickness="0.5"/>
-                <Border
-                    Grid.Column="0"
-                    CornerRadius="0"
-                    Margin="1"
-                    Background="Transparent"
-                    BorderBrush="#FF97A0A5"
-                    BorderThickness="0,0,1,0"/>
+                
                 <Path
                     x:Name="Arrow"
                     Grid.Column="1"
@@ -67,7 +61,7 @@
 
         <ControlTemplate x:Key="ComboBoxTextBox"
                          TargetType="{x:Type TextBox}">
-            <Border x:Name="PART_ContentHost"
+            <Border x:Name="PARTContentHost"
                     Focusable="False"
                     Background="{TemplateBinding Background}"/>
         </ControlTemplate>
@@ -110,7 +104,7 @@
                                               Margin="3,3,23,3"
                                               VerticalAlignment="Center"
                                               HorizontalAlignment="Left"/>
-                            <TextBox x:Name="PART_EditableTextBox"
+                            <TextBox x:Name="PARTEditableTextBox"
                                      Style="{x:Null}"
                                      Template="{StaticResource ComboBoxTextBox}"
                                      HorizontalAlignment="Left"
@@ -177,7 +171,7 @@
                                      Value="true">
                                 <Setter Property="IsTabStop"
                                         Value="false"/>
-                                <Setter TargetName="PART_EditableTextBox"
+                                <Setter TargetName="PARTEditableTextBox"
                                         Property="Visibility"
                                         Value="Visible"/>
                                 <Setter TargetName="ContentSite"
@@ -348,14 +342,14 @@
                                 FlowDirection="RightToLeft"
                                 Background="Transparent"
                                 Margin="0,0,5,0"
-                                MouseLeftButtonDown="pnlControlBar_MouseLeftButtonDown"
-                                MouseEnter="pnlControlBar_MouseEnter">
+                                MouseLeftButtonDown="pnlControlBarMouseLeftButtonDown"
+                                MouseEnter="pnlControlBarMouseEnter">
 
                         <Button x:Name="btnClose"
                                 Style="{StaticResource controlButton}"
                                 Tag="#E81123"
                                 Content="X"
-                                Click="btnClose_Click">
+                                Click="btnCloseClick">
 
                         </Button>
 
@@ -363,7 +357,7 @@
                                 Style="{StaticResource controlButton}"
                                 Tag="#D3D3D6"
                                 Content="▢"
-                                Click="btnMaximize_Click">
+                                Click="btnMaximizeClick">
 
                         </Button>
 
@@ -371,7 +365,7 @@
                                 Style="{StaticResource controlButton}"
                                 Tag="#D3D3D6"
                                 Content="_"
-                                Click="btnMinimize_Click">
+                                Click="btnMinimizeClick">
 
                         </Button>
 
@@ -384,34 +378,25 @@ FontSize="16"
 FontFamily="Segoe UI"
 FontWeight="Medium"
 VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                    <Grid Grid.Row="2"
-                          VerticalAlignment="Center">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="200"/>
-                            <ColumnDefinition Width="15"/>
-                            <ColumnDefinition Width="1071"/>
-                        </Grid.ColumnDefinitions>
+                    
                         
-                        <StackPanel Grid.Column="2"
+                        <StackPanel Grid.Row="2"
                                     Orientation="Horizontal"
-                                    HorizontalAlignment="Right">
+                                    HorizontalAlignment="Right"
+                                    VerticalAlignment="Center">
 
 
 
                             <ComboBox x:Name="dtbSelector"
                                       ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                       SelectedIndex="{Binding SelectedDb}"
-                                      MouseLeftButtonUp="dtbSelector_MouseLeftButtonDown"
+                                      MouseLeftButtonUp="dtbSelectorMouseLeftButtonDown"
                                       OverridesDefaultStyle="True"/>
-                            <Button x:Name="generatePass"
-                                    Style="{StaticResource Windows11ButtonStyle}"
-                                    Margin="25,0,25,0"
-                                    Command="{Binding ShowPasswordGeneratorViewCommand}"
-                                    Content="Generate Password"/>
+                            
                             <Button x:Name="btnAddPass"
                                     Style="{StaticResource Windows11ButtonStyle}"
-                                    Margin="0,0,25,0"
-                                    Click="btnAddPass_Click"
+                                    Margin="25,0,25,0"
+                                    Click="btnAddPassClick"
                                     Content="+ Add Password"/>
 
 
@@ -420,7 +405,6 @@ VerticalAlignment="Center" HorizontalAlignment="Left"/>
                         </StackPanel>
 
 
-                    </Grid>
 
                     <ContentControl x:Name="childView"
                                     Content="{Binding CurrentChildView}"

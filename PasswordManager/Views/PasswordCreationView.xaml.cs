@@ -21,50 +21,33 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class PasswordCreationView : Window
     {
-        private static bool isLoaded = false;
         public PasswordCreationView()
         {
             InitializeComponent();
-            ((PasswordCreationViewModel)this.DataContext).CloseAction = UnLoad;
         }
 
-        public void Load()
+        private void btnCloseClick(object sender, RoutedEventArgs e)
         {
-            if (!isLoaded)
-            {
-                Show();
-                isLoaded = true;
-            }
-        }
-
-        public void UnLoad()
-        {
-            isLoaded = false;
-            Close();
-        }
-        private void btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            isLoaded = false;
             Close();
         }
 
-        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        private void btnMinimizeClick(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
 
-        private void pnlControlBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void pnlControlBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
 
-        private void datePicker_GotMouseCapture(object sender, MouseEventArgs e)
+        private void datePickerGotMouseCapture(object sender, MouseEventArgs e)
         {
             datePicker.Foreground = Brushes.Black;
             datePicker.SelectedDate = DateTime.Today;
         }
 
-        private void datePicker_KeyUp(object sender, KeyEventArgs e)
+        private void datePickerKeyUp(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Back || e.Key == Key.Delete)
             {
@@ -76,7 +59,7 @@ namespace PasswordManager.Views
             }
         }
 
-        private void txtTag_KeyUp(object sender, KeyEventArgs e)
+        private void txtTagKeyUp(object sender, KeyEventArgs e)
         {
             string tag;
             if (e.Key == Key.Space)
@@ -87,7 +70,7 @@ namespace PasswordManager.Views
             }
         }
 
-        private void txtTag_LostFocus(object sender, RoutedEventArgs e)
+        private void txtTagLostFocus(object sender, RoutedEventArgs e)
         {
             string tag;
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
@@ -100,7 +83,7 @@ namespace PasswordManager.Views
             ((TextBox)sender).Text = "";
         }
 
-        private void Tags_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void TagsMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (Tags.SelectedItem == null)
             {

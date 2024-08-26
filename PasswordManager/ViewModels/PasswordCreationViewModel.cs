@@ -1,5 +1,6 @@
 ﻿using PasswordManager.Models;
 using PasswordManager.Repositories;
+using PasswordManager.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,19 +16,21 @@ namespace PasswordManager.ViewModels
 {
     internal class PasswordCreationViewModel : ViewModelBase
     {
-        public ICommand AddPasswordCommand { get; }
-        string _username;
-        string _password;
-        string _url;
-        DateTime _expirationDate;
-        List<string> _categoryPaths;
-        string _tags;
-        bool _favorite;
-        string _database;
-        string _notes;
+        string username;
+        string password;
+        string url;
+        DateTime expirationDate;
+        List<string> categoryPaths;
+        string tags;
+        bool favorite;
+        string database;
+        string notes;
+        private bool overlayVisibility;
 
         public PasswordCreationViewModel()
         {
+            OverlayVisibility = false;
+            ShowPasswordGeneratorViewCommand = new ViewModelCommand(ExecuteShowPasswordGeneratorCommand);
             var passwordRepository = new PasswordRepository();
             DatabaseItems = new List<string>();
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
@@ -38,87 +41,98 @@ namespace PasswordManager.ViewModels
             AddPasswordCommand = new ViewModelCommand(ExecuteAddPasswordCommand);
             CategoryPaths = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString()+".json").Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
-
+        public ICommand AddPasswordCommand { get; }
+        public ICommand ShowPasswordGeneratorViewCommand { get; }
         public string Username
         {
-            get => _username;
+            get => username;
             set
             {
-                _username = value;
+                username = value;
             }
         }
         public string Password
         {
-            get => _password;
+            get => password;
             set
             {
-                _password = value;
+                password = value;
             }
         }
         public string Url
         {
-            get => _url;
+            get => url;
             set
             {
-                _url = value;
+                url = value;
             }
         }
         public DateTime ExpirationDate
         {
-            get => _expirationDate;
+            get => expirationDate;
             set
             {
-                _expirationDate = value;
+                expirationDate = value;
             }
         }
         public string CategoryPath { get; set; }
 
         public List<string> CategoryPaths
         {
-            get => _categoryPaths;
+            get => categoryPaths;
             set
             {
-                _categoryPaths = value;
+                categoryPaths = value;
                 OnPropertyChanged(nameof(CategoryPaths));
             }
         }
         public ObservableCollection<string> CompletedTags { get; set; } = new();
         public string Tags
         {
-            get => _tags;
+            get => tags;
             set
             {
-                _tags = value;
-                OnPropertyChanged(nameof(_tags));
+                tags = value;
+                OnPropertyChanged(nameof(tags));
             }
         }
         public bool Favorite
         {
-            get => _favorite;
+            get => favorite;
             set
             {
-                _favorite = value;
+                favorite = value;
             }
         }
         public string Database
         {
-            get => _database;
+            get => database;
             set
             {
-                _database = value;
+                database = value;
                 OnPropertyChanged(nameof(Database));
             }
         }
         public string Notes
         {
-            get => _notes;
+            get => notes;
             set
             {
-                _notes = value;
+                notes = value;
             }
         }
         public List<string> DatabaseItems { get; }
         public Action CloseAction { get; set; }
+        public bool OverlayVisibility
+        {
+            get => overlayVisibility; 
+            set
+            {
+                overlayVisibility = value;
+                OnPropertyChanged(nameof(OverlayVisibility));
+            }
+        }
+
         private void ExecuteAddPasswordCommand(object obj)
         {
             App.Current.Properties["SelectedDb"] = Database;
@@ -128,6 +142,14 @@ namespace PasswordManager.ViewModels
             repository.Add(newPassword, App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json");
             App.Current.Properties["ShouldRefresh"] = true;
             CloseAction.Invoke();
+        }
+
+        private void ExecuteShowPasswordGeneratorCommand(object obj)
+        {
+            var PasswordGen = new PasswordGeneratorView();
+            OverlayVisibility = true;
+            PasswordGen.ShowDialog();
+            OverlayVisibility = false;
         }
     }
 }

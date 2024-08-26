@@ -32,7 +32,7 @@ namespace PasswordManager.CustomControls
             set { SetValue(searchCriteriaProperty, value); }
         }
 
-        private void searchBar_TextChanged(object sender, TextChangedEventArgs e)
+        private void searchBarTextChanged(object sender, TextChangedEventArgs e)
         {
             if(string.IsNullOrEmpty(searchBar.Text))
             {

@@ -10,17 +10,17 @@
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <Grid HorizontalAlignment="Center">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="15"/>
-            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <TreeView x:Name="Categories"
                   ItemsSource="{Binding Categories}"
                   Height="auto"
                   Width="auto"
-                  SelectedItemChanged="Categories_SelectedItemChanged"
+                  SelectedItemChanged="CategoriesSelectedItemChanged"
                   >
 
             <TreeView.ItemTemplate>

@@ -10,7 +10,7 @@
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <Grid HorizontalAlignment="Center">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="200"/>
             <ColumnDefinition Width="15"/>
@@ -21,7 +21,7 @@
                   Height="auto"
                   Width="auto"
                   SelectionMode="Multiple"
-                  SelectionChanged="Tags_SelectionChanged"
+                  SelectionChanged="TagsSelectionChanged"
                   Background="White"
                   Foreground="{StaticResource TextBrush}"/>
 

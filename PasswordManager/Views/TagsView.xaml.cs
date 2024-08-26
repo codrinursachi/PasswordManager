@@ -27,7 +27,7 @@ namespace PasswordManager.Views
             InitializeComponent();
         }
 
-        private void Tags_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void TagsSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var viewModel = (TagsViewModel)this.DataContext;
             if (viewModel != null && Tags.SelectedItems != null)

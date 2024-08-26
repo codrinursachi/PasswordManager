@@ -28,23 +28,23 @@ namespace PasswordManager.Views
             this.KeyDown += ((MainViewModel)this.DataContext).OnActivity;
         }
 
-        private void pnlControlBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void pnlControlBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             WindowInteropHelper helper = new WindowInteropHelper(this);
             SendMessage(helper.Handle, 161, 2, 0);
         }
 
-        private void pnlControlBar_MouseEnter(object sender, MouseEventArgs e)
+        private void pnlControlBarMouseEnter(object sender, MouseEventArgs e)
         {
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
         }
 
-        private void btnClose_Click(object sender, RoutedEventArgs e)
+        private void btnCloseClick(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
 
-        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        private void btnMaximizeClick(object sender, RoutedEventArgs e)
         {
             if (this.WindowState == WindowState.Normal)
             {
@@ -56,12 +56,12 @@ namespace PasswordManager.Views
             }
         }
 
-        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        private void btnMinimizeClick(object sender, RoutedEventArgs e)
         {
             this.WindowState = WindowState.Minimized;
         }
 
-        private void btnAddPass_Click(object sender, RoutedEventArgs e)
+        private void btnAddPassClick(object sender, RoutedEventArgs e)
         {
             PasswordCreationView passwordCreationView = new();
             Overlay.Visibility = Visibility.Visible;
@@ -69,7 +69,7 @@ namespace PasswordManager.Views
             Overlay.Visibility=Visibility.Hidden;
         }
 
-        private void dtbSelector_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void dtbSelectorMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             ((MainViewModel)this.DataContext).GetDatabases();
             CollectionViewSource.GetDefaultView(dtbSelector)?.Refresh();

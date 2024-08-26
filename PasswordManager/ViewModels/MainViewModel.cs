@@ -18,17 +18,16 @@ namespace PasswordManager.ViewModels
 {
     class MainViewModel : ViewModelBase
     {
-        private ViewModelBase _currentChildView;
-        private string _caption;
-        private int _selectedDb;
-        private DispatcherTimer _timer;
+        private ViewModelBase currentChildView;
+        private string caption;
+        private int selectedDb;
+        private DispatcherTimer timer;
         public MainViewModel()
         {
             ShowAllPasswordsViewCommand = new ViewModelCommand(ExecuteShowAllPasswordsViewCommand);
             ShowFavoritesViewCommand = new ViewModelCommand(ExecuteShowFavoritesViewCommand);
             ShowLabelsViewCommand = new ViewModelCommand(ExecuteShowLabelsViewCommand);
             ShowCategoryViewCommand = new ViewModelCommand(ExecuteShowCategoryViewCommand);
-            ShowPasswordGeneratorViewCommand = new ViewModelCommand(ExecuteShowPasswordGeneratorCommand);
             Databases = new();
             GetDatabases();
             SelectedDb = 0;
@@ -41,38 +40,37 @@ namespace PasswordManager.ViewModels
         public ICommand ShowFavoritesViewCommand { get; }
         public ICommand ShowLabelsViewCommand { get; }
         public ICommand ShowCategoryViewCommand { get; }
-        public ICommand ShowPasswordGeneratorViewCommand { get; }
 
         public string Caption
         {
-            get => _caption;
+            get => caption;
             set
             {
-                _caption = value;
+                caption = value;
                 OnPropertyChanged(nameof(Caption));
             }
         }
         public ViewModelBase CurrentChildView
         {
-            get => _currentChildView;
+            get => currentChildView;
             set
             {
-                ((IStopTimer)_currentChildView)?.Stop();
-                _currentChildView = value;
+                ((IStopTimer)currentChildView)?.Stop();
+                currentChildView = value;
                 OnPropertyChanged(nameof(CurrentChildView));
-                //App.Current.Properties["ShouldRefresh"] = true;
+                App.Current.Properties["ShouldRefresh"] = true;
             }
         }
         public ObservableCollection<string> Databases { get; set; }
 
         public int SelectedDb
         {
-            get => _selectedDb;
+            get => selectedDb;
             set
             {
-                _selectedDb = value;
+                selectedDb = value;
                 OnPropertyChanged(nameof(SelectedDb));
-                App.Current.Properties["SelectedDb"] = Databases[_selectedDb];
+                App.Current.Properties["SelectedDb"] = Databases[selectedDb];
                 App.Current.Properties["ShouldRefresh"] = true;
             }
         }
@@ -117,7 +115,7 @@ namespace PasswordManager.ViewModels
         {
             var pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
             var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
-            File.Copy(db, pathToBackups+"\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToShortDateString());
+            File.Copy(db, pathToBackups+"\\" + db[(pathToDb + "\\").Length..] + "" + DateTime.Now.ToShortDateString());
         }
 
         private bool CheckBackup(string DbName)
@@ -130,7 +128,7 @@ namespace PasswordManager.ViewModels
             var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
             foreach (var db in Directory.GetFiles(pathToBackups))
             {
-                if (db[(pathToBackups + "\\").Length..].StartsWith(DbName+"_"))
+                if (db[(pathToBackups + "\\").Length..].StartsWith(DbName+""))
                 {
                     backupCount++;
                     latestBackupTime = File.GetCreationTime(db) > latestBackupTime ? File.GetCreationTime(db) : latestBackupTime;
@@ -152,29 +150,23 @@ namespace PasswordManager.ViewModels
 
         public void OnActivity(object? sender, EventArgs e)
         {
-            _timer.Stop();
-            _timer.Start();
+            timer.Stop();
+            timer.Start();
         }
 
         public void SetupTimer()
         {
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(60);
-            _timer.Tick += Timer_Tick;
-            _timer.Start();
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(60);
+            timer.Tick += TimerTick;
+            timer.Start();
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void TimerTick(object sender, EventArgs e)
         {
             App.Current.Properties["timeout"] = true;
-            _timer.Stop();
+            timer.Stop();
             Application.Current.Shutdown();
-        }
-
-        private void ExecuteShowPasswordGeneratorCommand(object obj)
-        {
-            var PasswordGen = new PasswordGeneratorView();
-            PasswordGen.Load();
         }
 
         private void ExecuteShowCategoryViewCommand(object obj)

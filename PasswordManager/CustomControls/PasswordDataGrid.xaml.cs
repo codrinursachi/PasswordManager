@@ -26,8 +26,8 @@ namespace PasswordManager.CustomControls
     public partial class PasswordDataGrid : UserControl
     {
         public static readonly DependencyProperty PasswordListProperty = DependencyProperty.Register("PasswordList", typeof(ObservableCollection<PasswordToShowDTO>), typeof(PasswordDataGrid));
-        private string _storedPass;
-        private DispatcherTimer _timer;
+        private string storedPass;
+        private DispatcherTimer timer;
 
         public PasswordDataGrid()
         {
@@ -36,20 +36,20 @@ namespace PasswordManager.CustomControls
 
         private void SetupTimer()
         {
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(5);
-            _timer.Tick += Timer_Tick;
-            _timer.Start();
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(5);
+            timer.Tick += TimerTick;
+            timer.Start();
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void TimerTick(object sender, EventArgs e)
         {
-            if (Clipboard.GetText() == _storedPass)
+            if (Clipboard.GetText() == storedPass)
             {
                 Clipboard.Clear();
             }
 
-            _timer.Stop();
+            timer.Stop();
         }
 
         public ObservableCollection<PasswordToShowDTO> PasswordList
@@ -58,17 +58,17 @@ namespace PasswordManager.CustomControls
             set { SetValue(PasswordListProperty, value); }
         }
 
-        private void cpyClipboard_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void cpyClipboardMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            _storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
-            if (_storedPass != null)
+            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
+            if (storedPass != null)
             {
-            Clipboard.SetDataObject(_storedPass);
+            Clipboard.SetDataObject(storedPass);
             SetupTimer();
             }
         }
 
-        private void showPwd_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void showPwdMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             ((PasswordToShowDTO)pwdList.SelectedItem).Password = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
             pwdList.Items.Refresh();

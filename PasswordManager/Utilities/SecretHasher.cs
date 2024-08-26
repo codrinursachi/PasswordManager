@@ -9,28 +9,28 @@ namespace PasswordManager.Utilities
 {
     public static class SecretHasher
     {
-        private const int _saltSize = 16; // 128 bits
-        private const int _keySize = 32; // 256 bits
-        private static readonly HashAlgorithmName _algorithm = HashAlgorithmName.SHA256;
+        private const int saltSize = 16; // 128 bits
+        private const int keySize = 32; // 256 bits
+        private static readonly HashAlgorithmName algorithm = HashAlgorithmName.SHA256;
 
         private const char segmentDelimiter = ':';
 
         public static string Hash(string input, int iterations)
         {
-            byte[] salt = RandomNumberGenerator.GetBytes(_saltSize);
+            byte[] salt = RandomNumberGenerator.GetBytes(saltSize);
             byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
                 input,
                 salt,
                 iterations,
-                _algorithm,
-                _keySize
+                algorithm,
+                keySize
             );
             return string.Join(
                 segmentDelimiter,
                 Convert.ToHexString(hash),
                 Convert.ToHexString(salt),
                 iterations,
-                _algorithm
+                algorithm
             );
         }
 

@@ -16,8 +16,8 @@ namespace PasswordManager.ViewModels
 {
     class FavoritesViewModel : ViewModelBase, IStopTimer
     {
-        string _searchFilter;
-        private DispatcherTimer _timer;
+        string searchFilter;
+        private DispatcherTimer timer;
 
         public FavoritesViewModel()
         {
@@ -28,10 +28,10 @@ namespace PasswordManager.ViewModels
         public ObservableCollection<PasswordToShowDTO> Passwords { get; }
         public string SearchFilter
         {
-            get => _searchFilter;
+            get => searchFilter;
             set
             {
-                _searchFilter = value;
+                searchFilter = value;
                 OnPropertyChanged(nameof(SearchFilter));
                 Refresh();
             }
@@ -39,18 +39,18 @@ namespace PasswordManager.ViewModels
 
         public void Stop()
         {
-            _timer.Stop();
+            timer.Stop();
         }
 
         private void SetupTimer()
         {
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(1);
-            _timer.Tick += Timer_Tick;
-            _timer.Start();
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += TimerTick;
+            timer.Start();
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void TimerTick(object sender, EventArgs e)
         {
             Refresh();
         }

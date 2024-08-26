@@ -17,42 +17,42 @@ namespace PasswordManager.ViewModels
     class LoginViewModel : ViewModelBase
     {
         public ICommand LoginCommand { get; }
-        private string _username;
-        private string _password;
-        private string _errorMessage;
-        private bool _isViewVisible = true;
-        private UserRepository _userRepository;
+        private string username;
+        private string password;
+        private string errorMessage;
+        private bool isViewVisible = true;
+        private UserRepository userRepository;
 
         public LoginViewModel()
         {
-            _userRepository = new UserRepository();
+            userRepository = new UserRepository();
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteOperationCommand);
         }
 
         public string Password
         {
-            get => _password;
+            get => password;
             set
             {
-                _password = value;
+                password = value;
                 OnPropertyChanged(nameof(Password));
             }
         }
         public string ErrorMessage
         {
-            get => _errorMessage;
+            get => errorMessage;
             set
             {
-                _errorMessage = value;
+                errorMessage = value;
                 OnPropertyChanged(nameof(ErrorMessage));
             }
         }
         public bool IsViewVisible
         {
-            get => _isViewVisible;
+            get => isViewVisible;
             set
             {
-                _isViewVisible = value;
+                isViewVisible = value;
                 OnPropertyChanged(nameof(IsViewVisible));
             }
         }
@@ -74,7 +74,7 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteLoginCommand(object obj)
         {
-            var isValidUser = _userRepository.AuthenticateUser(Password);
+            var isValidUser = userRepository.AuthenticateUser(Password);
             if (isValidUser)
             {
                 App.Current.Properties["pass"] = Password;

@@ -16,8 +16,8 @@ namespace PasswordManager.ViewModels
 {
     class CategoryViewModel : ViewModelBase, IStopTimer
     {
-        private CategoryNodeModel _filter;
-        private DispatcherTimer _timer;
+        private CategoryNodeModel filter;
+        private DispatcherTimer timer;
 
         public CategoryViewModel()
         {
@@ -31,10 +31,10 @@ namespace PasswordManager.ViewModels
         public ObservableCollection<PasswordToShowDTO> Passwords { get; } = new();
         public CategoryNodeModel Filter
         {
-            get => _filter;
+            get => filter;
             set
             {
-                _filter = value;
+                filter = value;
                 OnPropertyChanged(nameof(Filter));
                 App.Current.Properties["ShouldRefresh"] = true;
             }
@@ -42,18 +42,18 @@ namespace PasswordManager.ViewModels
 
         public void Stop()
         {
-            _timer.Stop();
+            timer.Stop();
         }
 
         private void SetupTimer()
         {
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(1);
-            _timer.Tick += Timer_Tick;
-            _timer.Start();
+            timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += TimerTick;
+            timer.Start();
         }
 
-        private void Timer_Tick(object sender, EventArgs e)
+        private void TimerTick(object sender, EventArgs e)
         {
             FilterPwd();
         }

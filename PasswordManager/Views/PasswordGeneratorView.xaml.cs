@@ -20,38 +20,22 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class PasswordGeneratorView : Window
     {
-        private static bool isLoaded = false;
         public PasswordGeneratorView()
         {
             InitializeComponent();
         }
 
-        public void Load()
+        private void btnCloseClick(object sender, RoutedEventArgs e)
         {
-            if (!isLoaded)
-            {
-                Show();
-                isLoaded = true;
-            }
-        }
-
-        public void UnLoad()
-        {
-            isLoaded = false;
             Close();
         }
 
-        private void btnClose_Click(object sender, RoutedEventArgs e)
-        {
-            UnLoad();
-        }
-
-        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        private void btnMinimizeClick(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
 
-        private void pnlControlBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void pnlControlBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
         }

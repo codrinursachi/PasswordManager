@@ -9,11 +9,11 @@
         mc:Ignorable="d"
         Title="LoginView"
         Height="400"
-        Width="800"
+        Width="600"
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        MouseLeftButtonDown="Window_MouseLeftButtonDown"
+        MouseLeftButtonDown="WindowMouseLeftButtonDown"
         Background="Transparent"
         AllowsTransparency="True">
 
@@ -64,7 +64,7 @@
                             Style="{StaticResource controlButton}"
                             Tag="#E94856"
                             Content="X"
-                            Click="btnClose_Click"
+                            Click="btnCloseClick"
                             Grid.Column="2">
 
                     </Button>
@@ -73,7 +73,7 @@
                             Style="{StaticResource controlButton}"
                             Tag="#D3D3D6"
                             Content="_"
-                            Click="btnMinimize_Click"
+                            Click="btnMinimizeClick"
                             Grid.Column="1">
 
                     </Button>

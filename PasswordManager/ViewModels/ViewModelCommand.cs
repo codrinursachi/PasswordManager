@@ -15,29 +15,29 @@ namespace PasswordManager.ViewModels
             remove { CommandManager.RequerySuggested -= value; }
         }
 
-        private readonly Action<object> _executeAction;
-        private readonly Predicate<object> _canExecuteAction;
+        private readonly Action<object> executeAction;
+        private readonly Predicate<object> canExecuteAction;
 
         public ViewModelCommand(Action<object> executeAction)
         {
-            _executeAction = executeAction;
-            _canExecuteAction = null;
+            this.executeAction = executeAction;
+            canExecuteAction = null;
         }
 
         public ViewModelCommand(Action<object> executeAction, Predicate<object> canExecuteAction)
         {
-            _executeAction = executeAction;
-            _canExecuteAction = canExecuteAction;
+            this.executeAction = executeAction;
+            this.canExecuteAction = canExecuteAction;
         }
 
         public bool CanExecute(object? parameter)
         {
-            return _canExecuteAction == null || _canExecuteAction(parameter);
+            return canExecuteAction == null || canExecuteAction(parameter);
         }
 
         public void Execute(object? parameter)
         {
-            _executeAction(parameter);
+            executeAction(parameter);
         }
     }
 }

@@ -24,17 +24,17 @@ namespace PasswordManager.Views
             InitializeComponent();
         }
 
-        private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void WindowMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DragMove();
         }
 
-        private void btnMinimize_Click(object sender, RoutedEventArgs e)
+        private void btnMinimizeClick(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;
         }
 
-        private void btnClose_Click(object sender, RoutedEventArgs e)
+        private void btnCloseClick(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
