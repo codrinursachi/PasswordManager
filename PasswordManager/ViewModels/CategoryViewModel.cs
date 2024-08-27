@@ -14,17 +14,16 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class CategoryViewModel : ViewModelBase, IStopTimer
+    class CategoryViewModel : ViewModelBase, IRefreshable
     {
         private CategoryNodeModel filter;
-        private DispatcherTimer timer;
 
         public CategoryViewModel()
         {
             PasswordRepository passwordRepository = new();
             var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json").Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories.Add(rootNode);
-            SetupTimer();
+            FilterPass();
         }
 
         public ObservableCollection<CategoryNodeModel> Categories { get; set; } = new();
@@ -36,36 +35,20 @@ namespace PasswordManager.ViewModels
             {
                 filter = value;
                 OnPropertyChanged(nameof(Filter));
-                App.Current.Properties["ShouldRefresh"] = true;
+                FilterPass();
             }
         }
 
-        public void Stop()
+        public void Refresh()
         {
-            timer.Stop();
+            PasswordRepository passwordRepository = new();
+            Categories.Clear();
+            var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json").Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
+            Categories.Add(rootNode);
         }
 
-        private void SetupTimer()
+        private void FilterPass()
         {
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += TimerTick;
-            timer.Start();
-        }
-
-        private void TimerTick(object sender, EventArgs e)
-        {
-            FilterPwd();
-        }
-
-        private void FilterPwd()
-        {
-            if (!(bool)App.Current.Properties["ShouldRefresh"])
-            {
-                return;
-            }
-
-            App.Current.Properties["ShouldRefresh"] = false;
             Passwords.Clear();
             PasswordRepository passwordRepository = new();
             if (Filter == null || Filter.Parent == null)

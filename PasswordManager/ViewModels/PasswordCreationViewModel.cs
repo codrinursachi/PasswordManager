@@ -140,7 +140,6 @@ namespace PasswordManager.ViewModels
             PasswordModel newPassword = new() { Username = Username, Password = Password, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
             var repository = new PasswordRepository();
             repository.Add(newPassword, App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json");
-            App.Current.Properties["ShouldRefresh"] = true;
             CloseAction.Invoke();
         }
 

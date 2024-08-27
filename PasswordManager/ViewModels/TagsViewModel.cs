@@ -3,68 +3,33 @@ using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class TagsViewModel : ViewModelBase, IStopTimer
+    class TagsViewModel : ViewModelBase, IRefreshable
     {
         private List<string> filter = new();
-        private DispatcherTimer timer;
 
         public TagsViewModel()
         {
-            SetupTimer();
+            FilterPass();
         }
 
         public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = new();
-        public ObservableCollection<string> Tags
-        {
-            get; set;
-        } = new();
+        public ObservableCollection<string> Tags{ get; set; } = new();
         public List<string> Filter
         {
             get => filter;
             set
             {
                 filter = value;
-                App.Current.Properties["ShouldRefresh"] = true;
+                FilterPass();
             }
         }
 
-        public void Stop()
+        public void FilterPass()
         {
-            timer.Stop();
-        }
-
-        private void SetupTimer()
-        {
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += TimerTick;
-            timer.Start();
-        }
-
-        private void TimerTick(object sender, EventArgs e)
-        {
-            FilterPwd();
-        }
-
-        private void FilterPwd()
-        {
-            if (!(bool)App.Current.Properties["ShouldRefresh"])
-            {
-                return;
-            }
-
-            UpdateTags();
-            App.Current.Properties["ShouldRefresh"] = false;
             IPasswordRepository passwordRepository = new PasswordRepository();
             Passwords.Clear();
 
@@ -84,7 +49,7 @@ namespace PasswordManager.ViewModels
             }
         }
 
-        private void UpdateTags()
+        public void Refresh()
         {
             IPasswordRepository passwordRepository = new PasswordRepository();
             var tags = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json").Where(p => p.Tags != null).Select(p => p.Tags.Split());

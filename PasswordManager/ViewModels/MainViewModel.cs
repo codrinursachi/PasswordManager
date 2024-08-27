@@ -22,24 +22,28 @@ namespace PasswordManager.ViewModels
         private string caption;
         private int selectedDb;
         private DispatcherTimer timer;
+        private bool overlayVisibility;
         public MainViewModel()
         {
             ShowAllPasswordsViewCommand = new ViewModelCommand(ExecuteShowAllPasswordsViewCommand);
             ShowFavoritesViewCommand = new ViewModelCommand(ExecuteShowFavoritesViewCommand);
             ShowLabelsViewCommand = new ViewModelCommand(ExecuteShowLabelsViewCommand);
             ShowCategoryViewCommand = new ViewModelCommand(ExecuteShowCategoryViewCommand);
+            ShowPasswordCreationViewCommand=new ViewModelCommand(ExecuteShowPasswordCreationViewCommand);
             Databases = new();
             GetDatabases();
             SelectedDb = 0;
             ExecuteShowAllPasswordsViewCommand(null);
             SetupTimer();
             CreateBackupIfNecessary();
+            overlayVisibility = false;
         }
 
         public ICommand ShowAllPasswordsViewCommand { get; }
         public ICommand ShowFavoritesViewCommand { get; }
         public ICommand ShowLabelsViewCommand { get; }
         public ICommand ShowCategoryViewCommand { get; }
+        public ICommand ShowPasswordCreationViewCommand { get; }
 
         public string Caption
         {
@@ -55,10 +59,9 @@ namespace PasswordManager.ViewModels
             get => currentChildView;
             set
             {
-                ((IStopTimer)currentChildView)?.Stop();
                 currentChildView = value;
                 OnPropertyChanged(nameof(CurrentChildView));
-                App.Current.Properties["ShouldRefresh"] = true;
+                ((IRefreshable)CurrentChildView).Refresh();
             }
         }
         public ObservableCollection<string> Databases { get; set; }
@@ -71,7 +74,17 @@ namespace PasswordManager.ViewModels
                 selectedDb = value;
                 OnPropertyChanged(nameof(SelectedDb));
                 App.Current.Properties["SelectedDb"] = Databases[selectedDb];
-                App.Current.Properties["ShouldRefresh"] = true;
+                ((IRefreshable)CurrentChildView)?.Refresh();
+            }
+        }
+
+        public bool OverlayVisibility
+        {
+            get => overlayVisibility; 
+            set
+            {
+                overlayVisibility = value;
+                OnPropertyChanged(nameof(OverlayVisibility));
             }
         }
 
@@ -191,6 +204,15 @@ namespace PasswordManager.ViewModels
         {
             CurrentChildView = new AllPasswordsViewModel();
             Caption = "All Passwords";
+        }
+
+        private void ExecuteShowPasswordCreationViewCommand(object obj)
+        {
+            OverlayVisibility = true;
+            PasswordCreationView passwordCreationView = new();
+            passwordCreationView.ShowDialog();
+            OverlayVisibility = false;
+            ((IRefreshable)CurrentChildView).Refresh();
         }
     }
 }

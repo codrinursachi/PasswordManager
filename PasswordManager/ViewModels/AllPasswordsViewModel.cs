@@ -14,16 +14,13 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class AllPasswordsViewModel : ViewModelBase, IStopTimer
+    class AllPasswordsViewModel : ViewModelBase,IRefreshable
     {
         string searchFilter;
-        private DispatcherTimer timer;
-
         public AllPasswordsViewModel()
         {
             Passwords = new();
             Refresh();
-            SetupTimer();
         }
         public ObservableCollection<PasswordToShowDTO> Passwords { get; set; }
         public string SearchFilter
@@ -37,31 +34,8 @@ namespace PasswordManager.ViewModels
             }
         }
 
-        public void Stop()
+        public void Refresh()
         {
-            timer.Stop();
-        }
-
-        private void SetupTimer()
-        {
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += TimerTick;
-            timer.Start();
-        }
-
-        private void TimerTick(object sender, EventArgs e)
-        {
-            Refresh();
-        }
-
-        private void Refresh()
-        {
-            if ((bool)App.Current.Properties["ShouldRefresh"] == false)
-            {
-                return;
-            }
-
             var passwordRepository = new PasswordRepository();
             App.Current.Properties["ShouldRefresh"] = false;
             Passwords.Clear();

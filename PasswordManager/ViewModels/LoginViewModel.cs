@@ -17,7 +17,6 @@ namespace PasswordManager.ViewModels
     class LoginViewModel : ViewModelBase
     {
         public ICommand LoginCommand { get; }
-        private string username;
         private string password;
         private string errorMessage;
         private bool isViewVisible = true;

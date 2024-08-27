@@ -24,6 +24,7 @@ namespace PasswordManager.Views
         public PasswordCreationView()
         {
             InitializeComponent();
+            ((PasswordCreationViewModel)this.DataContext).CloseAction = Close;
         }
 
         private void btnCloseClick(object sender, RoutedEventArgs e)

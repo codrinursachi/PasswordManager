@@ -63,23 +63,24 @@ namespace PasswordManager.CustomControls
             storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
             if (storedPass != null)
             {
-            Clipboard.SetDataObject(storedPass);
-            SetupTimer();
+                Clipboard.SetDataObject(storedPass);
+                SetupTimer();
             }
         }
 
         private void showPwdMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ((PasswordToShowDTO)pwdList.SelectedItem).Password = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
+            var pass = (PasswordToShowDTO)pwdList.SelectedItem;
+            pwdList.SelectedItem = null;
+            pass.Password = GetPasswordClearText.GetPasswordClearTextById((pass).Id);
             pwdList.Items.Refresh();
-            ClearPass();
+            ClearPass(pass);
         }
 
-        private async Task ClearPass()
+        private async void ClearPass(PasswordToShowDTO pass)
         {
-            var passToClear = (PasswordToShowDTO)pwdList.SelectedItem;
             await Task.Delay(TimeSpan.FromSeconds(5));
-            passToClear.Password = "********";
+            pass.Password = "********";
             pwdList.Items.Refresh();
         }
     }

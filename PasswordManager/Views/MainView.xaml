@@ -21,6 +21,7 @@
 
 
     <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
         <DataTemplate DataType="{x:Type viewModel:AllPasswordsViewModel}">
             <local:AllPasswordsView/>
         </DataTemplate>
@@ -396,7 +397,7 @@ VerticalAlignment="Center" HorizontalAlignment="Left"/>
                             <Button x:Name="btnAddPass"
                                     Style="{StaticResource Windows11ButtonStyle}"
                                     Margin="25,0,25,0"
-                                    Click="btnAddPassClick"
+                                    Command="{Binding ShowPasswordCreationViewCommand}"
                                     Content="+ Add Password"/>
 
 
@@ -415,7 +416,7 @@ VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
             </Border>
 
-            <Border x:Name="Overlay" Background="Black" Opacity="0.5" Grid.ColumnSpan="2" Visibility="Hidden" CornerRadius="10"/>
+            <Border x:Name="Overlay" Background="Black" Opacity="0.5" Grid.ColumnSpan="2" Visibility="{Binding OverlayVisibility, Converter={StaticResource BooleanToVisibility}}" CornerRadius="10"/>
         </Grid>
 
     </Border>
