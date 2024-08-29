@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.Models
 {
-    public class CategoryNodeModel
+    public record CategoryNodeModel
     {
         public string Name { get; set; }
         public CategoryNodeModel Parent { get; set; }
