@@ -128,7 +128,7 @@ namespace PasswordManager.ViewModels
         {
             var pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
             var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
-            File.Copy(db, pathToBackups+"\\" + db[(pathToDb + "\\").Length..] + "" + DateTime.Now.ToShortDateString());
+            File.Copy(db, pathToBackups+"\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToShortDateString());
         }
 
         private bool CheckBackup(string DbName)
@@ -141,7 +141,7 @@ namespace PasswordManager.ViewModels
             var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
             foreach (var db in Directory.GetFiles(pathToBackups))
             {
-                if (db[(pathToBackups + "\\").Length..].StartsWith(DbName+""))
+                if (db[(pathToBackups + "\\").Length..].StartsWith(DbName+"_"))
                 {
                     backupCount++;
                     latestBackupTime = File.GetCreationTime(db) > latestBackupTime ? File.GetCreationTime(db) : latestBackupTime;

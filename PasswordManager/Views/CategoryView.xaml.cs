@@ -20,9 +20,9 @@ namespace PasswordManager.Views
     /// <summary>
     /// Interaction logic for DirectoryView.xaml
     /// </summary>
-    public partial class DirectoryView : UserControl
+    public partial class CategoryView : UserControl
     {
-        public DirectoryView()
+        public CategoryView()
         {
             InitializeComponent();
         }

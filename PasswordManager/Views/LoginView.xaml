@@ -134,7 +134,7 @@
                                                         ToolTipService.InitialShowDelay="0"/>
 
                     <TextBlock Text="{Binding ErrorMessage}"
-                               Foreground="#D75960"
+                               Foreground="Red"
                                FontSize="12"
                                FontWeight="Medium"
                                FontFamily="Segoe UI"

@@ -10,8 +10,9 @@
 
                 <ResourceDictionary Source="/Styles/UIColors.xaml"/>
                 <ResourceDictionary Source="/Styles/Win11Colors.xaml"/>
-                <ResourceDictionary Source="/Styles/ButtonStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/Win11Button.xaml"/>
+                <ResourceDictionary Source="/Styles/Win11ComboBox.xaml"/>
+                <ResourceDictionary Source="/Styles/ButtonStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/TextStyles.xaml"/>
 
             </ResourceDictionary.MergedDictionaries>

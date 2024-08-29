@@ -16,7 +16,6 @@ namespace PasswordManager.Models
         public string CategoryPath { get; set; } = string.Empty;
         public string Tags { get; set; } = string.Empty;
         public bool Favorite { get; set; } = false;
-        public string Database { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
     }
 }

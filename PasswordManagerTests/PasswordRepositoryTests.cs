@@ -15,7 +15,7 @@ namespace PasswordManagerTests
         public void ShouldAddAndRetrievePasswordsCorrectly()
         {
             PasswordRepository passwordRepository = new();
-            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Database = "default", Url = "admin.com" };
+            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
             passwordRepository.Add(password, "admin");
             Assert.NotNull(passwordRepository.GetAllPasswords("admin").FirstOrDefault(p => p.Id==password.Id));
         }
@@ -24,7 +24,7 @@ namespace PasswordManagerTests
         public void ShouldRetrievePasswordById()
         {
             PasswordRepository passwordRepository = new();
-            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Database = "default", Url = "admin.com" };
+            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
             passwordRepository.Add(password, "admin");
             Assert.NotNull(passwordRepository.GetPasswordById(password.Id,"admin"));
         }
@@ -33,8 +33,8 @@ namespace PasswordManagerTests
         public void ShouldEditPasswordWhenRequested()
         {
             PasswordRepository passwordRepository = new();
-            PasswordModel password = new PasswordModel { Username = "admin1", Password = "admin", Database = "default", Url = "admin.com" };
-            PasswordModel passwordEdit = new PasswordModel { Username = "root", Password = "root", Database = "default", Url = "admin.com" };
+            PasswordModel password = new PasswordModel { Username = "admin1", Password = "admin", Url = "admin.com" };
+            PasswordModel passwordEdit = new PasswordModel { Username = "root", Password = "root", Url = "admin.com" };
             passwordRepository.Add(password, "admin");
             passwordRepository.Edit(password.Id, passwordEdit,"admin");
             Assert.Equal(passwordRepository.GetPasswordById(passwordEdit.Id,"admin"),passwordEdit);
@@ -44,7 +44,7 @@ namespace PasswordManagerTests
         public void ShouldRemovePasswordWhenRequested()
         {
             PasswordRepository passwordRepository = new();
-            PasswordModel password = new PasswordModel { Username = "admin2", Password = "admin", Database = "default", Url = "admin.com" };
+            PasswordModel password = new PasswordModel { Username = "admin2", Password = "admin", Url = "admin.com" };
             passwordRepository.Add(password, "admin");
             passwordRepository.Remove(password.Id, "admin");
             Assert.Null(passwordRepository.GetAllPasswords("admin").FirstOrDefault(p => p==password));
