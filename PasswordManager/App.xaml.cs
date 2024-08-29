@@ -29,7 +29,6 @@ namespace PasswordManager
                 }
             };
 
-            App.Current.Properties["ShouldRefresh"] = true;
             App.Current.Properties["timeout"] = false;
         }
 

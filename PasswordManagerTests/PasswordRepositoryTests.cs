@@ -14,40 +14,48 @@ namespace PasswordManagerTests
         [Fact]
         public void ShouldAddAndRetrievePasswordsCorrectly()
         {
+            string file=Path.GetRandomFileName();
             PasswordRepository passwordRepository = new();
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
-            passwordRepository.Add(password, "admin");
-            Assert.NotNull(passwordRepository.GetAllPasswords("admin").FirstOrDefault(p => p.Id==password.Id));
+            passwordRepository.Add(password, "admin",file);
+            Assert.NotNull(passwordRepository.GetAllPasswords("admin", file).FirstOrDefault(p => p.Id==password.Id));
+            File.Delete(file);
         }
 
         [Fact]
         public void ShouldRetrievePasswordById()
         {
+            string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new();
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
-            passwordRepository.Add(password, "admin");
-            Assert.NotNull(passwordRepository.GetPasswordById(password.Id,"admin"));
+            passwordRepository.Add(password, "admin", file);
+            Assert.NotNull(passwordRepository.GetPasswordById(password.Id,"admin",file));
+            File.Delete(file);
         }
 
         [Fact]
         public void ShouldEditPasswordWhenRequested()
         {
+            string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new();
             PasswordModel password = new PasswordModel { Username = "admin1", Password = "admin", Url = "admin.com" };
             PasswordModel passwordEdit = new PasswordModel { Username = "root", Password = "root", Url = "admin.com" };
-            passwordRepository.Add(password, "admin");
-            passwordRepository.Edit(password.Id, passwordEdit,"admin");
-            Assert.Equal(passwordRepository.GetPasswordById(passwordEdit.Id,"admin"),passwordEdit);
+            passwordRepository.Add(password, "admin", file);
+            passwordRepository.Edit(password.Id, passwordEdit, "admin", file);
+            Assert.Equal(passwordRepository.GetPasswordById(passwordEdit.Id,"admin",file),passwordEdit);
+            File.Delete(file);
         }
 
         [Fact]
         public void ShouldRemovePasswordWhenRequested()
         {
+            string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new();
             PasswordModel password = new PasswordModel { Username = "admin2", Password = "admin", Url = "admin.com" };
-            passwordRepository.Add(password, "admin");
-            passwordRepository.Remove(password.Id, "admin");
-            Assert.Null(passwordRepository.GetAllPasswords("admin").FirstOrDefault(p => p==password));
+            passwordRepository.Add(password, "admin",file);
+            passwordRepository.Remove(password.Id, "admin", file);
+            Assert.Null(passwordRepository.GetAllPasswords("admin",file).FirstOrDefault(p => p==password));
+            File.Delete(file);
         }
     }
 }

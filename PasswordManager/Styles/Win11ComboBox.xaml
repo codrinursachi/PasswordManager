@@ -35,7 +35,7 @@
         <Setter Property="MinWidth"
             Value="120"/>
         <Setter Property="Height"
-                Value="25"/>
+                Value="30"/>
         <Setter Property="Foreground"
             Value="{StaticResource TextBrush}"/>
         <Setter Property="Focusable"

@@ -64,6 +64,10 @@ namespace PasswordManager.Repositories
 
         private List<PasswordModel> GetPasswordsFromFile(string encryptionData, string dataBaseName)
         {
+            if (dataBaseName==".json")
+            {
+                return new();
+            }
             var fileName = Path.Combine(pathToDb, dataBaseName);
             UnicodeEncoding UE = new UnicodeEncoding();
             List<PasswordModel> passwords = new();

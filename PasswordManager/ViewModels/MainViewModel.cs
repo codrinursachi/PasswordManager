@@ -71,9 +71,8 @@ namespace PasswordManager.ViewModels
             {
                 selectedDb = value;
                 OnPropertyChanged(nameof(SelectedDb));
-                //App.Current.Properties["SelectedDb"] = Databases[selectedDb];
                 ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb];
-                ((IRefreshable)CurrentChildView)?.Refresh();
+                ((IRefreshable)CurrentChildView).Refresh();
             }
         }
 
@@ -211,7 +210,8 @@ namespace PasswordManager.ViewModels
             PasswordCreationView passwordCreationView = new();
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
-            ((IRefreshable)CurrentChildView).Refresh();
+            GetDatabases();
+            SelectedDb = 0;
         }
     }
 }
