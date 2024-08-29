@@ -28,8 +28,6 @@
                      Value="True">
                 <Setter Property="Background"
                         Value="{StaticResource ActiveBrush}"/>
-                <Setter Property="Foreground"
-                        Value="{StaticResource TextBrush}"/>
                 <Setter Property="BorderBrush"
                         Value="{StaticResource AccentBrush}"/>
             </Trigger>

@@ -14,17 +14,9 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class CategoryViewModel : ViewModelBase, IRefreshable
+    class CategoryViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable
     {
         private CategoryNodeModel filter;
-
-        public CategoryViewModel()
-        {
-            PasswordRepository passwordRepository = new();
-            var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json").Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
-            Categories.Add(rootNode);
-            FilterPass();
-        }
 
         public ObservableCollection<CategoryNodeModel> Categories { get; set; } = new();
         public ObservableCollection<PasswordToShowDTO> Passwords { get; } = new();
@@ -39,12 +31,15 @@ namespace PasswordManager.ViewModels
             }
         }
 
+        public string Database { get; set; }
+
         public void Refresh()
         {
             PasswordRepository passwordRepository = new();
             Categories.Clear();
-            var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json").Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
+            var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database + ".json").Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories.Add(rootNode);
+            FilterPass();
         }
 
         private void FilterPass()
@@ -53,7 +48,7 @@ namespace PasswordManager.ViewModels
             PasswordRepository passwordRepository = new();
             if (Filter == null || Filter.Parent == null)
             {
-                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json").Select(p => p.ToPasswordToShow()))
+                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database + ".json").Select(p => p.ToPasswordToShow()))
                 {
                     Passwords.Add(password);
                 }
@@ -77,7 +72,7 @@ namespace PasswordManager.ViewModels
                 filter += item;
             }
 
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString()+".json").Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')).Select(p => p.ToPasswordToShow()))
+            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database + ".json").Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')).Select(p => p.ToPasswordToShow()))
             {
                 Passwords.Add(password);
             }

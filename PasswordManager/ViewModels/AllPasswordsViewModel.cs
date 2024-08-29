@@ -14,31 +14,31 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class AllPasswordsViewModel : ViewModelBase,IRefreshable
+    class AllPasswordsViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable
     {
         string searchFilter;
-        public AllPasswordsViewModel()
-        {
-            Passwords = new();
-            Refresh();
-        }
-        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; }
+        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = new();
         public string SearchFilter
         {
             get => searchFilter;
             set
             {
                 searchFilter = value;
-                App.Current.Properties["ShouldRefresh"] = true;
                 Refresh();
             }
         }
 
+        public string Database { get; set; }
+
         public void Refresh()
         {
+            if (Database == null)
+            {
+                return;
+            }
             var passwordRepository = new PasswordRepository();
             Passwords.Clear();
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(),App.Current.Properties["SelectedDb"].ToString()+".json").Select(p => p.ToPasswordToShow()))
+            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database + ".json").Select(p => p.ToPasswordToShow()))
             {
                 List<string> searchData = [];
                 if (password.CategoryPath != null)
@@ -51,7 +51,7 @@ namespace PasswordManager.ViewModels
                 }
                 if (password.Tags != null)
                 {
-                    searchData.AddRange(password.Tags.Split(';'));
+                    searchData.AddRange(password.Tags.Split());
                 }
                 if (password.Url != null)
                 {

@@ -99,7 +99,6 @@
                     </StackPanel>
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color1}"
                                  Command="{Binding ShowAllPasswordsViewCommand}"
                                  IsChecked="True">
 
@@ -109,7 +108,6 @@
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color2}"
                                  Command="{Binding ShowFavoritesViewCommand}">
 
                         <TextBlock Text="Favorites"
@@ -118,7 +116,6 @@
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color3}"
                                  Command="{Binding ShowLabelsViewCommand}">
 
                         <TextBlock Text="Tags"
@@ -127,7 +124,6 @@
                     </RadioButton>
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color4}"
                                  Command="{Binding ShowCategoryViewCommand}">
 
                         <TextBlock Text="Categories"

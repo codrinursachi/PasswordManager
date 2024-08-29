@@ -7,14 +7,9 @@ using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
 {
-    class TagsViewModel : ViewModelBase, IRefreshable
+    class TagsViewModel : ViewModelBase, IRefreshable,IDatabaseChangeable
     {
         private List<string> filter = new();
-
-        public TagsViewModel()
-        {
-            FilterPass();
-        }
 
         public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = new();
         public ObservableCollection<string> Tags{ get; set; } = new();
@@ -28,6 +23,8 @@ namespace PasswordManager.ViewModels
             }
         }
 
+        public string Database { get; set; }
+
         public void FilterPass()
         {
             IPasswordRepository passwordRepository = new PasswordRepository();
@@ -35,14 +32,14 @@ namespace PasswordManager.ViewModels
 
             if (Filter.Count == 0)
             {
-                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(),App.Current.Properties["SelectedDb"].ToString() + ".json").Select(p => p.ToPasswordToShow()))
+                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database + ".json").Select(p => p.ToPasswordToShow()))
                 {
                     Passwords.Add(password);
                 }
             }
             else
             {
-                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json").Select(p => p.ToPasswordToShow()).Where(p => p.Tags != null && p.Tags.Split().ToHashSet().IsSupersetOf(Filter)))
+                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database + ".json").Select(p => p.ToPasswordToShow()).Where(p => p.Tags != null && p.Tags.Split().ToHashSet().IsSupersetOf(Filter)))
                 {
                     Passwords.Add(password);
                 }
@@ -52,7 +49,7 @@ namespace PasswordManager.ViewModels
         public void Refresh()
         {
             IPasswordRepository passwordRepository = new PasswordRepository();
-            var tags = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json").Where(p => p.Tags != null).Select(p => p.Tags.Split());
+            var tags = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database + ".json").Where(p => p.Tags != null).Select(p => p.Tags.Split());
             HashSet<string> result = new();
             foreach (var itemTags in tags)
             {
@@ -70,6 +67,8 @@ namespace PasswordManager.ViewModels
                     Tags.Add(tag);
                 }
             }
+
+            FilterPass();
         }
     }
 }

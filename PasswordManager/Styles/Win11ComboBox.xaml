@@ -76,7 +76,6 @@
                         Placement="Bottom"
                         IsOpen="{TemplateBinding IsDropDownOpen}"
                         AllowsTransparency="True"
-                        Focusable="False"
                         PopupAnimation="Slide">
 
                             <Grid Name="DropDown"
@@ -85,7 +84,8 @@
                                 x:Name="DropDownBorder"
                                 Background="White"
                                 BorderThickness="1"
-                                BorderBrush="#888888"/>
+                                BorderBrush="#888888"
+                                    CornerRadius="5"/>
                                 <ScrollViewer Margin="4,6,4,6">
                                     <StackPanel IsItemsHost="True"
                                             KeyboardNavigation.DirectionalNavigation="Contained"/>
@@ -94,18 +94,6 @@
                         </Popup>
                     </Grid>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsGrouping"
-                             Value="true">
-                            <Setter Property="ScrollViewer.CanContentScroll"
-                                Value="false"/>
-                        </Trigger>
-                        <Trigger SourceName="Popup"
-                             Property="Popup.AllowsTransparency"
-                             Value="true">
-                            <Setter TargetName="DropDownBorder"
-                                Property="CornerRadius"
-                                Value="5"/>
-                        </Trigger>
                         <Trigger Property="IsEditable"
                              Value="true">
                             

@@ -20,7 +20,7 @@ namespace PasswordManager.ViewModels
     {
         private ViewModelBase currentChildView;
         private string caption;
-        private int selectedDb;
+        private int selectedDb=0;
         private DispatcherTimer timer;
         private bool overlayVisibility;
         public MainViewModel()
@@ -30,13 +30,10 @@ namespace PasswordManager.ViewModels
             ShowLabelsViewCommand = new ViewModelCommand(ExecuteShowLabelsViewCommand);
             ShowCategoryViewCommand = new ViewModelCommand(ExecuteShowCategoryViewCommand);
             ShowPasswordCreationViewCommand=new ViewModelCommand(ExecuteShowPasswordCreationViewCommand);
-            Databases = new();
             GetDatabases();
-            SelectedDb = 0;
             ExecuteShowAllPasswordsViewCommand(null);
             SetupTimer();
             CreateBackupIfNecessary();
-            overlayVisibility = false;
         }
 
         public ICommand ShowAllPasswordsViewCommand { get; }
@@ -61,10 +58,11 @@ namespace PasswordManager.ViewModels
             {
                 currentChildView = value;
                 OnPropertyChanged(nameof(CurrentChildView));
+                ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb];
                 ((IRefreshable)CurrentChildView).Refresh();
             }
         }
-        public ObservableCollection<string> Databases { get; set; }
+        public ObservableCollection<string> Databases { get; set; } = new();
 
         public int SelectedDb
         {
@@ -73,7 +71,8 @@ namespace PasswordManager.ViewModels
             {
                 selectedDb = value;
                 OnPropertyChanged(nameof(SelectedDb));
-                App.Current.Properties["SelectedDb"] = Databases[selectedDb];
+                //App.Current.Properties["SelectedDb"] = Databases[selectedDb];
+                ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb];
                 ((IRefreshable)CurrentChildView)?.Refresh();
             }
         }
@@ -96,7 +95,7 @@ namespace PasswordManager.ViewModels
                 Directory.CreateDirectory(path);
             }
             Databases.Clear();
-            foreach (var db in (Directory.GetFiles(path)))
+            foreach (var db in Directory.GetFiles(path))
             {
                 Databases.Add(db[(path + "\\").Length..^".json".Length]);
             }

@@ -14,7 +14,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class FavoritesViewModel : ViewModelBase, IRefreshable
+    class FavoritesViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable
     {
         string searchFilter;
         public FavoritesViewModel()
@@ -28,16 +28,21 @@ namespace PasswordManager.ViewModels
             set
             {
                 searchFilter = value;
-                OnPropertyChanged(nameof(SearchFilter));
                 Refresh();
             }
         }
 
+        public string Database { get; set; }
+
         public void Refresh()
         {
+            if (Database == null)
+            {
+                return;
+            }
             Passwords.Clear();
             var passwordRepository = new PasswordRepository();
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json").Where(p => p.Favorite).Select(p => p.ToPasswordToShow()))
+            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database+ ".json").Where(p => p.Favorite).Select(p => p.ToPasswordToShow()))
             {
                 List<string> searchData = [];
                 if (password.CategoryPath != null)
@@ -50,7 +55,7 @@ namespace PasswordManager.ViewModels
                 }
                 if (password.Tags != null)
                 {
-                    searchData.AddRange(password.Tags.Split(';'));
+                    searchData.AddRange(password.Tags.Split());
                 }
                 if (password.Url != null)
                 {

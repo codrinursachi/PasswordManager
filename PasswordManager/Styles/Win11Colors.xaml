@@ -11,8 +11,8 @@
     <Color x:Key="ColorOnCloseButton">Red</Color>
 
     <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource LightThemeBackgroundColor}" />
-    <SolidColorBrush x:Key="TextBrush" Color="{DynamicResource LightThemeTextColor}" />
+    <SolidColorBrush x:Key="TextBrush" Color="{StaticResource LightThemeTextColor}" />
     <SolidColorBrush x:Key="ActiveBrush" Color="{DynamicResource ActiveColor}" />
-    <SolidColorBrush x:Key="AccentBrush" Color="{DynamicResource {x:Static SystemParameters.WindowGlassBrush}}" />
+    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource LightThemeAccentColor}" />
 
 </ResourceDictionary>
