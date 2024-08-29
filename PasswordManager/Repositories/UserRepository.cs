@@ -15,17 +15,17 @@ namespace PasswordManager.Repositories
     {
         readonly string fileName;
 
-        public UserRepository()
+        public UserRepository(string loginFileName)
         {
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager");
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }
-            fileName = Path.Combine(path, "UserLogin.json");
+            fileName = Path.Combine(path, loginFileName);
             if (!File.Exists(fileName))
             {
-                File.Create(fileName);
+                File.Create(fileName).Close();
             }
         }
 
@@ -41,6 +41,7 @@ namespace PasswordManager.Repositories
             if (string.IsNullOrEmpty(passwordHash))
             {
                 Add(password);
+                return true;
             }
 
             return SecretHasher.Verify(password, passwordHash);

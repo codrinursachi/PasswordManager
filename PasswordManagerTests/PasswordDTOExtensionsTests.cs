@@ -57,6 +57,8 @@ namespace PasswordManagerTests
             Assert.Equal((DateTime.Now + TimeSpan.FromDays(1)).ToShortDateString(), passwordDTO.ExpirationDate);
             Assert.Equal("admin/admin", passwordDTO.CategoryPath);
             Assert.Equal("tag1 tag2 tag3", passwordDTO.Tags);
+            Assert.True(passwordDTO.Favorite);
+            Assert.Equal("admin notes", passwordDTO.Notes);
         }
 
         [Fact]
@@ -80,6 +82,8 @@ namespace PasswordManagerTests
             Assert.Equal("expired", passwordDTO.ExpirationDate);
             Assert.Equal("admin/admin", passwordDTO.CategoryPath);
             Assert.Equal("tag1 tag2 tag3", passwordDTO.Tags);
+            Assert.True(passwordDTO.Favorite);
+            Assert.Equal("admin notes", passwordDTO.Notes);
         }
     }
 }

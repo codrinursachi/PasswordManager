@@ -100,7 +100,7 @@ namespace PasswordManager.ViewModels
             }
             if(Databases.Count == 0)
             {
-                File.Create(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", "default.json"));
+                File.Create(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", "default.json")).Close();
                 Databases.Add("default");
             }
         }

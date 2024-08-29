@@ -24,7 +24,7 @@ namespace PasswordManager.ViewModels
 
         public LoginViewModel()
         {
-            userRepository = new UserRepository();
+            userRepository = new UserRepository("UserLogin.json");
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteOperationCommand);
         }
 
