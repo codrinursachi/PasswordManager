@@ -1,4 +1,5 @@
-﻿using PasswordManager.Models;
+﻿using PasswordManager.Interfaces;
+using PasswordManager.Models;
 using PasswordManager.Repositories;
 using PasswordManager.Views;
 using System;
@@ -14,7 +15,7 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
 {
-    internal class PasswordCreationViewModel : ViewModelBase
+    public class PasswordCreationViewModel : ViewModelBase,IDatabaseChangeable
     {
         string username;
         string password;
@@ -39,7 +40,7 @@ namespace PasswordManager.ViewModels
                 DatabaseItems.Add(db[(path + "\\").Length..^".json".Length]);
             }
             AddPasswordCommand = new ViewModelCommand(ExecuteAddPasswordCommand);
-            CategoryPaths = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString()+".json").Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
+            CategoryPaths = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database+".json").Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
         public ICommand AddPasswordCommand { get; }
         public ICommand ShowPasswordGeneratorViewCommand { get; }
@@ -57,6 +58,7 @@ namespace PasswordManager.ViewModels
             set
             {
                 password = value;
+                OnPropertyChanged(nameof(Password));
             }
         }
         public string Url
@@ -139,13 +141,13 @@ namespace PasswordManager.ViewModels
             string tags = string.Join(" ", CompletedTags);
             PasswordModel newPassword = new() { Username = Username, Password = Password, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
             var repository = new PasswordRepository();
-            repository.Add(newPassword, App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString() + ".json");
+            repository.Add(newPassword, App.Current.Properties["pass"].ToString(), Database + ".json");
             CloseAction.Invoke();
         }
 
         private void ExecuteShowPasswordGeneratorCommand(object obj)
         {
-            var PasswordGen = new PasswordGeneratorView();
+            var PasswordGen = new PasswordGeneratorView(this);
             OverlayVisibility = true;
             PasswordGen.ShowDialog();
             OverlayVisibility = false;

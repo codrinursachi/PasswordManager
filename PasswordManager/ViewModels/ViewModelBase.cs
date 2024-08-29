@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.ViewModels
 {
-    abstract class ViewModelBase : INotifyPropertyChanged
+    abstract public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
