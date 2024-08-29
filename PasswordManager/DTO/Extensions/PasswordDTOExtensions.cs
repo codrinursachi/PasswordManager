@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.DTO.Extensions
 {
-    internal static class PasswordDTOExtensions
+    public static class PasswordDTOExtensions
     {
-        public static PasswordToShowDTO ToPasswordToShow(this PasswordModel passwordModel)
+        public static PasswordToShowDTO ToPasswordToShowDTO(this PasswordModel passwordModel)
         {
             return new PasswordToShowDTO
             {
