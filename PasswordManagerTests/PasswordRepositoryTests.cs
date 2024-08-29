@@ -19,7 +19,7 @@ namespace PasswordManagerTests
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
             passwordRepository.Add(password, "admin",file);
             Assert.NotNull(passwordRepository.GetAllPasswords("admin", file).FirstOrDefault(p => p.Id==password.Id));
-            File.Delete(file);
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases",file));
         }
 
         [Fact]
@@ -30,7 +30,7 @@ namespace PasswordManagerTests
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
             passwordRepository.Add(password, "admin", file);
             Assert.NotNull(passwordRepository.GetPasswordById(password.Id,"admin",file));
-            File.Delete(file);
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace PasswordManagerTests
             passwordRepository.Add(password, "admin", file);
             passwordRepository.Edit(password.Id, passwordEdit, "admin", file);
             Assert.Equal(passwordRepository.GetPasswordById(passwordEdit.Id,"admin",file),passwordEdit);
-            File.Delete(file);
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
         }
 
         [Fact]
@@ -55,7 +55,7 @@ namespace PasswordManagerTests
             passwordRepository.Add(password, "admin",file);
             passwordRepository.Remove(password.Id, "admin", file);
             Assert.Null(passwordRepository.GetAllPasswords("admin",file).FirstOrDefault(p => p==password));
-            File.Delete(file);
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
         }
     }
 }
