@@ -14,12 +14,12 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class CategoryViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable,IPasswordSettable
+    public class CategoryViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable,IPasswordSettable
     {
         private CategoryNodeModel filter;
 
         public ObservableCollection<CategoryNodeModel> Categories { get; set; } = new();
-        public ObservableCollection<PasswordToShowDTO> Passwords { get; } = new();
+        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = new();
         public CategoryNodeModel Filter
         {
             get => filter;
