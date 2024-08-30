@@ -26,7 +26,7 @@ namespace PasswordManager.ViewModels
             set
             {
                 filter = value;
-                OnPropertyChanged(nameof(Filter));
+                //OnPropertyChanged(nameof(Filter));
                 FilterPass();
             }
         }
