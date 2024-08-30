@@ -26,7 +26,7 @@ namespace PasswordManager.ViewModels
         public string Database { get; set; }
         public string Password { get; set; }
 
-        public void FilterPass()
+        private void FilterPass()
         {
             PasswordRepository passwordRepository = new(Database, Password);
             Passwords.Clear();
