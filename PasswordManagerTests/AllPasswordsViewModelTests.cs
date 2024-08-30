@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace PasswordManagerTests
 {
@@ -17,18 +18,16 @@ namespace PasswordManagerTests
         public void ShouldStorePasswords()
         {
             string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new();
+            PasswordRepository passwordRepository = new(file, "admin");
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
             PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com" };
             PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com" };
-            passwordRepository.Add(password, "admin", file);
-            passwordRepository.Add(password2, "admin", file);
-            passwordRepository.Add(password3, "admin", file);
-            if (System.Windows.Application.Current == null)
-            { new System.Windows.Application { ShutdownMode = ShutdownMode.OnExplicitShutdown }; }
-            App.Current.Properties["pass"]="admin";
+            passwordRepository.Add(password);
+            passwordRepository.Add(password2);
+            passwordRepository.Add(password3);
             AllPasswordsViewModel allPasswordsViewModel = new();
             allPasswordsViewModel.Database = file;
+            allPasswordsViewModel.Password = "admin";
             allPasswordsViewModel.Refresh();
             Assert.Equal(3,allPasswordsViewModel.Passwords.Count);
             File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
@@ -38,21 +37,17 @@ namespace PasswordManagerTests
         public void ShouldFilterPasswords()
         {
             string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new();
+            PasswordRepository passwordRepository = new(file, "admin");
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
             PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com" };
             PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com" };
-            passwordRepository.Add(password, "admin", file);
-            passwordRepository.Add(password2, "admin", file);
-            passwordRepository.Add(password3, "admin", file);
-            if (System.Windows.Application.Current == null)
-            { new System.Windows.Application { ShutdownMode = ShutdownMode.OnExplicitShutdown }; }
-            App.Current.Properties["pass"] = "admin";
+            passwordRepository.Add(password);
+            passwordRepository.Add(password2);
+            passwordRepository.Add(password3);
             AllPasswordsViewModel allPasswordsViewModel = new();
             allPasswordsViewModel.Database = file;
-            allPasswordsViewModel.Refresh();
+            allPasswordsViewModel.Password="admin";
             allPasswordsViewModel.SearchFilter="admin2";
-            allPasswordsViewModel.Refresh();
             Assert.Single(allPasswordsViewModel.Passwords);
             File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
         }

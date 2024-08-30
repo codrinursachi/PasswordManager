@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
 {
-    class TagsViewModel : ViewModelBase, IRefreshable,IDatabaseChangeable
+    class TagsViewModel : ViewModelBase, IRefreshable,IDatabaseChangeable,IPasswordSettable
     {
         private List<string> filter = new();
 
@@ -24,22 +24,23 @@ namespace PasswordManager.ViewModels
         }
 
         public string Database { get; set; }
+        public string Password { get; set; }
 
         public void FilterPass()
         {
-            IPasswordRepository passwordRepository = new PasswordRepository();
+            PasswordRepository passwordRepository = new(Database, Password);
             Passwords.Clear();
 
             if (Filter.Count == 0)
             {
-                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Select(p => p.ToPasswordToShowDTO()))
+                foreach (var password in passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()))
                 {
                     Passwords.Add(password);
                 }
             }
             else
             {
-                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Select(p => p.ToPasswordToShowDTO()).Where(p => p.Tags != null && p.Tags.Split().ToHashSet().IsSupersetOf(Filter)))
+                foreach (var password in passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()).Where(p => p.Tags != null && p.Tags.Split().ToHashSet().IsSupersetOf(Filter)))
                 {
                     Passwords.Add(password);
                 }
@@ -48,8 +49,8 @@ namespace PasswordManager.ViewModels
 
         public void Refresh()
         {
-            IPasswordRepository passwordRepository = new PasswordRepository();
-            var tags = passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Where(p => p.Tags != null).Select(p => p.Tags.Split());
+            PasswordRepository passwordRepository = new(Database, Password);
+            var tags = passwordRepository.GetAllPasswords().Where(p => p.Tags != null).Select(p => p.Tags.Split());
             HashSet<string> result = new();
             foreach (var itemTags in tags)
             {

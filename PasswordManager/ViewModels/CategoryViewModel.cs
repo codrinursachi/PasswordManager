@@ -14,7 +14,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class CategoryViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable
+    class CategoryViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable,IPasswordSettable
     {
         private CategoryNodeModel filter;
 
@@ -32,12 +32,13 @@ namespace PasswordManager.ViewModels
         }
 
         public string Database { get; set; }
+        public string Password { get; set; }
 
         public void Refresh()
         {
-            PasswordRepository passwordRepository = new();
+            PasswordRepository passwordRepository = new(Database,Password);
             Categories.Clear();
-            var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
+            var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories.Add(rootNode);
             FilterPass();
         }
@@ -45,10 +46,10 @@ namespace PasswordManager.ViewModels
         private void FilterPass()
         {
             Passwords.Clear();
-            PasswordRepository passwordRepository = new();
+            PasswordRepository passwordRepository = new(Database, Password);
             if (Filter == null || Filter.Parent == null)
             {
-                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Select(p => p.ToPasswordToShowDTO()))
+                foreach (var password in passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()))
                 {
                     Passwords.Add(password);
                 }
@@ -72,7 +73,7 @@ namespace PasswordManager.ViewModels
                 filter += item;
             }
 
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')).Select(p => p.ToPasswordToShowDTO()))
+            foreach (var password in passwordRepository.GetAllPasswords().Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')).Select(p => p.ToPasswordToShowDTO()))
             {
                 Passwords.Add(password);
             }

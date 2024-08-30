@@ -13,34 +13,42 @@ using System.Windows.Media;
 
 namespace PasswordManager.Repositories
 {
-    public class PasswordRepository : IPasswordRepository
+    public class PasswordRepository
     {
         readonly string pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
+        readonly string password;
+        readonly string dataBaseName;
 
-        public void Add(PasswordModel passwordModel, string encryptionData, string dataBaseName)
+        public PasswordRepository(string dataBaseName, string password)
         {
-            List<PasswordModel> passwords = GetPasswordsFromFile(encryptionData,dataBaseName);
-            passwordModel.Id = passwords.Count == 0 ? 1 : passwords.Max(p => p.Id) + 1;
-            passwords.Add(passwordModel);
-            WritePasswords(encryptionData, passwords, dataBaseName);
+            this.password = password;
+            this.dataBaseName = dataBaseName;
         }
 
-        public void Edit(int id, PasswordModel newPasswordModel, string encryptionData, string dataBaseName)
+        public void Add(PasswordModel passwordModel)
         {
-            List<PasswordModel> passwords = GetAllPasswords(encryptionData,dataBaseName);
+            List<PasswordModel> passwords = GetPasswordsFromFile();
+            passwordModel.Id = passwords.Count == 0 ? 1 : passwords.Max(p => p.Id) + 1;
+            passwords.Add(passwordModel);
+            WritePasswords(passwords);
+        }
+
+        public void Edit(int id, PasswordModel newPasswordModel)
+        {
+            List<PasswordModel> passwords = GetAllPasswords();
             var currentPassword = passwords.FirstOrDefault(p => p.Id == id);
             if (currentPassword == null)
             {
                 return;
             }
 
-            Remove(id, encryptionData, dataBaseName);
-            Add(newPasswordModel, encryptionData, dataBaseName);
+            Remove(id);
+            Add(newPasswordModel);
         }
 
-        public List<PasswordModel> GetAllPasswords(string encryptionData, string dataBaseName)
+        public List<PasswordModel> GetAllPasswords()
         {
-            List<PasswordModel> passwords = GetPasswordsFromFile(encryptionData,dataBaseName);
+            List<PasswordModel> passwords = GetPasswordsFromFile();
 
             foreach (var password in passwords)
             {
@@ -50,21 +58,21 @@ namespace PasswordManager.Repositories
             return new(passwords.OrderBy(p => p.Url));
         }
 
-        public PasswordModel GetPasswordById(int id, string encryptionData, string dataBaseName)
+        public PasswordModel GetPasswordById(int id)
         {
-            return GetPasswordsFromFile(encryptionData, dataBaseName).FirstOrDefault(p => p.Id == id);
+            return GetPasswordsFromFile().FirstOrDefault(p => p.Id == id);
         }
 
-        public void Remove(int id, string encryptionData, string dataBaseName)
+        public void Remove(int id)
         {
-            List<PasswordModel> passwords = GetAllPasswords(encryptionData, dataBaseName);
+            List<PasswordModel> passwords = GetAllPasswords();
             passwords.Remove(passwords.First(p => p.Id == id));
-            WritePasswords(encryptionData, passwords, dataBaseName);
+            WritePasswords(passwords);
         }
 
-        private List<PasswordModel> GetPasswordsFromFile(string encryptionData, string dataBaseName)
+        private List<PasswordModel> GetPasswordsFromFile()
         {
-            if (dataBaseName==".json")
+            if (dataBaseName == ".json")
             {
                 return new();
             }
@@ -73,7 +81,7 @@ namespace PasswordManager.Repositories
             List<PasswordModel> passwords = new();
             using (var AES = Aes.Create())
             {
-                byte[] passwordBytes = UE.GetBytes(encryptionData);
+                byte[] passwordBytes = UE.GetBytes(password);
                 byte[] aesKey = SHA256.HashData(passwordBytes);
                 byte[] aesIV = MD5.HashData(passwordBytes);
                 AES.Key = aesKey;
@@ -98,13 +106,13 @@ namespace PasswordManager.Repositories
             return passwords;
         }
 
-        private void WritePasswords(string encryptionData, List<PasswordModel> passwords, string dataBaseName)
+        private void WritePasswords(List<PasswordModel> passwords)
         {
             var fileName = Path.Combine(pathToDb, dataBaseName);
             UnicodeEncoding UE = new UnicodeEncoding();
             using (var AES = Aes.Create())
             {
-                byte[] passwordBytes = UE.GetBytes(encryptionData);
+                byte[] passwordBytes = UE.GetBytes(password);
                 byte[] aesKey = SHA256.HashData(passwordBytes);
                 byte[] aesIV = MD5.HashData(passwordBytes);
                 AES.Key = aesKey;

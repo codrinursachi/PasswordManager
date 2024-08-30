@@ -14,7 +14,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    public class AllPasswordsViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable
+    public class AllPasswordsViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable, IPasswordSettable
     {
         string searchFilter;
         public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = new();
@@ -29,6 +29,7 @@ namespace PasswordManager.ViewModels
         }
 
         public string Database { get; set; }
+        public string Password { get; set; }
 
         public void Refresh()
         {
@@ -36,9 +37,9 @@ namespace PasswordManager.ViewModels
             {
                 return;
             }
-            var passwordRepository = new PasswordRepository();
+            var passwordRepository = new PasswordRepository(Database, Password);
             Passwords.Clear();
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Select(p => p.ToPasswordToShowDTO()))
+            foreach (var password in passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()))
             {
                 List<string> searchData = [];
                 if (password.Username != null)

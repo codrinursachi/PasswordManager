@@ -12,8 +12,8 @@ namespace PasswordManager.Utilities
     {
         public static string GetPasswordClearTextById(int id)
         {
-            IPasswordRepository passwordRepository = new PasswordRepository();
-            return passwordRepository.GetPasswordById(id, App.Current.Properties["pass"].ToString(), App.Current.Properties["SelectedDb"].ToString()+".json").Password;
+            PasswordRepository passwordRepository = new(App.Current.Properties["SelectedDb"].ToString(),App.Current.Properties["pass"].ToString());
+            return passwordRepository.GetPasswordById(id).Password;
         }
     }
 }
