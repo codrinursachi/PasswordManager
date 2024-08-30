@@ -137,11 +137,10 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteAddPasswordCommand(object obj)
         {
-            App.Current.Properties["SelectedDb"] = Database;
             string tags = string.Join(" ", CompletedTags);
             PasswordModel newPassword = new() { Username = Username, Password = Password, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
             var repository = new PasswordRepository();
-            repository.Add(newPassword, App.Current.Properties["pass"].ToString(), Database + ".json");
+            repository.Add(newPassword, App.Current.Properties["pass"].ToString(), Database);
             CloseAction.Invoke();
         }
 

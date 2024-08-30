@@ -45,6 +45,10 @@ namespace PasswordManager.ViewModels
             foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Where(p => p.Favorite).Select(p => p.ToPasswordToShowDTO()))
             {
                 List<string> searchData = [];
+                if (password.Username != null)
+                {
+                    searchData.Add(password.Username);
+                }
                 if (password.CategoryPath != null)
                 {
                     searchData.AddRange(password.CategoryPath.Split('/'));
