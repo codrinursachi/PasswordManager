@@ -37,7 +37,7 @@ namespace PasswordManager.ViewModels
         {
             PasswordRepository passwordRepository = new();
             Categories.Clear();
-            var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database + ".json").Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
+            var rootNode = BuildTree(passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories.Add(rootNode);
             FilterPass();
         }
@@ -48,7 +48,7 @@ namespace PasswordManager.ViewModels
             PasswordRepository passwordRepository = new();
             if (Filter == null || Filter.Parent == null)
             {
-                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database + ".json").Select(p => p.ToPasswordToShowDTO()))
+                foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Select(p => p.ToPasswordToShowDTO()))
                 {
                     Passwords.Add(password);
                 }
@@ -72,7 +72,7 @@ namespace PasswordManager.ViewModels
                 filter += item;
             }
 
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database + ".json").Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')).Select(p => p.ToPasswordToShowDTO()))
+            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')).Select(p => p.ToPasswordToShowDTO()))
             {
                 Passwords.Add(password);
             }

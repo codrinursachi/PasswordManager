@@ -42,7 +42,7 @@ namespace PasswordManager.ViewModels
             }
             Passwords.Clear();
             var passwordRepository = new PasswordRepository();
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database+ ".json").Where(p => p.Favorite).Select(p => p.ToPasswordToShowDTO()))
+            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Where(p => p.Favorite).Select(p => p.ToPasswordToShowDTO()))
             {
                 List<string> searchData = [];
                 if (password.CategoryPath != null)

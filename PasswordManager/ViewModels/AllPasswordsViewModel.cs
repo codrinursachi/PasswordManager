@@ -14,7 +14,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class AllPasswordsViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable
+    public class AllPasswordsViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable
     {
         string searchFilter;
         public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = new();
@@ -38,7 +38,7 @@ namespace PasswordManager.ViewModels
             }
             var passwordRepository = new PasswordRepository();
             Passwords.Clear();
-            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database + ".json").Select(p => p.ToPasswordToShowDTO()))
+            foreach (var password in passwordRepository.GetAllPasswords(App.Current.Properties["pass"].ToString(), Database).Select(p => p.ToPasswordToShowDTO()))
             {
                 List<string> searchData = [];
                 if (password.CategoryPath != null)

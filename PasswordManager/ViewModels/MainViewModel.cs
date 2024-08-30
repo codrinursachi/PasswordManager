@@ -58,7 +58,7 @@ namespace PasswordManager.ViewModels
             {
                 currentChildView = value;
                 OnPropertyChanged(nameof(CurrentChildView));
-                ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb];
+                ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb] + ".json";
                 ((IRefreshable)CurrentChildView).Refresh();
             }
         }
