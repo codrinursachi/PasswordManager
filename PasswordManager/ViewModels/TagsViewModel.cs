@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
 {
-    class TagsViewModel : ViewModelBase, IRefreshable,IDatabaseChangeable,IPasswordSettable
+    public class TagsViewModel : ViewModelBase, IRefreshable,IDatabaseChangeable,IPasswordSettable
     {
         private List<string> filter = new();
 
