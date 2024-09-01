@@ -32,11 +32,10 @@
                 Value="{StaticResource AccentBrush}"/>
         <Setter Property="BorderThickness"
                 Value="0,0,0,1"/>
-<Setter Property="Height"
+        <Setter Property="Height"
                 Value="25"/>
         <Setter Property="VerticalContentAlignment"
                 Value="Center"/>
     </Style>
 
-    
 </ResourceDictionary>

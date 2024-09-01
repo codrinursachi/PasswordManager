@@ -46,5 +46,33 @@ namespace PasswordManager.Views
         {
             DragMove();
         }
+
+        private void alphaNumDec_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtAlphaNums.Text == "0")
+            {
+                return;
+            }
+            txtAlphaNums.Text = (int.Parse(txtAlphaNums.Text) - 1).ToString();
+        }
+
+        private void alphaNumInc_Click(object sender, RoutedEventArgs e)
+        {
+            txtAlphaNums.Text = (int.Parse(txtAlphaNums.Text) + 1).ToString();
+        }
+
+        private void symNumInc_Click(object sender, RoutedEventArgs e)
+        {
+            txtSymbols.Text = (int.Parse(txtSymbols.Text) + 1).ToString();
+        }
+
+        private void symNumDec_Click(object sender, RoutedEventArgs e)
+        {
+            if (txtSymbols.Text == "0")
+            {
+                return;
+            }
+            txtSymbols.Text = (int.Parse(txtSymbols.Text) - 1).ToString();
+        }
     }
 }
