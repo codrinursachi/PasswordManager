@@ -32,11 +32,11 @@ namespace PasswordManager.ViewModels
         }
 
         public string Database { get; set; }
-        public string Password { get; set; }
+        public byte[] DBPass { get; set; }
 
         public void Refresh()
         {
-            PasswordRepository passwordRepository = new(Database,Password);
+            PasswordRepository passwordRepository = new(Database,DBPass);
             Categories.Clear();
             var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories.Add(rootNode);
@@ -46,7 +46,7 @@ namespace PasswordManager.ViewModels
         private void FilterPass()
         {
             Passwords.Clear();
-            PasswordRepository passwordRepository = new(Database, Password);
+            PasswordRepository passwordRepository = new(Database, DBPass);
             if (Filter == null || Filter.Parent == null)
             {
                 foreach (var password in passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()))

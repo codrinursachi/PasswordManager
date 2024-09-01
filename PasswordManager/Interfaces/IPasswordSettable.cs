@@ -8,6 +8,6 @@ namespace PasswordManager.Interfaces
 {
     interface IPasswordSettable
     {
-        string Password { get; set; }
+        byte[] DBPass { get; set; }
     }
 }

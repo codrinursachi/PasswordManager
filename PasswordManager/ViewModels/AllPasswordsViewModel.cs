@@ -29,7 +29,7 @@ namespace PasswordManager.ViewModels
         }
 
         public string Database { get; set; }
-        public string Password { get; set; }
+        public byte[] DBPass { get; set; }
 
         public void Refresh()
         {
@@ -37,7 +37,7 @@ namespace PasswordManager.ViewModels
             {
                 return;
             }
-            var passwordRepository = new PasswordRepository(Database, Password);
+            var passwordRepository = new PasswordRepository(Database, DBPass);
             Passwords.Clear();
             foreach (var password in passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()))
             {

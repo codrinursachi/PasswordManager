@@ -16,10 +16,10 @@ namespace PasswordManager.Repositories
     public class PasswordRepository
     {
         readonly string pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
-        readonly string password;
+        readonly byte[] password;
         readonly string dataBaseName;
 
-        public PasswordRepository(string dataBaseName, string password)
+        public PasswordRepository(string dataBaseName, byte[] password)
         {
             this.password = password;
             this.dataBaseName = dataBaseName;
@@ -74,14 +74,14 @@ namespace PasswordManager.Repositories
         {
             if (dataBaseName == ".json")
             {
-                return new();
+                return null;
             }
             var fileName = Path.Combine(pathToDb, dataBaseName);
             UnicodeEncoding UE = new UnicodeEncoding();
             List<PasswordModel> passwords = new();
             using (var AES = Aes.Create())
             {
-                byte[] passwordBytes = UE.GetBytes(password);
+                byte[] passwordBytes = UE.GetBytes(Encoding.UTF8.GetString(ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser)));
                 byte[] aesKey = SHA256.HashData(passwordBytes);
                 byte[] aesIV = MD5.HashData(passwordBytes);
                 AES.Key = aesKey;
@@ -112,7 +112,7 @@ namespace PasswordManager.Repositories
             UnicodeEncoding UE = new UnicodeEncoding();
             using (var AES = Aes.Create())
             {
-                byte[] passwordBytes = UE.GetBytes(password);
+                byte[] passwordBytes = UE.GetBytes(Encoding.UTF8.GetString(ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser)));
                 byte[] aesKey = SHA256.HashData(passwordBytes);
                 byte[] aesIV = MD5.HashData(passwordBytes);
                 AES.Key = aesKey;

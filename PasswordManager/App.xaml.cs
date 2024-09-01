@@ -1,4 +1,5 @@
-﻿using PasswordManager.Views;
+﻿using PasswordManager.Interfaces;
+using PasswordManager.Views;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -21,9 +22,10 @@ namespace PasswordManager
             }
             loginView.IsVisibleChanged += (s, ev) =>
             {
-                if (loginView.IsVisible == false && loginView.IsLoaded&&App.Current.Properties["pass"] != null)
+                if (loginView.IsVisible == false && loginView.IsLoaded && (((IPasswordSettable)loginView.DataContext).DBPass!=null))
                 {
                     var mainView = new MainView();
+                    ((IPasswordSettable)mainView.DataContext).DBPass = ((IPasswordSettable)loginView.DataContext).DBPass;
                     mainView.Show();
                     loginView.Close();
                 }

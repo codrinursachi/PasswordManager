@@ -51,13 +51,13 @@ namespace PasswordManager.ViewModels
                 username = value;
             }
         }
-        public string UserPassword
+        public string Password
         {
             get => password;
             set
             {
                 password = value;
-                OnPropertyChanged(nameof(UserPassword));
+                OnPropertyChanged(nameof(Password));
             }
         }
         public string Url
@@ -115,7 +115,7 @@ namespace PasswordManager.ViewModels
                 CategoryPaths.Clear();
                 if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", value + ".json")))
                 {
-                    passwordRepository = new(Database + ".json", App.Current.Properties["pass"].ToString());
+                    passwordRepository = new(Database + ".json", DBPass);
                     CategoryPaths.AddRange(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
                 }
             }
@@ -140,13 +140,13 @@ namespace PasswordManager.ViewModels
             }
         }
 
-        public string Password { get; set; }
+        public byte[] DBPass { get; set; }
 
         public void ExecuteAddPasswordCommand(object obj)
         {
             string tags = string.Join(" ", CompletedTags);
-            PasswordModel newPassword = new() { Username = Username, Password = UserPassword, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
-            PasswordRepository passwordRepository = new(Database + ".json", Password);
+            PasswordModel newPassword = new() { Username = Username, Password = Password, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
+            PasswordRepository passwordRepository = new(Database + ".json", DBPass);
             passwordRepository.Add(newPassword);
             CloseAction?.Invoke();
         }

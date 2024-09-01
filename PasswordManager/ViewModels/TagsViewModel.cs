@@ -24,11 +24,11 @@ namespace PasswordManager.ViewModels
         }
 
         public string Database { get; set; }
-        public string Password { get; set; }
+        public byte[] DBPass { get; set; }
 
         private void FilterPass()
         {
-            PasswordRepository passwordRepository = new(Database, Password);
+            PasswordRepository passwordRepository = new(Database, DBPass);
             Passwords.Clear();
 
             if (Filter.Count == 0)
@@ -49,7 +49,7 @@ namespace PasswordManager.ViewModels
 
         public void Refresh()
         {
-            PasswordRepository passwordRepository = new(Database, Password);
+            PasswordRepository passwordRepository = new(Database, DBPass);
             var tags = passwordRepository.GetAllPasswords().Where(p => p.Tags != null).Select(p => p.Tags.Split());
             HashSet<string> result = new();
             foreach (var itemTags in tags)

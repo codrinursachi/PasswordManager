@@ -16,11 +16,12 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class MainViewModel : ViewModelBase
+    class MainViewModel : ViewModelBase, IPasswordSettable
     {
         private ViewModelBase currentChildView;
         private string caption;
         private int selectedDb = 0;
+        private byte[] dBPass;
         private DispatcherTimer timer;
         private bool overlayVisibility;
         public MainViewModel()
@@ -31,7 +32,6 @@ namespace PasswordManager.ViewModels
             ShowCategoryViewCommand = new ViewModelCommand(ExecuteShowCategoryViewCommand);
             ShowPasswordCreationViewCommand = new ViewModelCommand(ExecuteShowPasswordCreationViewCommand);
             GetDatabases();
-            ExecuteShowAllPasswordsViewCommand(null);
             SetupTimer();
             CreateBackupIfNecessary();
         }
@@ -58,7 +58,7 @@ namespace PasswordManager.ViewModels
             {
                 currentChildView = value;
                 OnPropertyChanged(nameof(CurrentChildView));
-                ((IPasswordSettable)CurrentChildView).Password = App.Current.Properties["pass"].ToString();
+                ((IPasswordSettable)CurrentChildView).DBPass = DBPass;
                 ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb] + ".json";
                 ((IRefreshable)CurrentChildView).Refresh();
             }
@@ -87,6 +87,19 @@ namespace PasswordManager.ViewModels
             {
                 overlayVisibility = value;
                 OnPropertyChanged(nameof(OverlayVisibility));
+            }
+        }
+
+        public byte[] DBPass
+        {
+            get
+            {
+                return dBPass;
+            } 
+            set
+            {
+                dBPass = value;
+                ExecuteShowAllPasswordsViewCommand(null);
             }
         }
 
@@ -143,7 +156,7 @@ namespace PasswordManager.ViewModels
             var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
             foreach (var db in Directory.GetFiles(pathToBackups))
             {
-                if (db[(pathToBackups + "\\").Length..].StartsWith(DbName + "_"))
+                if (db[(pathToBackups + "\\").Length..^"01.01.0001".Length] == DbName + "_")
                 {
                     backupCount++;
                     latestBackupTime = File.GetCreationTime(db) > latestBackupTime ? File.GetCreationTime(db) : latestBackupTime;
@@ -212,8 +225,8 @@ namespace PasswordManager.ViewModels
         {
             OverlayVisibility = true;
             PasswordCreationView passwordCreationView = new();
+            ((IPasswordSettable)passwordCreationView.DataContext).DBPass = DBPass;
             ((IDatabaseChangeable)passwordCreationView.DataContext).Database = Databases[SelectedDb];
-            ((IPasswordSettable)passwordCreationView.DataContext).Password = App.Current.Properties["pass"].ToString();
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
             GetDatabases();

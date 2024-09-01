@@ -1,4 +1,5 @@
 ﻿using PasswordManager.DTO;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Utilities;
 using System;
@@ -69,7 +70,7 @@ namespace PasswordManager.CustomControls
 
         private void cpyClipboardMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id, Database);
+            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id, Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
             if (storedPass != null)
             {
                 Clipboard.SetDataObject(storedPass);
@@ -81,7 +82,7 @@ namespace PasswordManager.CustomControls
         {
             var pass = (PasswordToShowDTO)pwdList.SelectedItem;
             pwdList.SelectedItem = null;
-            pass.Password = GetPasswordClearText.GetPasswordClearTextById((pass).Id, Database);
+            pass.Password = GetPasswordClearText.GetPasswordClearTextById((pass).Id, Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
             pwdList.Items.Refresh();
             ClearPass(pass);
         }

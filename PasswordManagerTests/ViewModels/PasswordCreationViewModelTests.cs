@@ -18,7 +18,7 @@ namespace PasswordManagerTests.ViewModels
             passwordCreationViewModel.Password = "admin";
             passwordCreationViewModel.Database = file;
             passwordCreationViewModel.Username = "admin";
-            passwordCreationViewModel.UserPassword = "admin";
+            passwordCreationViewModel.Password = "admin";
             passwordCreationViewModel.Url = "admin.com";
             passwordCreationViewModel.ExecuteAddPasswordCommand(null);
             PasswordRepository passwordRepository = new(file+".json", "admin");

@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
 using System;
@@ -7,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,7 +16,7 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
 {
-    class LoginViewModel : ViewModelBase
+    class LoginViewModel : ViewModelBase,IPasswordSettable
     {
         public ICommand LoginCommand { get; }
         private string password;
@@ -56,6 +58,8 @@ namespace PasswordManager.ViewModels
             }
         }
 
+        public byte[] DBPass { get; set; }
+
         private bool CanExecuteOperationCommand(object obj)
         {
             bool validData;
@@ -76,7 +80,7 @@ namespace PasswordManager.ViewModels
             var isValidUser = userRepository.AuthenticateUser(Password);
             if (isValidUser)
             {
-                App.Current.Properties["pass"] = Password;
+                DBPass=ProtectedData.Protect(Encoding.UTF8.GetBytes(Password), null, DataProtectionScope.CurrentUser);
                 IsViewVisible = false;
             }
             else

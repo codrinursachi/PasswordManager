@@ -33,7 +33,7 @@ namespace PasswordManager.ViewModels
         }
 
         public string Database { get; set; }
-        public string Password { get; set; }
+        public byte[] DBPass { get; set; }
 
         public void Refresh()
         {
@@ -42,7 +42,7 @@ namespace PasswordManager.ViewModels
                 return;
             }
             Passwords.Clear();
-            PasswordRepository passwordRepository = new(Database, Password);
+            PasswordRepository passwordRepository = new(Database, DBPass);
             foreach (var password in passwordRepository.GetAllPasswords().Where(p => p.Favorite).Select(p => p.ToPasswordToShowDTO()))
             {
                 List<string> searchData = [];
