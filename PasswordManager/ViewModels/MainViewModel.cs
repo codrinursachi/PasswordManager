@@ -1,6 +1,7 @@
 ﻿using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
+using PasswordManager.Utilities;
 using PasswordManager.Views;
 using System;
 using System.Collections.Generic;
@@ -33,7 +34,8 @@ namespace PasswordManager.ViewModels
             ShowPasswordCreationViewCommand = new ViewModelCommand(ExecuteShowPasswordCreationViewCommand);
             GetDatabases();
             SetupTimer();
-            CreateBackupIfNecessary();
+            BackupCreator backupCreator = new();
+            backupCreator.CreateBackupIfNecessary();
         }
 
         public ICommand ShowAllPasswordsViewCommand { get; }
@@ -122,59 +124,7 @@ namespace PasswordManager.ViewModels
             }
         }
 
-        private void CreateBackupIfNecessary()
-        {
-            var pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
-            var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
-            if (!Directory.Exists(pathToBackups))
-            {
-                Directory.CreateDirectory(pathToBackups);
-            }
-            foreach (var db in (Directory.GetFiles(pathToDb)))
-            {
-                if (CheckBackup(db[(pathToDb + "\\").Length..]))
-                {
-                    CreateBackup(db);
-                }
-            }
-        }
-
-        private void CreateBackup(string db)
-        {
-            var pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
-            var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
-            File.Copy(db, pathToBackups + "\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToShortDateString());
-        }
-
-        private bool CheckBackup(string DbName)
-        {
-            int backupCount = 0;
-            DateTime latestBackupTime = default;
-            DateTime oldestBackupTime = DateTime.Now;
-            string oldestBackup = string.Empty;
-
-            var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
-            foreach (var db in Directory.GetFiles(pathToBackups))
-            {
-                if (db[(pathToBackups + "\\").Length..^"01.01.0001".Length] == DbName + "_")
-                {
-                    backupCount++;
-                    latestBackupTime = File.GetCreationTime(db) > latestBackupTime ? File.GetCreationTime(db) : latestBackupTime;
-                    if (File.GetCreationTime(db) < oldestBackupTime)
-                    {
-                        oldestBackupTime = File.GetCreationTime(DbName);
-                        oldestBackup = db;
-                    }
-                }
-            }
-
-            if (backupCount >= 5)
-            {
-                File.Delete(oldestBackup);
-            }
-
-            return latestBackupTime < DateTime.Now - TimeSpan.FromDays(7);
-        }
+       
 
         public void OnActivity(object? sender, EventArgs e)
         {
