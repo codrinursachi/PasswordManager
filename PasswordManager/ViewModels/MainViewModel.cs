@@ -213,6 +213,7 @@ namespace PasswordManager.ViewModels
             OverlayVisibility = true;
             PasswordCreationView passwordCreationView = new();
             ((IDatabaseChangeable)passwordCreationView.DataContext).Database = Databases[SelectedDb];
+            ((IPasswordSettable)passwordCreationView.DataContext).Password = App.Current.Properties["pass"].ToString();
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
             GetDatabases();

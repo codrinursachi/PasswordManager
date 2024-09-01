@@ -10,7 +10,7 @@ namespace PasswordManager.ViewModels
     class PasswordGeneratorViewModel : ViewModelBase
     {
         private string alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
-        private string symbols = """!\";#$%&'()*+,-./:;<=>?@[]^`{|}~""";
+        private string symbols = "!\\\";#$%&'()*+,-./:;<=>?@[]^`{|}~";
         public string generatedPassword;
         public PasswordGeneratorViewModel()
         {

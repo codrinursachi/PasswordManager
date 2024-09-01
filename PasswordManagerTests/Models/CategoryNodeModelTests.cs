@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PasswordManagerTests
+namespace PasswordManagerTests.Models
 {
     public class CategoryNodeModelTests
     {
@@ -17,7 +17,7 @@ namespace PasswordManagerTests
             CategoryNodeModel child1 = new();
             CategoryNodeModel child2 = new();
             categoryNodeModel.Parent = parent;
-            categoryNodeModel.Children.AddRange([child1, child2 ]);
+            categoryNodeModel.Children.AddRange([child1, child2]);
             categoryNodeModel.Name = "Test";
             Assert.Equal("Test", categoryNodeModel.Name);
             Assert.Equal(parent, categoryNodeModel.Parent);

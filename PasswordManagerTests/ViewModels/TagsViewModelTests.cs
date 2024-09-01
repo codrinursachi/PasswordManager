@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PasswordManagerTests
+namespace PasswordManagerTests.ViewModels
 {
     public class TagsViewModelTests
     {
@@ -35,9 +35,9 @@ namespace PasswordManagerTests
         {
             string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new(file, "admin");
-            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com", Tags="tag1 tag2" };
-            PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com", Tags="tag2 tag3" };
-            PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com", Tags="tag3 tag4" };
+            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com", Tags = "tag1 tag2" };
+            PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com", Tags = "tag2 tag3" };
+            PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com", Tags = "tag3 tag4" };
             passwordRepository.Add(password);
             passwordRepository.Add(password2);
             passwordRepository.Add(password3);

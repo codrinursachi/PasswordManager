@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PasswordManagerTests
+namespace PasswordManagerTests.Repositories
 {
     public class UserRepositoryTests
     {

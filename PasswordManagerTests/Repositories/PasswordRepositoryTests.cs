@@ -7,19 +7,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PasswordManagerTests
+namespace PasswordManagerTests.Repositories
 {
     public class PasswordRepositoryTests
     {
         [Fact]
         public void ShouldAddAndRetrievePasswordsCorrectly()
         {
-            string file=Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file,"admin");
+            string file = Path.GetRandomFileName();
+            PasswordRepository passwordRepository = new(file, "admin");
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
             passwordRepository.Add(password);
-            Assert.NotNull(passwordRepository.GetAllPasswords().FirstOrDefault(p => p.Id==password.Id));
-            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases",file));
+            Assert.NotNull(passwordRepository.GetAllPasswords().FirstOrDefault(p => p.Id == password.Id));
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace PasswordManagerTests
             PasswordModel passwordEdit = new PasswordModel { Username = "root", Password = "root", Url = "admin.com" };
             passwordRepository.Add(password);
             passwordRepository.Edit(password.Id, passwordEdit);
-            Assert.Equal(passwordRepository.GetPasswordById(passwordEdit.Id),passwordEdit);
+            Assert.Equal(passwordRepository.GetPasswordById(passwordEdit.Id), passwordEdit);
             File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
         }
 
@@ -54,7 +54,7 @@ namespace PasswordManagerTests
             PasswordModel password = new PasswordModel { Username = "admin2", Password = "admin", Url = "admin.com" };
             passwordRepository.Add(password);
             passwordRepository.Remove(password.Id);
-            Assert.Null(passwordRepository.GetAllPasswords().FirstOrDefault(p => p==password));
+            Assert.Null(passwordRepository.GetAllPasswords().FirstOrDefault(p => p == password));
             File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
         }
     }

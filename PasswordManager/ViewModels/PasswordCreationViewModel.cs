@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
 {
-    public class PasswordCreationViewModel : ViewModelBase, IDatabaseChangeable
+    public class PasswordCreationViewModel : ViewModelBase, IDatabaseChangeable, IPasswordSettable
     {
         string username;
         string password;
@@ -51,13 +51,13 @@ namespace PasswordManager.ViewModels
                 username = value;
             }
         }
-        public string Password
+        public string UserPassword
         {
             get => password;
             set
             {
                 password = value;
-                OnPropertyChanged(nameof(Password));
+                OnPropertyChanged(nameof(UserPassword));
             }
         }
         public string Url
@@ -140,13 +140,15 @@ namespace PasswordManager.ViewModels
             }
         }
 
-        private void ExecuteAddPasswordCommand(object obj)
+        public string Password { get; set; }
+
+        public void ExecuteAddPasswordCommand(object obj)
         {
             string tags = string.Join(" ", CompletedTags);
-            PasswordModel newPassword = new() { Username = Username, Password = Password, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
-            PasswordRepository passwordRepository = new(Database + ".json", App.Current.Properties["pass"].ToString());
+            PasswordModel newPassword = new() { Username = Username, Password = UserPassword, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
+            PasswordRepository passwordRepository = new(Database + ".json", Password);
             passwordRepository.Add(newPassword);
-            CloseAction.Invoke();
+            CloseAction?.Invoke();
         }
 
         private void ExecuteShowPasswordGeneratorCommand(object obj)
