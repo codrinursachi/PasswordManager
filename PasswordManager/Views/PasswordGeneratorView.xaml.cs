@@ -20,10 +20,9 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class PasswordGeneratorView : Window
     {
-        public PasswordGeneratorView(PasswordCreationViewModel passwordCreationViewModel)
+        public PasswordGeneratorView()
         {
             InitializeComponent();
-            ((PasswordGeneratorViewModel)DataContext).PasswordCreationViewModel = passwordCreationViewModel;
             ((PasswordGeneratorViewModel)DataContext).CloseAction = Unload;
         }
 

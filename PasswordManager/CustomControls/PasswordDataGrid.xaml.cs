@@ -93,5 +93,11 @@ namespace PasswordManager.CustomControls
             pass.Password = "********";
             pwdList.Items.Refresh();
         }
+
+        private void delPwd_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            DeletePassword.DeletePasswordById(((PasswordToShowDTO)pwdList.SelectedItem).Id, Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
+            PasswordList.Remove((PasswordToShowDTO)pwdList.SelectedItem);
+        }
     }
 }

@@ -11,7 +11,7 @@ namespace PasswordManager.ViewModels
     {
         private string alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         private string symbols = "!\\\";#$%&'()*+,-./:;<=>?@[]^`{|}~";
-        public string generatedPassword;
+        private string generatedPassword;
         public PasswordGeneratorViewModel()
         {
             GeneratePasswordCommand = new ViewModelCommand(ExecuteGeneratePasswordCommand);
@@ -35,8 +35,7 @@ namespace PasswordManager.ViewModels
         public ICommand AcceptPasswordCommand { get; }
 
         private void ExecuteAcceptPasswordCommand(object obj)
-        {
-            PasswordCreationViewModel.Password = GeneratedPassword;
+        { 
             CloseAction.Invoke();
         }
 
