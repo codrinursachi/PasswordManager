@@ -26,6 +26,7 @@
                   Foreground="{StaticResource TextBrush}"/>
 
         <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
-                                         Grid.Column="2"/>
+                                         Grid.Column="2"
+                                         Database="{Binding Database}"/>
     </Grid>
 </UserControl>

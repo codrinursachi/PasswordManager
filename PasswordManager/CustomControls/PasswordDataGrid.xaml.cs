@@ -26,12 +26,26 @@ namespace PasswordManager.CustomControls
     public partial class PasswordDataGrid : UserControl
     {
         public static readonly DependencyProperty PasswordListProperty = DependencyProperty.Register("PasswordList", typeof(ObservableCollection<PasswordToShowDTO>), typeof(PasswordDataGrid));
+        public static readonly DependencyProperty DatabaseProperty = DependencyProperty.Register("Database", typeof(string), typeof(PasswordDataGrid));
+
         private string storedPass;
         private DispatcherTimer timer;
 
         public PasswordDataGrid()
         {
             InitializeComponent();
+        }
+
+        public ObservableCollection<PasswordToShowDTO> PasswordList
+        {
+            get { return (ObservableCollection<PasswordToShowDTO>)GetValue(PasswordListProperty); }
+            set { SetValue(PasswordListProperty, value); }
+        }
+
+        public string Database
+        {
+            get { return (string)GetValue(DatabaseProperty); }
+            set { SetValue(DatabaseProperty, value); }
         }
 
         private void SetupTimer()
@@ -52,15 +66,10 @@ namespace PasswordManager.CustomControls
             timer.Stop();
         }
 
-        public ObservableCollection<PasswordToShowDTO> PasswordList
-        {
-            get { return (ObservableCollection<PasswordToShowDTO>)GetValue(PasswordListProperty); }
-            set { SetValue(PasswordListProperty, value); }
-        }
 
         private void cpyClipboardMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id);
+            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id, Database);
             if (storedPass != null)
             {
                 Clipboard.SetDataObject(storedPass);
@@ -72,7 +81,7 @@ namespace PasswordManager.CustomControls
         {
             var pass = (PasswordToShowDTO)pwdList.SelectedItem;
             pwdList.SelectedItem = null;
-            pass.Password = GetPasswordClearText.GetPasswordClearTextById((pass).Id);
+            pass.Password = GetPasswordClearText.GetPasswordClearTextById((pass).Id, Database);
             pwdList.Items.Refresh();
             ClearPass(pass);
         }

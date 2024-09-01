@@ -62,10 +62,13 @@ namespace PasswordManager.Views
 
         private void txtTagKeyUp(object sender, KeyEventArgs e)
         {
-            string tag;
             if (e.Key == Key.Space)
             {
-                tag = ((TextBox)sender).Text.Trim();
+                if (string.IsNullOrWhiteSpace(((TextBox)sender).Text))
+                {
+                    return;
+                }
+                string tag = ((TextBox)sender).Text.Trim();
                 ((PasswordCreationViewModel)this.DataContext).CompletedTags.Add(tag);
                 ((TextBox)sender).Text = "";
             }
@@ -73,13 +76,12 @@ namespace PasswordManager.Views
 
         private void txtTagLostFocus(object sender, RoutedEventArgs e)
         {
-            string tag;
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+            if (string.IsNullOrWhiteSpace(((TextBox)sender).Text))
             {
                 return;
             }
 
-            tag = ((TextBox)sender).Text.Trim();
+            string tag = ((TextBox)sender).Text.Trim();
             ((PasswordCreationViewModel)this.DataContext).CompletedTags.Add(tag);
             ((TextBox)sender).Text = "";
         }
@@ -91,6 +93,18 @@ namespace PasswordManager.Views
                 return;
             }
             ((PasswordCreationViewModel)this.DataContext).CompletedTags.Remove(Tags.SelectedItem.ToString());
+        }
+
+        private void txtCat_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ((ComboBox)sender).ItemsSource = null;
+            ((ComboBox)sender).ItemsSource = ((PasswordCreationViewModel)this.DataContext).CategoryPaths;
+            ((TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender)).Focus();
+        }
+
+        private void ComboBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            ((TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender)).Focus();
         }
     }
 }

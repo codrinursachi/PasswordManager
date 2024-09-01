@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
 {
-    public class PasswordCreationViewModel : ViewModelBase,IDatabaseChangeable
+    public class PasswordCreationViewModel : ViewModelBase, IDatabaseChangeable
     {
         string username;
         string password;
@@ -27,12 +27,12 @@ namespace PasswordManager.ViewModels
         string database;
         string notes;
         private bool overlayVisibility;
-
+        private PasswordRepository passwordRepository;
         public PasswordCreationViewModel()
         {
             OverlayVisibility = false;
+            CategoryPaths = new();
             ShowPasswordGeneratorViewCommand = new ViewModelCommand(ExecuteShowPasswordGeneratorCommand);
-            PasswordRepository passwordRepository = new(Database, App.Current.Properties["pass"].ToString());
             DatabaseItems = new List<string>();
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
             foreach (var db in Directory.GetFiles(path))
@@ -40,7 +40,6 @@ namespace PasswordManager.ViewModels
                 DatabaseItems.Add(db[(path + "\\").Length..^".json".Length]);
             }
             AddPasswordCommand = new ViewModelCommand(ExecuteAddPasswordCommand);
-            CategoryPaths = passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
         public ICommand AddPasswordCommand { get; }
         public ICommand ShowPasswordGeneratorViewCommand { get; }
@@ -113,6 +112,12 @@ namespace PasswordManager.ViewModels
             {
                 database = value;
                 OnPropertyChanged(nameof(Database));
+                CategoryPaths.Clear();
+                if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", value + ".json")))
+                {
+                    passwordRepository = new(Database + ".json", App.Current.Properties["pass"].ToString());
+                    CategoryPaths.AddRange(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
+                }
             }
         }
         public string Notes
@@ -127,7 +132,7 @@ namespace PasswordManager.ViewModels
         public Action CloseAction { get; set; }
         public bool OverlayVisibility
         {
-            get => overlayVisibility; 
+            get => overlayVisibility;
             set
             {
                 overlayVisibility = value;
@@ -139,7 +144,7 @@ namespace PasswordManager.ViewModels
         {
             string tags = string.Join(" ", CompletedTags);
             PasswordModel newPassword = new() { Username = Username, Password = Password, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
-            PasswordRepository passwordRepository = new(Database, App.Current.Properties["pass"].ToString());
+            PasswordRepository passwordRepository = new(Database + ".json", App.Current.Properties["pass"].ToString());
             passwordRepository.Add(newPassword);
             CloseAction.Invoke();
         }

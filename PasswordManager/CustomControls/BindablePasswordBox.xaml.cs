@@ -23,21 +23,29 @@ namespace PasswordManager.CustomControls
     {
         public static readonly DependencyProperty PasswordProperty =
             DependencyProperty.Register("Password", typeof(string), typeof(BindablePasswordBox));
+        public static readonly DependencyProperty GeneratedPasswordProperty =
+            DependencyProperty.Register("GeneratedPassword", typeof(string), typeof(BindablePasswordBox));
         public BindablePasswordBox()
         {
             InitializeComponent();
             txtPassword.PasswordChanged += OnPasswordChanged;
         }
 
-        private void OnPasswordChanged(object sender, RoutedEventArgs e)
-        {
-            Password = txtPassword.Password;
-        }
-
         public string Password
         {
             get { return (string)GetValue(PasswordProperty); }
             set { SetValue(PasswordProperty, value); }
+        }
+
+        public string GeneratedPassword
+        {
+            get { return (string)GetValue(GeneratedPasswordProperty); }
+            set { SetValue(GeneratedPasswordProperty, value); txtPassword.Password=value; }
+        }
+
+        private void OnPasswordChanged(object sender, RoutedEventArgs e)
+        {
+            Password = txtPassword.Password;
         }
     }
 }

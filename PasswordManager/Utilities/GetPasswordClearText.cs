@@ -10,9 +10,9 @@ namespace PasswordManager.Utilities
 {
     static class GetPasswordClearText
     {
-        public static string GetPasswordClearTextById(int id)
+        public static string GetPasswordClearTextById(int id, string database)
         {
-            PasswordRepository passwordRepository = new(App.Current.Properties["SelectedDb"].ToString(),App.Current.Properties["pass"].ToString());
+            PasswordRepository passwordRepository = new(database, App.Current.Properties["pass"].ToString());
             return passwordRepository.GetPasswordById(id).Password;
         }
     }

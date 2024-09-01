@@ -20,7 +20,7 @@ namespace PasswordManager.ViewModels
     {
         private ViewModelBase currentChildView;
         private string caption;
-        private int selectedDb=0;
+        private int selectedDb = 0;
         private DispatcherTimer timer;
         private bool overlayVisibility;
         public MainViewModel()
@@ -29,7 +29,7 @@ namespace PasswordManager.ViewModels
             ShowFavoritesViewCommand = new ViewModelCommand(ExecuteShowFavoritesViewCommand);
             ShowLabelsViewCommand = new ViewModelCommand(ExecuteShowLabelsViewCommand);
             ShowCategoryViewCommand = new ViewModelCommand(ExecuteShowCategoryViewCommand);
-            ShowPasswordCreationViewCommand=new ViewModelCommand(ExecuteShowPasswordCreationViewCommand);
+            ShowPasswordCreationViewCommand = new ViewModelCommand(ExecuteShowPasswordCreationViewCommand);
             GetDatabases();
             ExecuteShowAllPasswordsViewCommand(null);
             SetupTimer();
@@ -58,6 +58,7 @@ namespace PasswordManager.ViewModels
             {
                 currentChildView = value;
                 OnPropertyChanged(nameof(CurrentChildView));
+                ((IPasswordSettable)CurrentChildView).Password = App.Current.Properties["pass"].ToString();
                 ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb] + ".json";
                 ((IRefreshable)CurrentChildView).Refresh();
             }
@@ -71,14 +72,17 @@ namespace PasswordManager.ViewModels
             {
                 selectedDb = value;
                 OnPropertyChanged(nameof(SelectedDb));
-                ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb];
-                ((IRefreshable)CurrentChildView).Refresh();
+                if (selectedDb >= 0)
+                {
+                    ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb] + ".json";
+                    ((IRefreshable)CurrentChildView).Refresh();
+                }
             }
         }
 
         public bool OverlayVisibility
         {
-            get => overlayVisibility; 
+            get => overlayVisibility;
             set
             {
                 overlayVisibility = value;
@@ -98,7 +102,7 @@ namespace PasswordManager.ViewModels
             {
                 Databases.Add(db[(path + "\\").Length..^".json".Length]);
             }
-            if(Databases.Count == 0)
+            if (Databases.Count == 0)
             {
                 File.Create(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", "default.json")).Close();
                 Databases.Add("default");
@@ -126,7 +130,7 @@ namespace PasswordManager.ViewModels
         {
             var pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
             var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
-            File.Copy(db, pathToBackups+"\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToShortDateString());
+            File.Copy(db, pathToBackups + "\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToShortDateString());
         }
 
         private bool CheckBackup(string DbName)
@@ -139,7 +143,7 @@ namespace PasswordManager.ViewModels
             var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
             foreach (var db in Directory.GetFiles(pathToBackups))
             {
-                if (db[(pathToBackups + "\\").Length..].StartsWith(DbName+"_"))
+                if (db[(pathToBackups + "\\").Length..].StartsWith(DbName + "_"))
                 {
                     backupCount++;
                     latestBackupTime = File.GetCreationTime(db) > latestBackupTime ? File.GetCreationTime(db) : latestBackupTime;
@@ -208,6 +212,7 @@ namespace PasswordManager.ViewModels
         {
             OverlayVisibility = true;
             PasswordCreationView passwordCreationView = new();
+            ((IDatabaseChangeable)passwordCreationView.DataContext).Database = Databases[SelectedDb];
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
             GetDatabases();
