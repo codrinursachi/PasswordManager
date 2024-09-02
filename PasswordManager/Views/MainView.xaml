@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PasswordManager.Views"
-        xmlns:viewModel="clr-namespace:PasswordManager.ViewModels"
+        xmlns:viewModel="clr-namespace:PasswordManager.ViewModels" xmlns:customcontrols="clr-namespace:PasswordManager.CustomControls"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="700"
@@ -148,40 +148,8 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <StackPanel x:Name="pnlControlBar"
-                                Grid.Row="0"
-                                Orientation="Horizontal"
-                                FlowDirection="RightToLeft"
-                                Background="Transparent"
-                                Margin="0,0,5,0"
-                                MouseLeftButtonDown="pnlControlBarMouseLeftButtonDown"
-                                MouseEnter="pnlControlBarMouseEnter">
+                    <customcontrols:PanelControlBar MaximizeVisible="True" IsMainWindow="True"/>
 
-                        <Button x:Name="btnClose"
-                                Style="{StaticResource controlButton}"
-                                Tag="#E81123"
-                                Content="X"
-                                Click="btnCloseClick">
-
-                        </Button>
-
-                        <Button x:Name="btnMaximize"
-                                Style="{StaticResource controlButton}"
-                                Tag="#D3D3D6"
-                                Content="▢"
-                                Click="btnMaximizeClick">
-
-                        </Button>
-
-                        <Button x:Name="btnMinimize"
-                                Style="{StaticResource controlButton}"
-                                Tag="#D3D3D6"
-                                Content="_"
-                                Click="btnMinimizeClick">
-
-                        </Button>
-
-                    </StackPanel>
                     <TextBlock Text="{Binding Caption}"
 Margin="25,0,0,0"
 Grid.Row="1"

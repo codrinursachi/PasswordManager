@@ -13,7 +13,6 @@
         WindowStyle="None"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        MouseLeftButtonDown="WindowMouseLeftButtonDown"
         Background="Transparent"
         AllowsTransparency="True">
 
@@ -44,42 +43,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition Width="35"/>
-                        <ColumnDefinition Width="35"/>
-                        <ColumnDefinition Width="5"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Text="Log in"
-                               Foreground="{StaticResource TextBrush}"
-                               FontSize="10"
-                               FontFamily="Segoe UI"
-                               Grid.Column="0"
-                               VerticalAlignment="Center"
-                               Margin="10,0,0,0"/>
-
-                    <Button x:Name="btnClose"
-                            Style="{StaticResource controlButton}"
-                            Tag="#E94856"
-                            Content="X"
-                            Click="btnCloseClick"
-                            Grid.Column="2">
-
-                    </Button>
-
-                    <Button x:Name="btnMinimize"
-                            Style="{StaticResource controlButton}"
-                            Tag="#D3D3D6"
-                            Content="_"
-                            Click="btnMinimizeClick"
-                            Grid.Column="1">
-
-                    </Button>
-
-                </Grid>
-
+            <customcontrols:PanelControlBar IsMainWindow="True" WindowTitle="Log in"/>
                 <StackPanel Width="250"
                             Grid.Row="1"
                             Orientation="Vertical"

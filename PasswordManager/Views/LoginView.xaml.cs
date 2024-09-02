@@ -24,11 +24,6 @@ namespace PasswordManager.Views
             InitializeComponent();
         }
 
-        private void WindowMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
-
         private void btnMinimizeClick(object sender, RoutedEventArgs e)
         {
             WindowState = WindowState.Minimized;

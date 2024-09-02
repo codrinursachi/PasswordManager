@@ -27,21 +27,6 @@ namespace PasswordManager.Views
             ((PasswordCreationViewModel)this.DataContext).CloseAction = Close;
         }
 
-        private void btnCloseClick(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void btnMinimizeClick(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void pnlControlBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
-
         private void datePickerGotMouseCapture(object sender, MouseEventArgs e)
         {
             datePicker.Foreground = Brushes.Black;
