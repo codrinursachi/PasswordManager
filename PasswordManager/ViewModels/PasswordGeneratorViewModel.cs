@@ -15,7 +15,7 @@ namespace PasswordManager.ViewModels
         public PasswordGeneratorViewModel()
         {
             GeneratePasswordCommand = new ViewModelCommand(ExecuteGeneratePasswordCommand);
-            AcceptPasswordCommand=new ViewModelCommand(ExecuteAcceptPasswordCommand);
+            AcceptPasswordCommand = new ViewModelCommand(ExecuteAcceptPasswordCommand);
         }
         public int AlphaNumCount { get; set; } = 5;
         public int SymbolsCount { get; set; } = 5;
@@ -35,7 +35,7 @@ namespace PasswordManager.ViewModels
         public ICommand AcceptPasswordCommand { get; }
 
         private void ExecuteAcceptPasswordCommand(object obj)
-        { 
+        {
             CloseAction.Invoke();
         }
 

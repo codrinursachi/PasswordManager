@@ -16,7 +16,7 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
 {
-    class LoginViewModel : ViewModelBase,IPasswordSettable
+    class LoginViewModel : ViewModelBase, IPasswordSettable
     {
         public ICommand LoginCommand { get; }
         private string password;
@@ -80,7 +80,7 @@ namespace PasswordManager.ViewModels
             var isValidUser = userRepository.AuthenticateUser(Password);
             if (isValidUser)
             {
-                DBPass=ProtectedData.Protect(Encoding.UTF8.GetBytes(Password), null, DataProtectionScope.CurrentUser);
+                DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes(Password), null, DataProtectionScope.CurrentUser);
                 IsViewVisible = false;
             }
             else

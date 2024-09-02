@@ -40,7 +40,7 @@ namespace PasswordManager.CustomControls
         public string GeneratedPassword
         {
             get { return (string)GetValue(GeneratedPasswordProperty); }
-            set { SetValue(GeneratedPasswordProperty, value); txtPassword.Password=value; }
+            set { SetValue(GeneratedPasswordProperty, value); txtPassword.Password = value; }
         }
 
         private void OnPasswordChanged(object sender, RoutedEventArgs e)

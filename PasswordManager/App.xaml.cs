@@ -22,7 +22,7 @@ namespace PasswordManager
             }
             loginView.IsVisibleChanged += (s, ev) =>
             {
-                if (loginView.IsVisible == false && loginView.IsLoaded && (((IPasswordSettable)loginView.DataContext).DBPass!=null))
+                if (loginView.IsVisible == false && loginView.IsLoaded && (((IPasswordSettable)loginView.DataContext).DBPass != null))
                 {
                     var mainView = new MainView();
                     ((IPasswordSettable)mainView.DataContext).DBPass = ((IPasswordSettable)loginView.DataContext).DBPass;

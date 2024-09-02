@@ -9,10 +9,11 @@ namespace PasswordManager.Utilities
 {
     public class BackupCreator
     {
+        private string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager");
         public void CreateBackupIfNecessary()
         {
-            var pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
-            var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
+            var pathToDb = Path.Combine(appFolder, "Databases");
+            var pathToBackups = Path.Combine(appFolder, "Backups");
             if (!Directory.Exists(pathToBackups))
             {
                 Directory.CreateDirectory(pathToBackups);
@@ -33,8 +34,8 @@ namespace PasswordManager.Utilities
 
         private void CreateBackup(string db)
         {
-            var pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
-            var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
+            var pathToDb = Path.Combine(appFolder, "Databases");
+            var pathToBackups = Path.Combine(appFolder, "Backups");
             File.Copy(db, pathToBackups + "\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToShortDateString());
         }
 
@@ -45,7 +46,7 @@ namespace PasswordManager.Utilities
             DateTime oldestBackupTime = DateTime.Now;
             string oldestBackup = string.Empty;
 
-            var pathToBackups = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Backups");
+            var pathToBackups = Path.Combine(appFolder, "Backups");
             foreach (var db in Directory.GetFiles(pathToBackups))
             {
                 if (db[(pathToBackups + "\\").Length..^"01.01.0001".Length] == DbName + "_")
@@ -62,10 +63,10 @@ namespace PasswordManager.Utilities
 
             if (backupCount < 5)
             {
-                oldestBackup=null;
+                oldestBackup = null;
             }
 
-            return (latestBackupTime < DateTime.Now - TimeSpan.FromDays(7),oldestBackup);
+            return (latestBackupTime < DateTime.Now - TimeSpan.FromDays(7), oldestBackup);
         }
     }
 }

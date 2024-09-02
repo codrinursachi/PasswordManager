@@ -32,7 +32,7 @@ namespace PasswordManager.Repositories
         public void Add(string password)
         {
             var passwordHash = SecretHasher.Hash(password, 50000);
-            File.WriteAllText(fileName,passwordHash);
+            File.WriteAllText(fileName, passwordHash);
         }
 
         public bool AuthenticateUser(string password)

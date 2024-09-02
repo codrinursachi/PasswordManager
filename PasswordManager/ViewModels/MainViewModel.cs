@@ -97,7 +97,7 @@ namespace PasswordManager.ViewModels
             get
             {
                 return dBPass;
-            } 
+            }
             set
             {
                 dBPass = value;
@@ -119,12 +119,10 @@ namespace PasswordManager.ViewModels
             }
             if (Databases.Count == 0)
             {
-                File.Create(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", "default.json")).Close();
+                File.Create(Path.Combine(path, "default.json")).Close();
                 Databases.Add("default");
             }
         }
-
-       
 
         public void OnActivity(object? sender, EventArgs e)
         {

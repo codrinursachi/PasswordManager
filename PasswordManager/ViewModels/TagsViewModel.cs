@@ -7,12 +7,12 @@ using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
 {
-    public class TagsViewModel : ViewModelBase, IRefreshable,IDatabaseChangeable,IPasswordSettable
+    public class TagsViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable, IPasswordSettable
     {
         private List<string> filter = new();
 
         public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = new();
-        public ObservableCollection<string> Tags{ get; set; } = new();
+        public ObservableCollection<string> Tags { get; set; } = new();
         public List<string> Filter
         {
             get => filter;

@@ -28,7 +28,7 @@ namespace PasswordManager.Views
 
         private void Unload()
         {
-            DialogResult=true;
+            DialogResult = true;
             Close();
         }
 

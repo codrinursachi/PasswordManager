@@ -4,7 +4,8 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PasswordManager.Views"
-        xmlns:viewModel="clr-namespace:PasswordManager.ViewModels" xmlns:customcontrols="clr-namespace:PasswordManager.CustomControls"
+        xmlns:viewModel="clr-namespace:PasswordManager.ViewModels"
+        xmlns:customcontrols="clr-namespace:PasswordManager.CustomControls"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="700"
@@ -34,7 +35,7 @@
         <DataTemplate DataType="{x:Type viewModel:CategoryViewModel}">
             <local:CategoryView/>
         </DataTemplate>
-        
+
 
     </Window.Resources>
 
@@ -148,41 +149,43 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <customcontrols:PanelControlBar MaximizeVisible="True" IsMainWindow="True"/>
+                    <customcontrols:PanelControlBar MaximizeVisible="True"
+                                                    IsMainWindow="True"/>
 
                     <TextBlock Text="{Binding Caption}"
-Margin="25,0,0,0"
-Grid.Row="1"
-Foreground="{StaticResource TextBrush}"
-FontSize="16"
-FontFamily="Segoe UI"
-FontWeight="Medium"
-VerticalAlignment="Center" HorizontalAlignment="Left"/>
-                    
-                        
-                        <StackPanel Grid.Row="2"
-                                    Orientation="Horizontal"
-                                    HorizontalAlignment="Right"
-                                    VerticalAlignment="Center">
+                               Margin="25,0,0,0"
+                               Grid.Row="1"
+                               Foreground="{StaticResource TextBrush}"
+                               FontSize="16"
+                               FontFamily="Segoe UI"
+                               FontWeight="Medium"
+                               VerticalAlignment="Center"
+                               HorizontalAlignment="Left"/>
+
+
+                    <StackPanel Grid.Row="2"
+                                Orientation="Horizontal"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
 
 
 
-                            <ComboBox x:Name="dtbSelector"
-                                      Style="{StaticResource Windows11ComboBoxStyle}"
-                                      ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                      SelectedIndex="{Binding SelectedDb}"
-                                      MouseLeftButtonUp="dtbSelectorMouseLeftButtonDown"/>
-                            
-                            <Button x:Name="btnAddPass"
-                                    Style="{StaticResource Windows11ButtonStyle}"
-                                    Margin="25,0,25,0"
-                                    Command="{Binding ShowPasswordCreationViewCommand}"
-                                    Content="+ Add Password"/>
+                        <ComboBox x:Name="dtbSelector"
+                                  Style="{StaticResource Windows11ComboBoxStyle}"
+                                  ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                                  SelectedIndex="{Binding SelectedDb}"
+                                  MouseLeftButtonUp="dtbSelectorMouseLeftButtonDown"/>
+
+                        <Button x:Name="btnAddPass"
+                                Style="{StaticResource Windows11ButtonStyle}"
+                                Margin="25,0,25,0"
+                                Command="{Binding ShowPasswordCreationViewCommand}"
+                                Content="+ Add Password"/>
 
 
 
 
-                        </StackPanel>
+                    </StackPanel>
 
 
 
@@ -195,7 +198,12 @@ VerticalAlignment="Center" HorizontalAlignment="Left"/>
 
             </Border>
 
-            <Border x:Name="Overlay" Background="Black" Opacity="0.5" Grid.ColumnSpan="2" Visibility="{Binding OverlayVisibility, Converter={StaticResource BooleanToVisibility}}" CornerRadius="10"/>
+            <Border x:Name="Overlay"
+                    Background="Black"
+                    Opacity="0.5"
+                    Grid.ColumnSpan="2"
+                    Visibility="{Binding OverlayVisibility, Converter={StaticResource BooleanToVisibility}}"
+                    CornerRadius="10"/>
         </Grid>
 
     </Border>

@@ -34,9 +34,9 @@ namespace PasswordManager.CustomControls
 
         private void searchBarTextChanged(object sender, TextChangedEventArgs e)
         {
-            if(string.IsNullOrEmpty(searchBar.Text))
+            if (string.IsNullOrEmpty(searchBar.Text))
             {
-                placeholder.Visibility=Visibility.Visible;
+                placeholder.Visibility = Visibility.Visible;
             }
             else
             {

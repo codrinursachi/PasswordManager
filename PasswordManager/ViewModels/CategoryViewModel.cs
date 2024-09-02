@@ -14,7 +14,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    public class CategoryViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable,IPasswordSettable
+    public class CategoryViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable, IPasswordSettable
     {
         private CategoryNodeModel filter;
 
@@ -36,7 +36,7 @@ namespace PasswordManager.ViewModels
 
         public void Refresh()
         {
-            PasswordRepository passwordRepository = new(Database,DBPass);
+            PasswordRepository passwordRepository = new(Database, DBPass);
             Categories.Clear();
             var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories.Add(rootNode);

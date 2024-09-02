@@ -20,8 +20,7 @@
                   ItemsSource="{Binding Categories}"
                   Height="auto"
                   Width="auto"
-                  SelectedItemChanged="CategoriesSelectedItemChanged"
-                  >
+                  SelectedItemChanged="CategoriesSelectedItemChanged">
 
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">

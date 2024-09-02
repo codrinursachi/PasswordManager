@@ -10,9 +10,13 @@
     <Color x:Key="DarkThemeAccentColor">#3A8FB7</Color>
     <Color x:Key="ColorOnCloseButton">Red</Color>
 
-    <SolidColorBrush x:Key="BackgroundBrush" Color="{StaticResource LightThemeBackgroundColor}" />
-    <SolidColorBrush x:Key="TextBrush" Color="{StaticResource LightThemeTextColor}" />
-    <SolidColorBrush x:Key="ActiveBrush" Color="{DynamicResource ActiveColor}" />
-    <SolidColorBrush x:Key="AccentBrush" Color="{StaticResource LightThemeAccentColor}" />
+    <SolidColorBrush x:Key="BackgroundBrush"
+                     Color="{StaticResource LightThemeBackgroundColor}"/>
+    <SolidColorBrush x:Key="TextBrush"
+                     Color="{StaticResource LightThemeTextColor}"/>
+    <SolidColorBrush x:Key="ActiveBrush"
+                     Color="{DynamicResource ActiveColor}"/>
+    <SolidColorBrush x:Key="AccentBrush"
+                     Color="{StaticResource LightThemeAccentColor}"/>
 
 </ResourceDictionary>

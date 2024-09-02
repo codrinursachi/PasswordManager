@@ -39,7 +39,7 @@ namespace PasswordManager.ViewModels
         }
         public ICommand AddPasswordCommand { get; }
         public ICommand ShowPasswordGeneratorViewCommand { get; }
-        public string Username{ get; set; }
+        public string Username { get; set; }
         public string Password
         {
             get => password;
@@ -49,8 +49,8 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(Password));
             }
         }
-        public string Url{ get; set; }
-        public DateTime ExpirationDate{ get; set; }
+        public string Url { get; set; }
+        public DateTime ExpirationDate { get; set; }
         public string CategoryPath { get; set; }
 
         public List<string> CategoryPaths
@@ -72,7 +72,7 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(Tags));
             }
         }
-        public bool Favorite{get; set;}
+        public bool Favorite { get; set; }
         public string Database
         {
             get => database;
@@ -88,7 +88,7 @@ namespace PasswordManager.ViewModels
                 }
             }
         }
-        public string Notes{ get; set; }
+        public string Notes { get; set; }
         public List<string> DatabaseItems { get; }
         public Action CloseAction { get; set; }
         public bool OverlayVisibility
