@@ -4,6 +4,7 @@ using PasswordManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace PasswordManagerTests.ViewModels
         public void ShouldStorePasswords()
         {
             string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, "admin");
+            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com", CategoryPath = "admin\\1" };
             PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com", CategoryPath = "admin\\2" };
             PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com", CategoryPath = "admin\\3" };
@@ -24,7 +25,7 @@ namespace PasswordManagerTests.ViewModels
             passwordRepository.Add(password3);
             CategoryViewModel categoryViewModel = new();
             categoryViewModel.Database = file;
-            categoryViewModel.Password = "admin";
+            categoryViewModel.DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser);
             categoryViewModel.Refresh();
             Assert.Equal(3, categoryViewModel.Passwords.Count);
             File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
@@ -34,7 +35,7 @@ namespace PasswordManagerTests.ViewModels
         public void ShouldFilterPasswords()
         {
             string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, "admin");
+            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com", CategoryPath = "admin\\1" };
             PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com", CategoryPath = "admin\\2" };
             PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com", CategoryPath = "admin\\3" };
@@ -43,7 +44,7 @@ namespace PasswordManagerTests.ViewModels
             passwordRepository.Add(password3);
             CategoryViewModel categoryViewModel = new();
             categoryViewModel.Database = file;
-            categoryViewModel.Password = "admin";
+            categoryViewModel.DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser);
             var root = new CategoryNodeModel { Name = "Categories" };
             var parts = "admin\\2".Split('\\');
             var current = root;

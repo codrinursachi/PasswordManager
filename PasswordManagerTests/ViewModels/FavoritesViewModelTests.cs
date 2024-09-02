@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using PasswordManager.Views;
 using static System.Net.Mime.MediaTypeNames;
+using System.Security.Cryptography;
 
 namespace PasswordManagerTests.ViewModels
 {
@@ -19,7 +20,7 @@ namespace PasswordManagerTests.ViewModels
         public void ShouldStorePasswords()
         {
             string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, "admin");
+            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
             PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com", Favorite = true };
             PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com", Favorite = true };
@@ -28,7 +29,7 @@ namespace PasswordManagerTests.ViewModels
             passwordRepository.Add(password3);
             FavoritesViewModel allPasswordsViewModel = new();
             allPasswordsViewModel.Database = file;
-            allPasswordsViewModel.Password = "admin";
+            allPasswordsViewModel.DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser);
             allPasswordsViewModel.Refresh();
             Assert.Equal(2, allPasswordsViewModel.Passwords.Count);
             File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
@@ -38,7 +39,7 @@ namespace PasswordManagerTests.ViewModels
         public void ShouldFilterPasswords()
         {
             string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, "admin");
+            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
             PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com", Favorite = true };
             PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com", Favorite = true };
@@ -47,7 +48,7 @@ namespace PasswordManagerTests.ViewModels
             passwordRepository.Add(password3);
             FavoritesViewModel allPasswordsViewModel = new();
             allPasswordsViewModel.Database = file;
-            allPasswordsViewModel.Password = "admin";
+            allPasswordsViewModel.DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser);
             allPasswordsViewModel.SearchFilter = "admin2";
             Assert.Single(allPasswordsViewModel.Passwords);
             File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));

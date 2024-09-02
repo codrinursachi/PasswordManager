@@ -4,6 +4,7 @@ using PasswordManager.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,7 +16,7 @@ namespace PasswordManagerTests.Repositories
         public void ShouldAddAndRetrievePasswordsCorrectly()
         {
             string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, "admin");
+            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
             passwordRepository.Add(password);
             Assert.NotNull(passwordRepository.GetAllPasswords().FirstOrDefault(p => p.Id == password.Id));
@@ -26,7 +27,7 @@ namespace PasswordManagerTests.Repositories
         public void ShouldRetrievePasswordById()
         {
             string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, "admin");
+            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
             PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
             passwordRepository.Add(password);
             Assert.NotNull(passwordRepository.GetPasswordById(password.Id));
@@ -37,7 +38,7 @@ namespace PasswordManagerTests.Repositories
         public void ShouldEditPasswordWhenRequested()
         {
             string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, "admin");
+            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
             PasswordModel password = new PasswordModel { Username = "admin1", Password = "admin", Url = "admin.com" };
             PasswordModel passwordEdit = new PasswordModel { Username = "root", Password = "root", Url = "admin.com" };
             passwordRepository.Add(password);
@@ -50,7 +51,7 @@ namespace PasswordManagerTests.Repositories
         public void ShouldRemovePasswordWhenRequested()
         {
             string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, "admin");
+            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
             PasswordModel password = new PasswordModel { Username = "admin2", Password = "admin", Url = "admin.com" };
             passwordRepository.Add(password);
             passwordRepository.Remove(password.Id);
