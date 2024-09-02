@@ -20,7 +20,6 @@ namespace PasswordManager.ViewModels
         string password;
         List<string> categoryPaths;
         string tags;
-        bool favorite;
         string database;
         private bool overlayVisibility;
         private PasswordRepository passwordRepository;
@@ -35,6 +34,7 @@ namespace PasswordManager.ViewModels
             {
                 DatabaseItems.Add(db[(path + "\\").Length..^".json".Length]);
             }
+
             AddPasswordCommand = new ViewModelCommand(ExecuteAddPasswordCommand);
         }
         public ICommand AddPasswordCommand { get; }

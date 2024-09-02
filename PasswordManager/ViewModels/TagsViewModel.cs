@@ -40,7 +40,7 @@ namespace PasswordManager.ViewModels
             }
             else
             {
-                foreach (var password in passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()).Where(p => p.Tags != null && p.Tags.Split().ToHashSet().IsSupersetOf(Filter)))
+                foreach (var password in passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()).Where(p => !string.IsNullOrEmpty(p.Tags) && p.Tags.Split().ToHashSet().IsSupersetOf(Filter)))
                 {
                     Passwords.Add(password);
                 }
@@ -50,7 +50,7 @@ namespace PasswordManager.ViewModels
         public void Refresh()
         {
             PasswordRepository passwordRepository = new(Database, DBPass);
-            var tags = passwordRepository.GetAllPasswords().Where(p => p.Tags != null).Select(p => p.Tags.Split());
+            var tags = passwordRepository.GetAllPasswords().Where(p => !string.IsNullOrEmpty(p.Tags)).Select(p => p.Tags.Split());
             HashSet<string> result = new();
             foreach (var itemTags in tags)
             {

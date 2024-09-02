@@ -26,11 +26,10 @@
         <StackPanel Grid.Column="1"
                     Orientation="Horizontal"
                     FlowDirection="RightToLeft"
-                    Background="Transparent"
-                    Margin="0,0,5,0">
+                    Background="Transparent">
 
             <Button x:Name="btnClose"
-                    Style="{StaticResource controlButton}"
+                    Style="{StaticResource closeControlButton}"
                     Tag="#E81123"
                     Content="X"
                     Click="btnCloseClick">
