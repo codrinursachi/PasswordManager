@@ -78,31 +78,25 @@
                 </Border>
 
                 <TextBlock Text="Password Manager"
-                           Foreground="{StaticResource TextBrush}"
                            FontSize="25"
                            FontWeight="Medium"
-                           FontFamily="Segoe UI"
                            HorizontalAlignment="Center"/>
 
-
                 <TextBlock Text="Password"
-                           Foreground="{StaticResource TextBrush}"
                            FontSize="12"
                            FontWeight="Medium"
-                           FontFamily="Segoe UI"
                            Margin="0,15,0,0"/>
 
                 <customcontrols:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                                                     Height="28"
                                                     Margin="0,5,0,0"
-                                                    ToolTip="First use will set password"
+                                                    ToolTip="Password must be at least 3 characters."
                                                     ToolTipService.InitialShowDelay="0"/>
 
                 <TextBlock Text="{Binding ErrorMessage}"
                            Foreground="Red"
                            FontSize="12"
                            FontWeight="Medium"
-                           FontFamily="Segoe UI"
                            Margin="0,10,0,0"
                            TextWrapping="Wrap"/>
 

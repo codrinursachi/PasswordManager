@@ -92,7 +92,7 @@
                         <TextBlock Text="Password Manager"
                                    Foreground="{DynamicResource TextBrush}"
                                    FontSize="20"
-                                   FontFamily="Segoe UI"
+                                   
                                    FontWeight="Medium"
                                    VerticalAlignment="Center"
                                    Margin="10,0,0,0"/>
@@ -157,7 +157,7 @@
                                Grid.Row="1"
                                Foreground="{StaticResource TextBrush}"
                                FontSize="16"
-                               FontFamily="Segoe UI"
+                               
                                FontWeight="Medium"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"/>
