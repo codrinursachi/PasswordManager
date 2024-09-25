@@ -1,4 +1,5 @@
 ﻿using PasswordManager.DTO;
+using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Utilities;
@@ -98,6 +99,24 @@ namespace PasswordManager.CustomControls
         {
             DeletePassword.DeletePasswordById(((PasswordToShowDTO)pwdList.SelectedItem).Id, Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
             PasswordList.Remove((PasswordToShowDTO)pwdList.SelectedItem);
+        }
+
+        private void pwdList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        {
+            if (this.pwdList.SelectedItem!=null)
+            {
+                ((DataGrid)sender).RowEditEnding-= pwdList_RowEditEnding;
+                ((DataGrid)sender).CommitEdit();
+                ((DataGrid)sender).Items.Refresh();
+                ((DataGrid)sender).RowEditEnding += pwdList_RowEditEnding;
+                var pass = (PasswordToShowDTO)pwdList.SelectedItem;
+                if (pass.Password == "********")
+                {
+                    pass.Password = GetPasswordClearText.GetPasswordClearTextById(pass.Id, Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
+                }
+
+                EditPassword.EditPasswordById(pass.ToPasswordModel(), Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
+            }
         }
     }
 }
