@@ -82,8 +82,6 @@ namespace PasswordManager.Views
 
         private void txtCat_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            ((ComboBox)sender).ItemsSource = null;
-            ((ComboBox)sender).ItemsSource = ((PasswordCreationViewModel)this.DataContext).CategoryPaths;
             ((TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender)).Focus();
         }
 

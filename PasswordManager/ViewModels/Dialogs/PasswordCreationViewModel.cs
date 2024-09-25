@@ -17,7 +17,6 @@ namespace PasswordManager.ViewModels
 {
     public class PasswordCreationViewModel : ViewModelBase, IDatabaseChangeable, IPasswordSettable
     {
-        string password;
         List<string> categoryPaths;
         string tags;
         string database;
@@ -40,15 +39,7 @@ namespace PasswordManager.ViewModels
         public ICommand AddPasswordCommand { get; }
         public ICommand ShowPasswordGeneratorViewCommand { get; }
         public string Username { get; set; }
-        public string Password
-        {
-            get => password;
-            set
-            {
-                password = value;
-                OnPropertyChanged(nameof(Password));
-            }
-        }
+        public string Password{ get; set; }
         public string Url { get; set; }
         public DateTime ExpirationDate { get; set; }
         public string CategoryPath { get; set; }
@@ -117,10 +108,6 @@ namespace PasswordManager.ViewModels
             var PasswordGen = new PasswordGeneratorView();
             OverlayVisibility = true;
             PasswordGen.ShowDialog();
-            if (PasswordGen.DialogResult == true)
-            {
-                Password = ((PasswordGeneratorViewModel)(PasswordGen.DataContext)).GeneratedPassword;
-            }
             OverlayVisibility = false;
         }
     }

@@ -86,7 +86,7 @@
                                     BorderThickness="1"
                                     BorderBrush="#888888"
                                     CornerRadius="5"/>
-                                <ScrollViewer Margin="4,6,4,6">
+                                <ScrollViewer>
                                     <StackPanel IsItemsHost="True"
                                                 KeyboardNavigation.DirectionalNavigation="Contained"/>
                                 </ScrollViewer>

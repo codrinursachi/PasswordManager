@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
@@ -19,7 +20,6 @@ namespace PasswordManager.ViewModels
         }
         public int AlphaNumCount { get; set; } = 5;
         public int SymbolsCount { get; set; } = 5;
-        public PasswordCreationViewModel PasswordCreationViewModel { get; set; }
         public Action CloseAction { get; set; }
 
         public string GeneratedPassword
@@ -36,6 +36,7 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteAcceptPasswordCommand(object obj)
         {
+            Clipboard.SetDataObject(GeneratedPassword);
             CloseAction.Invoke();
         }
 
