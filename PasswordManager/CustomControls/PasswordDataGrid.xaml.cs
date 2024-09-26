@@ -92,6 +92,8 @@ namespace PasswordManager.CustomControls
         {
             await Task.Delay(TimeSpan.FromSeconds(5));
             pass.Password = "********";
+            pwdList.CancelEdit();
+            pwdList.CancelEdit();
             pwdList.Items.Refresh();
         }
 
