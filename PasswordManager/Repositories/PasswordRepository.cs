@@ -35,7 +35,7 @@ namespace PasswordManager.Repositories
 
         public void Edit(int id, PasswordModel newPasswordModel)
         {
-            List<PasswordModel> passwords = GetAllPasswords();
+            List<PasswordModel> passwords = GetPasswordsFromFile();
             var currentPassword = passwords.FirstOrDefault(p => p.Id == id);
             if (currentPassword == null)
             {
@@ -65,7 +65,7 @@ namespace PasswordManager.Repositories
 
         public void Remove(int id)
         {
-            List<PasswordModel> passwords = GetAllPasswords();
+            List<PasswordModel> passwords = GetPasswordsFromFile();
             passwords.Remove(passwords.First(p => p.Id == id));
             WritePasswords(passwords);
         }
@@ -87,19 +87,13 @@ namespace PasswordManager.Repositories
                 AES.Key = aesKey;
                 AES.IV = aesIV;
                 ICryptoTransform decryptor = AES.CreateDecryptor();
-                using (FileStream fileStream = new(fileName, FileMode.OpenOrCreate, FileAccess.Read))
+                using FileStream fileStream = new(fileName, FileMode.OpenOrCreate, FileAccess.Read);
+                using CryptoStream cryptoStream = new(fileStream, decryptor, CryptoStreamMode.Read);
+                using StreamReader streamReader = new(cryptoStream);
+                string data = streamReader.ReadToEnd();
+                if (data.Length > 0)
                 {
-                    using (CryptoStream cryptoStream = new(fileStream, decryptor, CryptoStreamMode.Read))
-                    {
-                        using (StreamReader streamReader = new(cryptoStream))
-                        {
-                            string data = streamReader.ReadToEnd();
-                            if (data.Length > 0)
-                            {
-                                passwords = JsonSerializer.Deserialize<List<PasswordModel>>(data);
-                            }
-                        }
-                    }
+                    passwords = JsonSerializer.Deserialize<List<PasswordModel>>(data);
                 }
             }
 
@@ -118,17 +112,11 @@ namespace PasswordManager.Repositories
                 AES.Key = aesKey;
                 AES.IV = aesIV;
                 ICryptoTransform encryptor = AES.CreateEncryptor();
-                using (FileStream fileStream = new(fileName, FileMode.Create, FileAccess.Write))
-                {
-                    using (CryptoStream cryptoStream = new(fileStream, encryptor, CryptoStreamMode.Write))
-                    {
-                        using (StreamWriter streamWriter = new(cryptoStream))
-                        {
-                            string data = JsonSerializer.Serialize(passwords);
-                            streamWriter.Write(data);
-                        }
-                    }
-                }
+                using FileStream fileStream = new(fileName, FileMode.Create, FileAccess.Write);
+                using CryptoStream cryptoStream = new(fileStream, encryptor, CryptoStreamMode.Write);
+                using StreamWriter streamWriter = new(cryptoStream);
+                string data = JsonSerializer.Serialize(passwords);
+                streamWriter.Write(data);
             }
         }
     }

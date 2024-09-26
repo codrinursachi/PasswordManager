@@ -116,6 +116,7 @@ namespace PasswordManager.CustomControls
                 }
 
                 EditPassword.EditPasswordById(pass.ToPasswordModel(), Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
+                ((DataGrid)sender).Items.Refresh();
             }
         }
     }
