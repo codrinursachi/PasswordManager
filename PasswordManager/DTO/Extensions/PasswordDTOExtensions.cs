@@ -34,7 +34,7 @@ namespace PasswordManager.DTO.Extensions
                 Url = passwordToShowDTO.Url,
                 Username = passwordToShowDTO.Username,
                 Password = passwordToShowDTO.Password,
-                ExpirationDate = passwordToShowDTO.ExpirationDate == "No expiration" ? default : DateTime.Parse(passwordToShowDTO.ExpirationDate),
+                ExpirationDate = passwordToShowDTO.ExpirationDate == "No expiration" || passwordToShowDTO.ExpirationDate == "Expired" ? default : DateTime.Parse(passwordToShowDTO.ExpirationDate),
                 CategoryPath = passwordToShowDTO.CategoryPath,
                 Tags = passwordToShowDTO.Tags,
                 Notes = passwordToShowDTO.Notes

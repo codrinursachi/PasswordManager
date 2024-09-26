@@ -103,9 +103,9 @@ namespace PasswordManager.CustomControls
 
         private void pwdList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
         {
-            if (this.pwdList.SelectedItem!=null)
+            if (this.pwdList.SelectedItem != null)
             {
-                ((DataGrid)sender).RowEditEnding-= pwdList_RowEditEnding;
+                ((DataGrid)sender).RowEditEnding -= pwdList_RowEditEnding;
                 ((DataGrid)sender).CommitEdit();
                 ((DataGrid)sender).Items.Refresh();
                 ((DataGrid)sender).RowEditEnding += pwdList_RowEditEnding;
@@ -116,6 +116,7 @@ namespace PasswordManager.CustomControls
                 }
 
                 EditPassword.EditPasswordById(pass.ToPasswordModel(), Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
+                pass.Password = "********";
                 ((DataGrid)sender).Items.Refresh();
             }
         }
