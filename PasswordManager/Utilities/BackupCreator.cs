@@ -36,7 +36,7 @@ namespace PasswordManager.Utilities
         {
             var pathToDb = Path.Combine(appFolder, "Databases");
             var pathToBackups = Path.Combine(appFolder, "Backups");
-            File.Copy(db, pathToBackups + "\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToShortDateString());
+            File.Copy(db, pathToBackups + "\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToShortDateString().Replace("\\",".")+".bak");
         }
 
         private (bool backupNecessary, string oldestBackup) CheckBackup(string DbName)
@@ -49,7 +49,7 @@ namespace PasswordManager.Utilities
             var pathToBackups = Path.Combine(appFolder, "Backups");
             foreach (var db in Directory.GetFiles(pathToBackups))
             {
-                if (db[(pathToBackups + "\\").Length..^"01.01.0001".Length] == DbName + "_")
+                if (db[(pathToBackups + "\\").Length..^"01.01.0001.bak".Length] == DbName + "_")
                 {
                     backupCount++;
                     latestBackupTime = File.GetCreationTime(db) > latestBackupTime ? File.GetCreationTime(db) : latestBackupTime;

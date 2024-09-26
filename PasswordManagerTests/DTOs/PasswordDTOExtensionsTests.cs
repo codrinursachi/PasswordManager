@@ -79,7 +79,7 @@ namespace PasswordManagerTests.DTOs
             Assert.Equal("admin", passwordDTO.Username);
             Assert.Equal("admin", passwordDTO.Password);
             Assert.Equal("admin.com", passwordDTO.Url);
-            Assert.Equal("expired", passwordDTO.ExpirationDate);
+            Assert.Equal("Expired", passwordDTO.ExpirationDate);
             Assert.Equal("admin/admin", passwordDTO.CategoryPath);
             Assert.Equal("tag1 tag2 tag3", passwordDTO.Tags);
             Assert.True(passwordDTO.Favorite);
