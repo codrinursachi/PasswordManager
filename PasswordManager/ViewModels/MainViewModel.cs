@@ -1,4 +1,5 @@
-﻿using PasswordManager.Interfaces;
+﻿using Microsoft.Win32;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
 using PasswordManager.Utilities;
@@ -10,6 +11,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -32,6 +34,7 @@ namespace PasswordManager.ViewModels
             ShowLabelsViewCommand = new ViewModelCommand(ExecuteShowLabelsViewCommand);
             ShowCategoryViewCommand = new ViewModelCommand(ExecuteShowCategoryViewCommand);
             ShowPasswordCreationViewCommand = new ViewModelCommand(ExecuteShowPasswordCreationViewCommand);
+            ShowPasswordFilePickerDialogueViewCommand = new ViewModelCommand(ExecuteShowPasswordFilePickerDialogueViewCommand);
             GetDatabases();
             SetupTimer();
             BackupCreator backupCreator = new();
@@ -43,6 +46,7 @@ namespace PasswordManager.ViewModels
         public ICommand ShowLabelsViewCommand { get; }
         public ICommand ShowCategoryViewCommand { get; }
         public ICommand ShowPasswordCreationViewCommand { get; }
+        public ICommand ShowPasswordFilePickerDialogueViewCommand { get; }
 
         public string Caption
         {
@@ -179,6 +183,31 @@ namespace PasswordManager.ViewModels
             OverlayVisibility = false;
             GetDatabases();
             SelectedDb = 0;
+        }
+
+        private void ExecuteShowPasswordFilePickerDialogueViewCommand(object obj)
+        {
+            OverlayVisibility = true;
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string passwords = File.ReadAllText(openFileDialog.FileName);
+                List<PasswordModel> passwordsToImport;
+                if (string.IsNullOrEmpty(passwords))
+                {
+                    return;
+                }
+
+                passwordsToImport = JsonSerializer.Deserialize<List<PasswordModel>>(passwords);
+                PasswordRepository passwordRepository=new(Databases[SelectedDb]+".json",dBPass);
+                foreach(var password in passwordsToImport)
+                {
+                    passwordRepository.Add(password);
+                }
+            }
+
+            OverlayVisibility = false;
+            ((IRefreshable)CurrentChildView).Refresh();
         }
     }
 }

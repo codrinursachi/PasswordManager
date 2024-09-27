@@ -29,6 +29,7 @@ namespace PasswordManager.CustomControls
     {
         public static readonly DependencyProperty PasswordListProperty = DependencyProperty.Register("PasswordList", typeof(ObservableCollection<PasswordToShowDTO>), typeof(PasswordDataGrid));
         public static readonly DependencyProperty DatabaseProperty = DependencyProperty.Register("Database", typeof(string), typeof(PasswordDataGrid));
+        public static readonly DependencyProperty DBPassProperty = DependencyProperty.Register("DBPass", typeof(byte[]), typeof(PasswordDataGrid));
 
         private string storedPass;
         private DispatcherTimer timer;
@@ -48,6 +49,12 @@ namespace PasswordManager.CustomControls
         {
             get { return (string)GetValue(DatabaseProperty); }
             set { SetValue(DatabaseProperty, value); }
+        }
+
+        public byte[] DBPass
+        {
+            get { return (byte[])GetValue(DBPassProperty); }
+            set { SetValue(DBPassProperty, value); }
         }
 
         private void SetupTimer()
@@ -99,7 +106,7 @@ namespace PasswordManager.CustomControls
 
         private void delPwd_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            DeletePassword.DeletePasswordById(((PasswordToShowDTO)pwdList.SelectedItem).Id, Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
+            DeletePassword.DeletePasswordById(((PasswordToShowDTO)pwdList.SelectedItem).Id, Database, DBPass);
             PasswordList.Remove((PasswordToShowDTO)pwdList.SelectedItem);
         }
 
@@ -114,10 +121,10 @@ namespace PasswordManager.CustomControls
                 var pass = (PasswordToShowDTO)pwdList.SelectedItem;
                 if (pass.Password == "********")
                 {
-                    pass.Password = GetPasswordClearText.GetPasswordClearTextById(pass.Id, Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
+                    pass.Password = GetPasswordClearText.GetPasswordClearTextById(pass.Id, Database, DBPass);
                 }
 
-                EditPassword.EditPasswordById(pass.ToPasswordModel(), Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
+                EditPassword.EditPasswordById(pass.ToPasswordModel(), Database, DBPass);
                 pass.Password = "********";
                 ((DataGrid)sender).Items.Refresh();
             }

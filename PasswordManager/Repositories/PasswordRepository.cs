@@ -77,11 +77,10 @@ namespace PasswordManager.Repositories
                 return null;
             }
             var fileName = Path.Combine(pathToDb, dataBaseName);
-            UnicodeEncoding UE = new UnicodeEncoding();
             List<PasswordModel> passwords = new();
             using (var AES = Aes.Create())
             {
-                byte[] passwordBytes = UE.GetBytes(Encoding.UTF8.GetString(ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser)));
+                byte[] passwordBytes = ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser);
                 byte[] aesKey = SHA256.HashData(passwordBytes);
                 byte[] aesIV = MD5.HashData(passwordBytes);
                 AES.Key = aesKey;
@@ -103,10 +102,9 @@ namespace PasswordManager.Repositories
         private void WritePasswords(List<PasswordModel> passwords)
         {
             var fileName = Path.Combine(pathToDb, dataBaseName);
-            UnicodeEncoding UE = new UnicodeEncoding();
             using (var AES = Aes.Create())
             {
-                byte[] passwordBytes = UE.GetBytes(Encoding.UTF8.GetString(ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser)));
+                byte[] passwordBytes = ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser);
                 byte[] aesKey = SHA256.HashData(passwordBytes);
                 byte[] aesIV = MD5.HashData(passwordBytes);
                 AES.Key = aesKey;

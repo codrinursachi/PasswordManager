@@ -19,7 +19,6 @@ namespace PasswordManager.ViewModels
     class LoginViewModel : ViewModelBase, IPasswordSettable
     {
         public ICommand LoginCommand { get; }
-        private string password;
         private string errorMessage;
         private bool isViewVisible = true;
         private UserRepository userRepository;
@@ -30,15 +29,7 @@ namespace PasswordManager.ViewModels
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteOperationCommand);
         }
 
-        public string Password
-        {
-            get => password;
-            set
-            {
-                password = value;
-                OnPropertyChanged(nameof(Password));
-            }
-        }
+        public string Password{ get; set; }
         public string ErrorMessage
         {
             get => errorMessage;

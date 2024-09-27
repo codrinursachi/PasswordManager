@@ -32,6 +32,7 @@
         </TreeView>
 
         <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
+                                         DBPass="{Binding DBPass}"
                                          Grid.Column="2"
                                          Database="{Binding Database}"/>
     </Grid>
