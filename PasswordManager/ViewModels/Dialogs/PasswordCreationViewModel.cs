@@ -39,7 +39,7 @@ namespace PasswordManager.ViewModels
         public ICommand AddPasswordCommand { get; }
         public ICommand ShowPasswordGeneratorViewCommand { get; }
         public string Username { get; set; }
-        public string Password{ get; set; }
+        public string Password { get; set; }
         public string Url { get; set; }
         public DateTime ExpirationDate { get; set; }
         public string CategoryPath { get; set; }

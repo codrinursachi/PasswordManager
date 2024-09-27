@@ -36,7 +36,7 @@ namespace PasswordManager.Utilities
         {
             var pathToDb = Path.Combine(appFolder, "Databases");
             var pathToBackups = Path.Combine(appFolder, "Backups");
-            File.Copy(db, pathToBackups + "\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToShortDateString().Replace("\\",".")+".bak");
+            File.Copy(db, pathToBackups + "\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToShortDateString().Replace("\\", ".") + ".bak");
         }
 
         private (bool backupNecessary, string oldestBackup) CheckBackup(string DbName)

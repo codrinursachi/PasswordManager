@@ -92,7 +92,6 @@
                         <TextBlock Text="Password Manager"
                                    Foreground="{DynamicResource TextBrush}"
                                    FontSize="20"
-                                   
                                    FontWeight="Medium"
                                    VerticalAlignment="Center"
                                    Margin="10,0,0,0"/>
@@ -157,7 +156,6 @@
                                Grid.Row="1"
                                Foreground="{StaticResource TextBrush}"
                                FontSize="16"
-                               
                                FontWeight="Medium"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"/>
@@ -182,10 +180,10 @@
                                 Command="{Binding ShowPasswordCreationViewCommand}"
                                 Content="+ Add Password"/>
                         <Button x:Name="btnImportPass"
-        Style="{StaticResource Windows11ButtonStyle}"
-        Margin="0,0,25,0"
-        Command="{Binding ShowPasswordFilePickerDialogueViewCommand}"
-        Content="Import passwords"/>
+                                Style="{StaticResource Windows11ButtonStyle}"
+                                Margin="0,0,25,0"
+                                Command="{Binding ShowPasswordFilePickerDialogueViewCommand}"
+                                Content="Import passwords"/>
 
 
 

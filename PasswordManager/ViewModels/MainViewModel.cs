@@ -199,8 +199,8 @@ namespace PasswordManager.ViewModels
                 }
 
                 passwordsToImport = JsonSerializer.Deserialize<List<PasswordModel>>(passwords);
-                PasswordRepository passwordRepository=new(Databases[SelectedDb]+".json",dBPass);
-                foreach(var password in passwordsToImport)
+                PasswordRepository passwordRepository = new(Databases[SelectedDb] + ".json", dBPass);
+                foreach (var password in passwordsToImport)
                 {
                     passwordRepository.Add(password);
                 }

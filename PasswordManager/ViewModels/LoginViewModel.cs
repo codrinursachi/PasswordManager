@@ -29,7 +29,7 @@ namespace PasswordManager.ViewModels
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteOperationCommand);
         }
 
-        public string Password{ get; set; }
+        public string Password { get; set; }
         public string ErrorMessage
         {
             get => errorMessage;
