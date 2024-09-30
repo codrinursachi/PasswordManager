@@ -32,7 +32,7 @@ namespace PasswordManager.Views
             var viewModel = (CategoryViewModel)this.DataContext;
             if (viewModel != null)
             {
-                viewModel.Filter = e.NewValue as CategoryNodeModel;
+                viewModel.Filter = (CategoryNodeModel)e.NewValue;
             }
         }
     }
