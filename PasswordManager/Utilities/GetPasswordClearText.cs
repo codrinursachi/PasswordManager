@@ -13,7 +13,7 @@ namespace PasswordManager.Utilities
         public static string GetPasswordClearTextById(int id, string database, byte[] dBPass)
         {
             PasswordRepository passwordRepository = new(database, dBPass);
-            return passwordRepository.GetPasswordById(id).Password;
+            return passwordRepository.GetPasswordById(id)?.Password;
         }
     }
 }

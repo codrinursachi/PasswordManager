@@ -143,8 +143,8 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="25"/>
-                        <RowDefinition Height="55"/>
-                        <RowDefinition Height="55"/>
+                        <RowDefinition Height="30"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
@@ -153,9 +153,9 @@
 
                     <TextBlock Text="{Binding Caption}"
                                Margin="25,0,0,0"
-                               Grid.Row="1"
+                               Grid.Row="2"
                                Foreground="{StaticResource TextBrush}"
-                               FontSize="16"
+                               FontSize="24"
                                FontWeight="Medium"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left"/>
