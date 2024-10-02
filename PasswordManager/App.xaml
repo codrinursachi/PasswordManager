@@ -14,7 +14,7 @@
                 <ResourceDictionary Source="/Styles/Win11ComboBox.xaml"/>
                 <ResourceDictionary Source="/Styles/ButtonStyles.xaml"/>
                 <ResourceDictionary Source="/Styles/TextStyles.xaml"/>
-
+                <ResourceDictionary Source="/Styles/InputBorder.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
 

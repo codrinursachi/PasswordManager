@@ -22,9 +22,18 @@ namespace PasswordManager.ViewModels
         string database;
         private bool overlayVisibility;
         private PasswordRepository passwordRepository;
+        private string username;
+        private string password;
+        private string url;
+        private DateTime expirationDate;
+        private string categoryPath;
+        private bool favorite;
+        private string notes;
+        private bool addButtonVisible;
+        private bool editButtonVisible;
+
         public PasswordCreationViewModel()
         {
-            OverlayVisibility = false;
             CategoryPaths = new();
             ShowPasswordGeneratorViewCommand = new ViewModelCommand(ExecuteShowPasswordGeneratorCommand);
             DatabaseItems = new List<string>();
@@ -35,14 +44,76 @@ namespace PasswordManager.ViewModels
             }
 
             AddPasswordCommand = new ViewModelCommand(ExecuteAddPasswordCommand);
+            AddButtonVisible = true;
         }
         public ICommand AddPasswordCommand { get; }
         public ICommand ShowPasswordGeneratorViewCommand { get; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Url { get; set; }
-        public DateTime ExpirationDate { get; set; }
-        public string CategoryPath { get; set; }
+        public bool AddButtonVisible
+        {
+            get => addButtonVisible; 
+            set
+            {
+                addButtonVisible = value;
+                editButtonVisible=!value;
+                OnPropertyChanged(nameof(AddButtonVisible));
+            }
+        }
+
+        public bool EditButtonVisible
+        {
+            get => editButtonVisible;
+            set
+            {
+                editButtonVisible = value;
+                OnPropertyChanged(nameof(EditButtonVisible));
+            }
+        }
+
+        public string Username
+        {
+            get => username;
+            set
+            {
+                username = value;
+                OnPropertyChanged(nameof(Username));
+            }
+        }
+        public string Password
+        {
+            get => password; 
+            set
+            {
+                password = value;
+                OnPropertyChanged(nameof(Password));
+            }
+        }
+        public string Url
+        {
+            get => url; 
+            set
+            {
+                url = value;
+                OnPropertyChanged(nameof(Url));
+            }
+        }
+        public DateTime ExpirationDate
+        {
+            get => expirationDate; 
+            set
+            {
+                expirationDate = value;
+                OnPropertyChanged(nameof(ExpirationDate));
+            }
+        }
+        public string CategoryPath
+        {
+            get => categoryPath; 
+            set
+            {
+                categoryPath = value;
+                OnPropertyChanged(nameof(CategoryPath));
+            }
+        }
 
         public List<string> CategoryPaths
         {
@@ -53,7 +124,7 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(CategoryPaths));
             }
         }
-        public ObservableCollection<string> CompletedTags { get; set; } = new();
+        public ObservableCollection<string> CompletedTags { get; set; } = [];
         public string Tags
         {
             get => tags;
@@ -63,7 +134,14 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(Tags));
             }
         }
-        public bool Favorite { get; set; }
+        public bool Favorite
+        {
+            get => favorite; set
+            {
+                favorite = value;
+                OnPropertyChanged(nameof(Favorite));
+            }
+        }
         public string Database
         {
             get => database;
@@ -79,7 +157,15 @@ namespace PasswordManager.ViewModels
                 }
             }
         }
-        public string Notes { get; set; }
+        public string Notes
+        {
+            get => notes; 
+            set
+            {
+                notes = value;
+                OnPropertyChanged(nameof(Notes));
+            }
+        }
         public List<string> DatabaseItems { get; }
         public Action CloseAction { get; set; }
         public bool OverlayVisibility

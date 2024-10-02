@@ -24,70 +24,7 @@ namespace PasswordManager.Views
         public PasswordCreationView()
         {
             InitializeComponent();
-            ((PasswordCreationViewModel)this.DataContext).CloseAction = Close;
-        }
-
-        private void datePickerGotMouseCapture(object sender, MouseEventArgs e)
-        {
-            datePicker.Foreground = Brushes.Black;
-            datePicker.SelectedDate = DateTime.Today;
-        }
-
-        private void datePickerKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Back || e.Key == Key.Delete)
-            {
-                if (string.IsNullOrEmpty(datePicker.Text))
-                {
-                    datePicker.SelectedDate = default(DateTime);
-                    datePicker.Foreground = Brushes.Transparent;
-                }
-            }
-        }
-
-        private void txtTagKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Space)
-            {
-                if (string.IsNullOrWhiteSpace(((TextBox)sender).Text))
-                {
-                    return;
-                }
-                string tag = ((TextBox)sender).Text.Trim();
-                ((PasswordCreationViewModel)this.DataContext).CompletedTags.Add(tag);
-                ((TextBox)sender).Text = "";
-            }
-        }
-
-        private void txtTagLostFocus(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(((TextBox)sender).Text))
-            {
-                return;
-            }
-
-            string tag = ((TextBox)sender).Text.Trim();
-            ((PasswordCreationViewModel)this.DataContext).CompletedTags.Add(tag);
-            ((TextBox)sender).Text = "";
-        }
-
-        private void TagsMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (Tags.SelectedItem == null)
-            {
-                return;
-            }
-            ((PasswordCreationViewModel)this.DataContext).CompletedTags.Remove(Tags.SelectedItem.ToString());
-        }
-
-        private void txtCat_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            ((TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender)).Focus();
-        }
-
-        private void ComboBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            ((TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender)).Focus();
+            ((PasswordCreationViewModel)DataContext).CloseAction = Close;
         }
     }
 }

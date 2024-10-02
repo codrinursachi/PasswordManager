@@ -8,7 +8,7 @@
         xmlns:customcontrols="clr-namespace:PasswordManager.CustomControls"
         mc:Ignorable="d"
         Title="MainWindow"
-        Height="700"
+        Height="740"
         Width="1700"
         WindowStyle="None"
         Background="Transparent"

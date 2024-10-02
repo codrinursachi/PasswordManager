@@ -3,6 +3,8 @@ using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Utilities;
+using PasswordManager.ViewModels;
+using PasswordManager.ViewModels.CustomControls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -99,8 +101,6 @@ namespace PasswordManager.CustomControls
         {
             await Task.Delay(TimeSpan.FromSeconds(5));
             pass.Password = "********";
-            pwdList.CancelEdit();
-            pwdList.CancelEdit();
             pwdList.Items.Refresh();
         }
 
@@ -110,24 +110,16 @@ namespace PasswordManager.CustomControls
             PasswordList.Remove((PasswordToShowDTO)pwdList.SelectedItem);
         }
 
-        private void pwdList_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        private void pwdList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (this.pwdList.SelectedItem != null)
+            var selectedItem = (PasswordToShowDTO)(pwdList.SelectedItem);
+            if (selectedItem == null)
             {
-                ((DataGrid)sender).RowEditEnding -= pwdList_RowEditEnding;
-                ((DataGrid)sender).CommitEdit();
-                ((DataGrid)sender).Items.Refresh();
-                ((DataGrid)sender).RowEditEnding += pwdList_RowEditEnding;
-                var pass = (PasswordToShowDTO)pwdList.SelectedItem;
-                if (pass.Password == "********")
-                {
-                    pass.Password = GetPasswordClearText.GetPasswordClearTextById(pass.Id, Database, DBPass);
-                }
-
-                EditPassword.EditPasswordById(pass.ToPasswordModel(), Database, DBPass);
-                pass.Password = "********";
-                ((DataGrid)sender).Items.Refresh();
+                return;
             }
+            ((PasswordDataGridViewModel)Resources["ViewModel"]).PasswordModel = selectedItem.ToPasswordModel();
+            ((IPasswordSettable)Resources["ViewModel"]).DBPass=DBPass;
+            ((IDatabaseChangeable)Resources["ViewModel"]).Database = Database[..^".json".Length];
         }
     }
 }
