@@ -183,7 +183,7 @@ namespace PasswordManager.ViewModels
         public void ExecuteAddPasswordCommand(object obj)
         {
             string tags = string.Join(" ", CompletedTags);
-            PasswordModel newPassword = new() { Username = Username, Password = Password, Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
+            PasswordModel newPassword = new() { Username = Username, Password = Password.ToCharArray(), Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
             PasswordRepository passwordRepository = new(Database + ".json", DBPass);
             passwordRepository.Add(newPassword);
             CloseAction?.Invoke();

@@ -33,7 +33,7 @@ namespace PasswordManager.CustomControls
         public static readonly DependencyProperty DatabaseProperty = DependencyProperty.Register("Database", typeof(string), typeof(PasswordDataGrid));
         public static readonly DependencyProperty DBPassProperty = DependencyProperty.Register("DBPass", typeof(byte[]), typeof(PasswordDataGrid));
 
-        private string storedPass;
+        private char[] storedPass;
         private DispatcherTimer timer;
 
         public PasswordDataGrid()
@@ -69,7 +69,7 @@ namespace PasswordManager.CustomControls
 
         private void TimerTick(object sender, EventArgs e)
         {
-            if (Clipboard.GetText() == storedPass)
+            if (Clipboard.GetText().ToCharArray() == storedPass)
             {
                 Clipboard.Clear();
             }
@@ -80,10 +80,10 @@ namespace PasswordManager.CustomControls
 
         private void cpyClipboardMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id, Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
+            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id, Database, DBPass);
             if (storedPass != null)
             {
-                Clipboard.SetDataObject(storedPass);
+                Clipboard.SetDataObject(new string(storedPass));
                 SetupTimer();
             }
         }
@@ -100,7 +100,7 @@ namespace PasswordManager.CustomControls
         private async void ClearPass(PasswordToShowDTO pass)
         {
             await Task.Delay(TimeSpan.FromSeconds(5));
-            pass.Password = "********";
+            pass.Password = "********".ToCharArray();
             pwdList.Items.Refresh();
         }
 

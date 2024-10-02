@@ -25,7 +25,7 @@ namespace PasswordManager.ViewModels.CustomControls
                 passwordModel = value;
                 Url=passwordModel.Url;
                 Username = passwordModel.Username;
-                Password = passwordModel.Password;
+                Password = "********";
                 ExpirationDate = passwordModel.ExpirationDate;
                 CategoryPath = passwordModel.CategoryPath;
                 Favorite=passwordModel.Favorite;

@@ -10,7 +10,7 @@ namespace PasswordManager.Models
     {
         public int Id { get; set; } = 0;
         public string Username { get; set; } = string.Empty;
-        public string Password { get; set; } = string.Empty;
+        public char[] Password { get; set; } = [];
         public string Url { get; set; } = string.Empty;
         public DateTime ExpirationDate { get; set; }
         public string CategoryPath { get; set; } = string.Empty;
