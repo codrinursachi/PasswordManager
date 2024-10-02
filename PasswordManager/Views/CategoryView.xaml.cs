@@ -26,14 +26,5 @@ namespace PasswordManager.Views
         {
             InitializeComponent();
         }
-
-        private void CategoriesSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
-        {
-            var viewModel = (CategoryViewModel)this.DataContext;
-            if (viewModel != null)
-            {
-                viewModel.Filter = (CategoryNodeModel)e.NewValue;
-            }
-        }
     }
 }

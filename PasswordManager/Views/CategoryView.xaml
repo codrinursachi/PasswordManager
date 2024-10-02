@@ -10,30 +10,8 @@
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="200"/>
-            <ColumnDefinition Width="15"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <TreeView x:Name="Categories"
-                  ItemsSource="{Binding Categories}"
-                  Height="auto"
-                  Width="auto"
-                  SelectedItemChanged="CategoriesSelectedItemChanged">
-
-            <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                    <TextBlock x:Name="categoryItem"
-                               Text="{Binding Name}"
-                               Foreground="{StaticResource TextBrush}"/>
-                </HierarchicalDataTemplate>
-            </TreeView.ItemTemplate>
-        </TreeView>
-
-        <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
-                                         DBPass="{Binding DBPass}"
-                                         Grid.Column="2"
-                                         Database="{Binding Database}"/>
-    </Grid>
+    <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
+                                     DBPass="{Binding DBPass}"
+                                     Grid.Column="2"
+                                     Database="{Binding Database}" />
 </UserControl>

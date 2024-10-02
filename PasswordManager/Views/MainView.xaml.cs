@@ -1,4 +1,5 @@
-﻿using PasswordManager.ViewModels;
+﻿using PasswordManager.Models;
+using PasswordManager.ViewModels;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
@@ -31,6 +32,23 @@ namespace PasswordManager.Views
             ((MainViewModel)this.DataContext).GetDatabases();
             CollectionViewSource.GetDefaultView(dtbSelector)?.Refresh();
             App.Current.Properties["ShouldRefresh"] = true;
+        }
+
+
+        private void CategoriesSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            var viewModel = (MainViewModel)DataContext;
+            viewModel.Filter = (CategoryNodeModel)e.NewValue;
+        }
+
+        private void Categories_GotMouseCapture(object sender, MouseEventArgs e)
+        {
+            if (!(((MainViewModel)DataContext).CurrentChildView is CategoryViewModel))
+            {
+                categoryRadio.IsChecked = true;
+                ((MainViewModel)DataContext).ShowCategoryViewCommand.Execute(null);
+                ((TreeViewItem)Categories.ItemContainerGenerator.ContainerFromIndex(0)).IsExpanded=true;
+            }
         }
     }
 }

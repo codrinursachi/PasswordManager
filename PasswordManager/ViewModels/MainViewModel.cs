@@ -67,6 +67,7 @@ namespace PasswordManager.ViewModels
                 ((IPasswordSettable)CurrentChildView).DBPass = DBPass;
                 ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb] + ".json";
                 ((IRefreshable)CurrentChildView).Refresh();
+                Refresh();
             }
         }
         public ObservableCollection<string> Databases { get; set; } = new();
@@ -109,6 +110,20 @@ namespace PasswordManager.ViewModels
             }
         }
 
+        public CategoryNodeModel Filter
+        {
+            get => ((CategoryViewModel)CurrentChildView).Filter;
+            set
+            {
+                if (currentChildView is CategoryViewModel child)
+                {
+                    child.Filter = value;
+                }
+            }
+        }
+
+        public ObservableCollection<CategoryNodeModel> Categories { get; set; } = new();
+
         public void GetDatabases()
         {
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
@@ -140,6 +155,18 @@ namespace PasswordManager.ViewModels
             timer.Interval = TimeSpan.FromSeconds(60);
             timer.Tick += TimerTick;
             timer.Start();
+        }
+
+        public void Refresh()
+        {
+            PasswordRepository passwordRepository = new(Databases[SelectedDb] + ".json", DBPass);
+            Categories.Clear();
+            var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
+            Categories.Add(rootNode);
+            if (CurrentChildView is CategoryViewModel child)
+            {
+                child.Refresh();
+            }
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -183,6 +210,10 @@ namespace PasswordManager.ViewModels
             OverlayVisibility = false;
             GetDatabases();
             SelectedDb = 0;
+            if (CurrentChildView is CategoryViewModel)
+            {
+                Refresh();
+            }
         }
 
         private void ExecuteShowPasswordFilePickerDialogueViewCommand(object obj)
@@ -208,6 +239,29 @@ namespace PasswordManager.ViewModels
 
             OverlayVisibility = false;
             ((IRefreshable)CurrentChildView).Refresh();
+        }
+
+        private CategoryNodeModel BuildTree(List<string> paths)
+        {
+            var root = new CategoryNodeModel { Name = "Categories" };
+            foreach (var path in paths)
+            {
+                var parts = path.Split('\\');
+                var current = root;
+                foreach (var part in parts)
+                {
+                    var child = current.Children.FirstOrDefault(p => p.Name == part);
+                    if (child == null)
+                    {
+                        child = new CategoryNodeModel { Name = part, Parent = current };
+                        current.Children.Add(child);
+                    }
+
+                    current = child;
+                }
+            }
+
+            return root;
         }
     }
 }

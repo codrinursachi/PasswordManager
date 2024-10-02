@@ -18,7 +18,6 @@ namespace PasswordManager.ViewModels
     {
         private CategoryNodeModel filter;
 
-        public ObservableCollection<CategoryNodeModel> Categories { get; set; } = new();
         public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = new();
         public CategoryNodeModel Filter
         {
@@ -26,7 +25,6 @@ namespace PasswordManager.ViewModels
             set
             {
                 filter = value;
-                //OnPropertyChanged(nameof(Filter));
                 FilterPass();
             }
         }
@@ -36,13 +34,8 @@ namespace PasswordManager.ViewModels
 
         public void Refresh()
         {
-            PasswordRepository passwordRepository = new(Database, DBPass);
-            Categories.Clear();
-            var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
-            Categories.Add(rootNode);
             FilterPass();
         }
-
         private void FilterPass()
         {
             Passwords.Clear();
@@ -78,30 +71,6 @@ namespace PasswordManager.ViewModels
                 Passwords.Add(password);
             }
         }
-
-        private CategoryNodeModel BuildTree(List<string> paths)
-        {
-            var root = new CategoryNodeModel { Name = "Categories" };
-            foreach (var path in paths)
-            {
-                var parts = path.Split('\\');
-                var current = root;
-                foreach (var part in parts)
-                {
-                    var child = current.Children.FirstOrDefault(p => p.Name == part);
-                    if (child == null)
-                    {
-                        child = new CategoryNodeModel { Name = part, Parent = current };
-                        current.Children.Add(child);
-                    }
-
-                    current = child;
-                }
-            }
-
-            return root;
-        }
-
     }
 }
 
