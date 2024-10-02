@@ -30,9 +30,9 @@ namespace PasswordManager.Repositories
         {
             List<PasswordModel> passwords = GetPasswordsFromFile();
             passwordModel.Id = passwords.Count == 0 ? 1 : passwords.Max(p => p.Id) + 1;
-            var encryptedPass = EncryptPass(passwordModel.Password);
+            var encryptedPass = Encrypt(passwordModel.Password);
             Array.Fill(passwordModel.Password, '0');
-            passwordModel.Password = encryptedPass;
+            passwordModel.Password = encryptedPass.ToCharArray();
             passwords.Add(passwordModel);
             WritePasswords(passwords);
         }
@@ -65,7 +65,7 @@ namespace PasswordManager.Repositories
                 return null;
             }
 
-            password.Password=DecryptPass(password.Password);
+            password.Password=Decrypt(password.Password).ToCharArray();
             return password;
         }
 
@@ -83,22 +83,12 @@ namespace PasswordManager.Repositories
                 return null;
             }
             var fileName = Path.Combine(pathToDb, dataBaseName);
-            List<PasswordModel> passwords = new();
-            using var AES = Aes.Create();
-
-            byte[] passwordBytes = ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser);
-            byte[] aesKey = SHA256.HashData(passwordBytes);
-            byte[] aesIV = MD5.HashData(passwordBytes);
-            AES.Key = aesKey;
-            AES.IV = aesIV;
-            ICryptoTransform decryptor = AES.CreateDecryptor();
-            using FileStream fileStream = new(fileName, FileMode.OpenOrCreate, FileAccess.Read);
-            using CryptoStream cryptoStream = new(fileStream, decryptor, CryptoStreamMode.Read);
-            using StreamReader streamReader = new(cryptoStream);
-            string data = streamReader.ReadToEnd();
+            List<PasswordModel> passwords = [];
+            
+            string data = File.ReadAllText(fileName);
             if (data.Length > 0)
             {
-                passwords = JsonSerializer.Deserialize<List<PasswordModel>>(data);
+                passwords = JsonSerializer.Deserialize<List<PasswordModel>>(Decrypt(data.ToCharArray()));
             }
 
 
@@ -108,21 +98,10 @@ namespace PasswordManager.Repositories
         private void WritePasswords(List<PasswordModel> passwords)
         {
             var fileName = Path.Combine(pathToDb, dataBaseName);
-            using var AES = Aes.Create();
-            byte[] passwordBytes = ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser);
-            byte[] aesKey = SHA256.HashData(passwordBytes);
-            byte[] aesIV = MD5.HashData(passwordBytes);
-            AES.Key = aesKey;
-            AES.IV = aesIV;
-            ICryptoTransform encryptor = AES.CreateEncryptor();
-            using FileStream fileStream = new(fileName, FileMode.Create, FileAccess.Write);
-            using CryptoStream cryptoStream = new(fileStream, encryptor, CryptoStreamMode.Write);
-            using StreamWriter streamWriter = new(cryptoStream);
-            string data = JsonSerializer.Serialize(passwords);
-            streamWriter.Write(data);
+            File.WriteAllText(fileName,Encrypt(JsonSerializer.Serialize(passwords).ToCharArray()));
         }
 
-        private char[] EncryptPass(char[] input)
+        private string Encrypt(char[] input)
         {
             using Aes AES = Aes.Create();
             byte[] passwordBytes = ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser);
@@ -141,11 +120,10 @@ namespace PasswordManager.Repositories
             srEncrypt.Flush();
             csEncrypt.FlushFinalBlock();
             var encrypted = msEncrypt.ToArray();
-
-            return Convert.ToBase64String(encrypted).ToCharArray();
+            return Convert.ToBase64String(encrypted);
         }
 
-        private char[] DecryptPass(char[] input)
+        private string Decrypt(char[] input)
         {
             byte[] inputBytes = Convert.FromBase64String(new string(input));
             using Aes AES = Aes.Create();
@@ -161,7 +139,7 @@ namespace PasswordManager.Repositories
             using MemoryStream msDecrypt = new(inputBytes);
             using CryptoStream csDecrypt = new(msDecrypt, decryptor, CryptoStreamMode.Read);
             using StreamReader srDecrypt = new(csDecrypt);
-            return srDecrypt.ReadToEnd().ToCharArray();
+            return srDecrypt.ReadToEnd();
         }
     }
 }
