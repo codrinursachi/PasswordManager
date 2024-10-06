@@ -17,14 +17,53 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <ListView x:Name="Tags"
-                  ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged}"
+                  Focusable="False"
                   Height="auto"
-                  Width="auto"
+                  VerticalAlignment="Top"
+                  ItemsSource="{Binding Tags, UpdateSourceTrigger=PropertyChanged}"
+                  Background="Transparent"
+                  BorderThickness="0"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                   SelectionMode="Multiple"
-                  SelectionChanged="TagsSelectionChanged"
-                  Background="White"
-                  Foreground="{StaticResource TextBrush}"/>
-
+                  SelectionChanged="TagsSelectionChanged">
+            <ListView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Width="{Binding ElementName=Tags, Path=ActualWidth}" />
+                </ItemsPanelTemplate>
+            </ListView.ItemsPanel>
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="ListViewItem">
+                                <Border x:Name="listViewBd"
+                                        CornerRadius="5"
+                                        Padding="5"
+                                        Margin="5"
+                                        Background="White">
+                                    <ContentPresenter />
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver"
+                                             Value="True">
+                                        <Setter TargetName="listViewBd"
+                                                Property="Background"
+                                                Value="LightGray" />
+                                    </Trigger>
+                                    <Trigger Property="IsSelected"
+                                             Value="True">
+                                        <Setter TargetName="listViewBd"
+                                                Property="Background"
+                                                Value="LightGray" />
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </ListView.ItemContainerStyle>
+        </ListView>
+        
         <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
                                          DBPass="{Binding DBPass}"
                                          Grid.Column="2"
