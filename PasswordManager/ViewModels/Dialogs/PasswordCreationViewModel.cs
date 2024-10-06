@@ -15,7 +15,7 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
 {
-    public class PasswordCreationViewModel : ViewModelBase, IDatabaseChangeable, IPasswordSettable
+    public class PasswordCreationViewModel : ViewModelBase, IDatabaseChangeable, IPasswordSettable, IPasswordPair
     {
         List<string> categoryPaths;
         string tags;
@@ -25,7 +25,7 @@ namespace PasswordManager.ViewModels
         private string username;
         private string password;
         private string url;
-        private DateTime expirationDate;
+        private DateTime expirationDate = DateTime.Today;
         private string categoryPath;
         private bool favorite;
         private string notes;
@@ -50,11 +50,11 @@ namespace PasswordManager.ViewModels
         public ICommand ShowPasswordGeneratorViewCommand { get; }
         public bool AddButtonVisible
         {
-            get => addButtonVisible; 
+            get => addButtonVisible;
             set
             {
                 addButtonVisible = value;
-                editButtonVisible=!value;
+                editButtonVisible = !value;
                 OnPropertyChanged(nameof(AddButtonVisible));
             }
         }
@@ -80,16 +80,18 @@ namespace PasswordManager.ViewModels
         }
         public string Password
         {
-            get => password; 
+            get => password;
             set
             {
                 password = value;
                 OnPropertyChanged(nameof(Password));
             }
         }
+
+        public char[] PasswordAsCharArray { get; set; } = [];
         public string Url
         {
-            get => url; 
+            get => url;
             set
             {
                 url = value;
@@ -98,7 +100,7 @@ namespace PasswordManager.ViewModels
         }
         public DateTime ExpirationDate
         {
-            get => expirationDate; 
+            get => expirationDate;
             set
             {
                 expirationDate = value;
@@ -107,7 +109,7 @@ namespace PasswordManager.ViewModels
         }
         public string CategoryPath
         {
-            get => categoryPath; 
+            get => categoryPath;
             set
             {
                 categoryPath = value;
@@ -159,7 +161,7 @@ namespace PasswordManager.ViewModels
         }
         public string Notes
         {
-            get => notes; 
+            get => notes;
             set
             {
                 notes = value;
@@ -183,9 +185,10 @@ namespace PasswordManager.ViewModels
         public void ExecuteAddPasswordCommand(object obj)
         {
             string tags = string.Join(" ", CompletedTags);
-            PasswordModel newPassword = new() { Username = Username, Password = Password.ToCharArray(), Url = Url, ExpirationDate = ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
+            PasswordModel newPassword = new() { Username = Username, Password = PasswordAsCharArray, Url = Url, ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
             PasswordRepository passwordRepository = new(Database + ".json", DBPass);
             passwordRepository.Add(newPassword);
+            Array.Fill(PasswordAsCharArray, '0');
             CloseAction?.Invoke();
         }
 
@@ -193,7 +196,12 @@ namespace PasswordManager.ViewModels
         {
             var PasswordGen = new PasswordGeneratorView();
             OverlayVisibility = true;
-            PasswordGen.ShowDialog();
+            if (PasswordGen.ShowDialog() == true)
+            {
+                var passGenDataContext = (PasswordGeneratorViewModel)PasswordGen.DataContext;
+                Password = string.Concat(Enumerable.Repeat('*', passGenDataContext.GeneratedPassword.Length));
+                PasswordAsCharArray = passGenDataContext.GeneratedPassword;
+            }
             OverlayVisibility = false;
         }
     }

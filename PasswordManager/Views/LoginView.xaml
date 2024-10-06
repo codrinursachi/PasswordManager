@@ -15,36 +15,27 @@
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
         AllowsTransparency="True">
-
     <Window.DataContext>
-        <viewModel:LoginViewModel/>
+        <viewModel:LoginViewModel />
     </Window.DataContext>
-
     <Window.Resources>
-        <BooleanToVisibilityConverter x:Key="BooleanToVisibility"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
     </Window.Resources>
-
     <Window.Visibility>
         <Binding Path="IsViewVisible"
                  Mode="TwoWay"
-                 Converter="{StaticResource BooleanToVisibility}"/>
+                 Converter="{StaticResource BooleanToVisibility}" />
     </Window.Visibility>
-
-
     <Border CornerRadius="10"
             BorderThickness="1"
             Background="{StaticResource BackgroundBrush}">
-
-
-
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="30"/>
-                <RowDefinition/>
+                <RowDefinition Height="30" />
+                <RowDefinition />
             </Grid.RowDefinitions>
-
             <customcontrols:PanelControlBar IsMainWindow="True"
-                                            WindowTitle="Log in"/>
+                                            WindowTitle="Log in" />
             <StackPanel Width="250"
                         Grid.Row="1"
                         Orientation="Vertical"
@@ -56,59 +47,50 @@
                         <LinearGradientBrush StartPoint="0,0"
                                              EndPoint="1,1">
                             <GradientStop Color="{StaticResource winBorderColor1}"
-                                          Offset="0"/>
+                                          Offset="0" />
                             <GradientStop Color="{StaticResource winBorderColor2}"
-                                          Offset="0.75"/>
+                                          Offset="0.75" />
                             <GradientStop Color="{StaticResource winBorderColor3}"
-                                          Offset="1"/>
+                                          Offset="1" />
                         </LinearGradientBrush>
                     </Border.Background>
-
                     <Border CornerRadius="50"
                             Width="100"
                             Height="100">
                         <Border.Background>
-
                             <ImageBrush ImageSource="/Images/Logo.png"
-                                        Opacity="0.2"/>
-
+                                        Opacity="0.2" />
                         </Border.Background>
-
                     </Border>
                 </Border>
-
                 <TextBlock Text="Password Manager"
                            FontSize="25"
                            FontWeight="Medium"
-                           HorizontalAlignment="Center"/>
-
+                           HorizontalAlignment="Center" />
                 <TextBlock Text="Password"
                            FontSize="12"
                            FontWeight="Medium"
-                           Margin="0,15,0,0"/>
-
-                <customcontrols:BindablePasswordBox Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                                                    Height="28"
-                                                    Margin="0,5,0,0"
-                                                    ToolTip="Password must be at least 3 characters."
-                                                    ToolTipService.InitialShowDelay="0"/>
-
+                           Margin="0,15,0,0" />
+                <customcontrols:PasswordTextBox FontSize="13"
+                                                FontWeight="Medium"
+                                                Foreground="{StaticResource TextBrush}"
+                                                VerticalContentAlignment="Center"
+                                                BorderThickness="0"
+                                                Height="28"
+                                                ToolTip="Password must be at least 3 characters."
+                                                ToolTipService.InitialShowDelay="0" />
                 <TextBlock Text="{Binding ErrorMessage}"
                            Foreground="Red"
                            FontSize="12"
                            FontWeight="Medium"
                            Margin="0,10,0,0"
-                           TextWrapping="Wrap"/>
-
+                           TextWrapping="Wrap" />
                 <Button x:Name="btnLogin"
                         Command="{Binding LoginCommand}"
                         Style="{StaticResource Windows11ButtonStyle}"
                         Content="Log In"
-                        IsDefault="True"/>
-
+                        IsDefault="True" />
             </StackPanel>
-
         </Grid>
-
     </Border>
 </Window>

@@ -15,11 +15,12 @@ namespace PasswordManager.Utilities
 
         private const char segmentDelimiter = ':';
 
-        public static string Hash(string input, int iterations)
+        public static string Hash(char[] input, int iterations)
         {
             byte[] salt = RandomNumberGenerator.GetBytes(saltSize);
+            byte[] pass = Encoding.UTF8.GetBytes(input);
             byte[] hash = Rfc2898DeriveBytes.Pbkdf2(
-                input,
+                pass,
                 salt,
                 iterations,
                 algorithm,
@@ -34,15 +35,16 @@ namespace PasswordManager.Utilities
             );
         }
 
-        public static bool Verify(string input, string hashString)
+        public static bool Verify(char[] input, string hashString)
         {
             string[] segments = hashString.Split(segmentDelimiter);
             byte[] hash = Convert.FromHexString(segments[0]);
             byte[] salt = Convert.FromHexString(segments[1]);
+            byte[] pass = Encoding.UTF8.GetBytes(input);
             int iterations = int.Parse(segments[2]);
             HashAlgorithmName algorithm = new HashAlgorithmName(segments[3]);
             byte[] inputHash = Rfc2898DeriveBytes.Pbkdf2(
-                input,
+                pass,
                 salt,
                 iterations,
                 algorithm,

@@ -26,7 +26,6 @@ namespace PasswordManager.CustomControls
         public PasswordModelEditor()
         {
             InitializeComponent();
-            datePicker.SelectedDate = DateTime.Now;
         }
 
         private void datePickerGotMouseCapture(object sender, MouseEventArgs e)
@@ -40,7 +39,7 @@ namespace PasswordManager.CustomControls
             {
                 if (string.IsNullOrEmpty(datePicker.Text))
                 {
-                    datePicker.SelectedDate = default(DateTime);
+                    datePicker.SelectedDate = DateTime.Today;
                     datePicker.Foreground = Brushes.Transparent;
                 }
             }

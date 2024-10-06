@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
@@ -12,7 +13,6 @@ namespace PasswordManager.ViewModels
     {
         private string alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         private string symbols = "!\\\";#$%&'()*+,-./:;<=>?@[]^`{|}~";
-        private string generatedPassword;
         public PasswordGeneratorViewModel()
         {
             GeneratePasswordCommand = new ViewModelCommand(ExecuteGeneratePasswordCommand);
@@ -22,15 +22,7 @@ namespace PasswordManager.ViewModels
         public int SymbolsCount { get; set; } = 5;
         public Action CloseAction { get; set; }
 
-        public string GeneratedPassword
-        {
-            get => generatedPassword;
-            set
-            {
-                generatedPassword = value;
-                OnPropertyChanged(nameof(GeneratedPassword));
-            }
-        }
+        public char[] GeneratedPassword { get; set; } = [];
         public ICommand GeneratePasswordCommand { get; }
         public ICommand AcceptPasswordCommand { get; }
 
@@ -42,20 +34,24 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteGeneratePasswordCommand(object obj)
         {
-            StringBuilder pass = new();
+            Array.Fill(GeneratedPassword, '0');
+            GeneratedPassword = new char[AlphaNumCount + SymbolsCount];
             for (int i = 0; i < AlphaNumCount; i++)
             {
-                pass.Append(alphaNum[Random.Shared.Next(alphaNum.Length)]);
+                GeneratedPassword[i] = alphaNum[Random.Shared.Next(alphaNum.Length)];
             }
 
             for (int i = 0; i < SymbolsCount; i++)
             {
-                pass.Append(symbols[Random.Shared.Next(symbols.Length)]);
+                GeneratedPassword[i + AlphaNumCount] = symbols[Random.Shared.Next(symbols.Length)];
             }
 
-            char[] shuffledArray = pass.ToString().ToCharArray();
-            Random.Shared.Shuffle(shuffledArray);
-            GeneratedPassword = new(shuffledArray);
+            Random.Shared.Shuffle(GeneratedPassword);
+            var textbox = (TextBox)obj;
+            foreach (char c in GeneratedPassword)
+            {
+                textbox.Text += c;
+            }
         }
     }
 }

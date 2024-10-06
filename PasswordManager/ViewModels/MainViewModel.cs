@@ -178,6 +178,10 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteShowCategoryViewCommand(object obj)
         {
+            if (currentChildView is CategoryViewModel)
+            {
+                return;
+            }
             CurrentChildView = new CategoryViewModel();
             Caption = "Categories";
         }

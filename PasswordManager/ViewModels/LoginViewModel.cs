@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
@@ -12,16 +13,18 @@ using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
 {
-    class LoginViewModel : ViewModelBase, IPasswordSettable
+    class LoginViewModel : ViewModelBase, IPasswordSettable, IPasswordPair
     {
         public ICommand LoginCommand { get; }
         private string errorMessage;
         private bool isViewVisible = true;
         private UserRepository userRepository;
+        private string password;
 
         public LoginViewModel()
         {
@@ -29,7 +32,6 @@ namespace PasswordManager.ViewModels
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteOperationCommand);
         }
 
-        public string Password { get; set; }
         public string ErrorMessage
         {
             get => errorMessage;
@@ -50,11 +52,21 @@ namespace PasswordManager.ViewModels
         }
 
         public byte[] DBPass { get; set; }
+        public char[] PasswordAsCharArray { get; set; } = [];
+        public string Password
+        {
+            get => password;
+            set
+            {
+                password = value;
+                OnPropertyChanged(nameof(Password));
+            }
+        }
 
         private bool CanExecuteOperationCommand(object obj)
         {
             bool validData;
-            if (Password == null || Password.Length < 3)
+            if (PasswordAsCharArray.Length < 3)
             {
                 validData = false;
             }
@@ -68,10 +80,11 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteLoginCommand(object obj)
         {
-            var isValidUser = userRepository.AuthenticateUser(Password);
+            var isValidUser = userRepository.AuthenticateUser(PasswordAsCharArray);
             if (isValidUser)
             {
-                DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes(Password), null, DataProtectionScope.CurrentUser);
+                DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes(PasswordAsCharArray), null, DataProtectionScope.CurrentUser);
+                Array.Fill(PasswordAsCharArray, '0');
                 IsViewVisible = false;
             }
             else

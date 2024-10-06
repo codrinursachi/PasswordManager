@@ -18,10 +18,9 @@
                 <ControlTemplate TargetType="RadioButton">
                     <Border Background="{TemplateBinding Background}"
                             BorderThickness="4,0,0,0"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            Padding="0,10,0,0">
+                            BorderBrush="{TemplateBinding BorderBrush}">
                         <ContentPresenter HorizontalAlignment="Left"
-                                          VerticalAlignment="Top"/>
+                                          VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>
