@@ -116,49 +116,28 @@ namespace PasswordManager.Repositories
 
         private string Encrypt(char[] input)
         {
-            using Aes AES = Aes.Create();
-            byte[] passwordBytes = ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser);
-            byte[] aesKey = SHA256.HashData(passwordBytes);
-            byte[] aesIV = MD5.HashData(passwordBytes);
-            AES.Key = aesKey;
-            AES.IV = aesIV;
-            AES.Padding = PaddingMode.PKCS7;
-
-            ICryptoTransform encryptor = AES.CreateEncryptor(AES.Key, AES.IV);
-
-            using MemoryStream msEncrypt = new();
-            using CryptoStream csEncrypt = new(msEncrypt, encryptor, CryptoStreamMode.Write);
-            using StreamWriter srEncrypt = new(csEncrypt);
-            srEncrypt.Write(input);
-            srEncrypt.Flush();
-            csEncrypt.FlushFinalBlock();
-            var encrypted = msEncrypt.ToArray();
-            Array.Clear(passwordBytes);
-            Array.Clear(AES.Key);
-            Array.Clear(AES.IV);
-            return Convert.ToBase64String(encrypted);
+            using Aes AES = GenerateAES();
+            return Convert.ToBase64String(AES.EncryptCbc(Encoding.UTF8.GetBytes(input), AES.IV));
         }
 
         private string Decrypt(char[] input)
         {
             byte[] inputBytes = Convert.FromBase64String(new string(input));
-            using Aes AES = Aes.Create();
+            using Aes AES = GenerateAES();
+            return Encoding.UTF8.GetString(AES.DecryptCbc(inputBytes, AES.IV));
+        }
+
+        private Aes GenerateAES()
+        {
+            Aes AES = Aes.Create();
             byte[] passwordBytes = ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser);
             byte[] aesKey = SHA256.HashData(passwordBytes);
             byte[] aesIV = MD5.HashData(passwordBytes);
             AES.Key = aesKey;
             AES.IV = aesIV;
             AES.Padding = PaddingMode.PKCS7;
-
-            ICryptoTransform decryptor = AES.CreateDecryptor(AES.Key, AES.IV);
-
-            using MemoryStream msDecrypt = new(inputBytes);
-            using CryptoStream csDecrypt = new(msDecrypt, decryptor, CryptoStreamMode.Read);
-            using StreamReader srDecrypt = new(csDecrypt);
             Array.Clear(passwordBytes);
-            Array.Clear(AES.Key);
-            Array.Clear(AES.IV);
-            return srDecrypt.ReadToEnd();
+            return AES;
         }
     }
 }
