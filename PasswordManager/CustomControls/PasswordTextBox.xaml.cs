@@ -41,6 +41,11 @@ namespace PasswordManager.CustomControls
 
         private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
         {
+            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+            {
+                Array.Fill(((IPasswordPair)DataContext).PasswordAsCharArray,'0');
+                ((IPasswordPair)DataContext).PasswordAsCharArray = [];
+            }
             if (e.IsRepeat)
             {
                 e.Handled = true;

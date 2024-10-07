@@ -10,7 +10,7 @@ using System.Windows;
 
 namespace PasswordManager.ViewModels.CustomControls
 {
-    class PasswordDataGridViewModel:PasswordCreationViewModel
+    class PasswordDataGridViewModel : PasswordCreationViewModel
     {
         PasswordModel passwordModel;
         public PasswordDataGridViewModel() : base()
@@ -23,13 +23,16 @@ namespace PasswordManager.ViewModels.CustomControls
             set
             {
                 passwordModel = value;
-                Url=passwordModel.Url;
+                Array.Clear(PasswordAsCharArray);
+                Id = passwordModel.Id;
+                Url = passwordModel.Url;
                 Username = passwordModel.Username;
-                Password = "********";
+                PasswordAsCharArray = passwordModel.Password;
                 ExpirationDate = passwordModel.ExpirationDate;
                 CategoryPath = passwordModel.CategoryPath;
-                Favorite=passwordModel.Favorite;
+                Favorite = passwordModel.Favorite;
                 Notes = passwordModel.Notes;
+                InitialDatabase = Database;
                 CompletedTags.Clear();
                 if (string.IsNullOrEmpty(passwordModel.Tags))
                 {

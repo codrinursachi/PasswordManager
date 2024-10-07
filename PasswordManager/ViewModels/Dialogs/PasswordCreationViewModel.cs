@@ -1,6 +1,7 @@
 ﻿using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
+using PasswordManager.Utilities;
 using PasswordManager.Views;
 using System;
 using System.Collections.Generic;
@@ -34,9 +35,9 @@ namespace PasswordManager.ViewModels
 
         public PasswordCreationViewModel()
         {
-            CategoryPaths = new();
+            CategoryPaths = [];
             ShowPasswordGeneratorViewCommand = new ViewModelCommand(ExecuteShowPasswordGeneratorCommand);
-            DatabaseItems = new List<string>();
+            DatabaseItems = [];
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
             foreach (var db in Directory.GetFiles(path))
             {
@@ -44,9 +45,11 @@ namespace PasswordManager.ViewModels
             }
 
             AddPasswordCommand = new ViewModelCommand(ExecuteAddPasswordCommand);
+            EditPasswordCommand = new ViewModelCommand(ExecuteEditPasswordCommand);
             AddButtonVisible = true;
         }
         public ICommand AddPasswordCommand { get; }
+        public ICommand EditPasswordCommand { get; }
         public ICommand ShowPasswordGeneratorViewCommand { get; }
         public bool AddButtonVisible
         {
@@ -68,6 +71,8 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(EditButtonVisible));
             }
         }
+
+        public int Id { get; set; }
 
         public string Username
         {
@@ -144,6 +149,7 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(Favorite));
             }
         }
+        public string InitialDatabase { get; set; }
         public string Database
         {
             get => database;
@@ -190,6 +196,25 @@ namespace PasswordManager.ViewModels
             passwordRepository.Add(newPassword);
             Array.Fill(PasswordAsCharArray, '0');
             CloseAction?.Invoke();
+        }
+
+        public void ExecuteEditPasswordCommand(object obj)
+        {
+            string tags = string.Join(" ", CompletedTags);
+            PasswordModel newPassword = new() { Username = Username, Password = PasswordAsCharArray, Url = Url, ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
+            PasswordRepository passwordRepository = new(Database + ".json", DBPass);
+            if (InitialDatabase != Database)
+            {
+                DeletePassword.DeletePasswordById(Id, InitialDatabase + ".json", DBPass);
+                passwordRepository.Add(newPassword);
+            }
+            else
+            {
+                passwordRepository.Edit(Id, newPassword);
+            }
+
+            Password = string.Empty;
+            Array.Fill(PasswordAsCharArray, '0');
         }
 
         private void ExecuteShowPasswordGeneratorCommand(object obj)

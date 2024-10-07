@@ -12,6 +12,5 @@
              d:DesignWidth="800">
     <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
                                      DBPass="{Binding DBPass}"
-                                     Grid.Column="2"
-                                     Database="{Binding Database}" />
+                                     Grid.Column="2"/>
 </UserControl>

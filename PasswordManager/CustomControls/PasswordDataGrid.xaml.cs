@@ -30,7 +30,6 @@ namespace PasswordManager.CustomControls
     public partial class PasswordDataGrid : UserControl
     {
         public static readonly DependencyProperty PasswordListProperty = DependencyProperty.Register("PasswordList", typeof(ObservableCollection<PasswordToShowDTO>), typeof(PasswordDataGrid));
-        public static readonly DependencyProperty DatabaseProperty = DependencyProperty.Register("Database", typeof(string), typeof(PasswordDataGrid));
         public static readonly DependencyProperty DBPassProperty = DependencyProperty.Register("DBPass", typeof(byte[]), typeof(PasswordDataGrid));
 
         private char[] storedPass;
@@ -47,12 +46,6 @@ namespace PasswordManager.CustomControls
             set { SetValue(PasswordListProperty, value); }
         }
 
-        public string Database
-        {
-            get { return (string)GetValue(DatabaseProperty); }
-            set { SetValue(DatabaseProperty, value); }
-        }
-
         public byte[] DBPass
         {
             get { return (byte[])GetValue(DBPassProperty); }
@@ -62,7 +55,7 @@ namespace PasswordManager.CustomControls
         private void SetupTimer()
         {
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(5);
+            timer.Interval = TimeSpan.FromSeconds(10);
             timer.Tick += TimerTick;
             timer.Start();
         }
@@ -74,52 +67,38 @@ namespace PasswordManager.CustomControls
                 Clipboard.Clear();
             }
 
+            Array.Clear(storedPass);
             timer.Stop();
-        }
-
-
-        private void cpyClipboardMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id, Database, DBPass);
-            if (storedPass != null)
-            {
-                Clipboard.SetDataObject(new string(storedPass));
-                SetupTimer();
-            }
-        }
-
-        private void showPwdMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            var pass = (PasswordToShowDTO)pwdList.SelectedItem;
-            pwdList.SelectedItem = null;
-            pass.Password = GetPasswordClearText.GetPasswordClearTextById((pass).Id, Database, ((IPasswordSettable)(Window.GetWindow(this)).DataContext).DBPass);
-            pwdList.Items.Refresh();
-            ClearPass(pass);
-        }
-
-        private async void ClearPass(PasswordToShowDTO pass)
-        {
-            await Task.Delay(TimeSpan.FromSeconds(5));
-            pass.Password = "********".ToCharArray();
-            pwdList.Items.Refresh();
-        }
-
-        private void delPwd_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            DeletePassword.DeletePasswordById(((PasswordToShowDTO)pwdList.SelectedItem).Id, Database, DBPass);
-            PasswordList.Remove((PasswordToShowDTO)pwdList.SelectedItem);
         }
 
         private void pwdList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var selectedItem = (PasswordToShowDTO)(pwdList.SelectedItem);
+            var selectedItem = (PasswordToShowDTO)pwdList.SelectedItem;
             if (selectedItem == null)
             {
                 return;
             }
+            ((IPasswordSettable)Resources["ViewModel"]).DBPass = DBPass;
+            ((IDatabaseChangeable)Resources["ViewModel"]).Database = ((IDatabaseChangeable)DataContext).Database[..^".json".Length];
             ((PasswordDataGridViewModel)Resources["ViewModel"]).PasswordModel = selectedItem.ToPasswordModel();
-            ((IPasswordSettable)Resources["ViewModel"]).DBPass=DBPass;
-            ((IDatabaseChangeable)Resources["ViewModel"]).Database = Database[..^".json".Length];
+        }
+
+        private void MenuItemUsername_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Clipboard.SetDataObject(((PasswordToShowDTO)pwdList.SelectedItem).Username);
+        }
+
+        private void MenuItemPassword_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id, ((IDatabaseChangeable)DataContext).Database, DBPass);
+            Clipboard.SetDataObject(new string(storedPass));
+            SetupTimer();
+        }
+
+        private void MenuItemDelete_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DeletePassword.DeletePasswordById(((PasswordToShowDTO)pwdList.SelectedItem).Id, ((IDatabaseChangeable)DataContext).Database, DBPass);
+            PasswordList.Remove((PasswordToShowDTO)pwdList.SelectedItem);
         }
     }
 }

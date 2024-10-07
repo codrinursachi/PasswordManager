@@ -20,7 +20,6 @@
 
         <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
                                          DBPass="{Binding DBPass}"
-                                         Grid.Row="1"
-                                         Database="Binding Database"/>
+                                         Grid.Row="1"/>
     </Grid>
 </UserControl>

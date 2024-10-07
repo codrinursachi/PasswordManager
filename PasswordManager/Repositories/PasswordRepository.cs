@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -24,6 +25,11 @@ namespace PasswordManager.Repositories
         {
             this.password = password;
             this.dataBaseName = dataBaseName;
+            var dbPath= Path.Combine(pathToDb, dataBaseName);
+            if (!File.Exists(dbPath))
+            {
+                File.Create(dbPath).Close();
+            }
         }
 
         public void Add(PasswordModel passwordModel)
@@ -46,8 +52,15 @@ namespace PasswordManager.Repositories
                 return;
             }
 
-            Remove(id);
-            Add(newPasswordModel);
+            currentPassword.Url = newPasswordModel.Url;
+            currentPassword.Username = newPasswordModel.Username;
+            currentPassword.Password = Encrypt(newPasswordModel.Password).ToCharArray();
+            currentPassword.ExpirationDate = newPasswordModel.ExpirationDate;
+            currentPassword.CategoryPath = newPasswordModel.CategoryPath;
+            currentPassword.Favorite = newPasswordModel.Favorite;
+            currentPassword.Notes = newPasswordModel.Notes;
+            currentPassword.Tags = newPasswordModel.Tags;
+            WritePasswords(passwords);
         }
 
         public List<PasswordModel> GetAllPasswords()
@@ -115,11 +128,14 @@ namespace PasswordManager.Repositories
 
             using MemoryStream msEncrypt = new();
             using CryptoStream csEncrypt = new(msEncrypt, encryptor, CryptoStreamMode.Write);
-            using StreamWriter srEncrypt = new StreamWriter(csEncrypt);
+            using StreamWriter srEncrypt = new(csEncrypt);
             srEncrypt.Write(input);
             srEncrypt.Flush();
             csEncrypt.FlushFinalBlock();
             var encrypted = msEncrypt.ToArray();
+            Array.Clear(passwordBytes);
+            Array.Clear(AES.Key);
+            Array.Clear(AES.IV);
             return Convert.ToBase64String(encrypted);
         }
 
@@ -139,6 +155,9 @@ namespace PasswordManager.Repositories
             using MemoryStream msDecrypt = new(inputBytes);
             using CryptoStream csDecrypt = new(msDecrypt, decryptor, CryptoStreamMode.Read);
             using StreamReader srDecrypt = new(csDecrypt);
+            Array.Clear(passwordBytes);
+            Array.Clear(AES.Key);
+            Array.Clear(AES.IV);
             return srDecrypt.ReadToEnd();
         }
     }

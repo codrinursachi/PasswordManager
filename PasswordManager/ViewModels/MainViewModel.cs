@@ -223,7 +223,7 @@ namespace PasswordManager.ViewModels
         private void ExecuteShowPasswordFilePickerDialogueViewCommand(object obj)
         {
             OverlayVisibility = true;
-            OpenFileDialog openFileDialog = new OpenFileDialog();
+            OpenFileDialog openFileDialog = new();
             if (openFileDialog.ShowDialog() == true)
             {
                 string passwords = File.ReadAllText(openFileDialog.FileName);
