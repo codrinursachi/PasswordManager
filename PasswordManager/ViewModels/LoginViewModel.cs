@@ -25,9 +25,19 @@ namespace PasswordManager.ViewModels
         private bool isViewVisible = true;
         private UserRepository userRepository;
         private string password;
+        private string buttonText;
 
         public LoginViewModel()
         {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "UserLogin.json");
+            if (!File.Exists(path))
+            {
+                ButtonText = "Register";
+            }
+            else
+            {
+                ButtonText = "Log in";
+            }
             userRepository = new UserRepository("UserLogin.json");
             LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteOperationCommand);
         }
@@ -60,6 +70,16 @@ namespace PasswordManager.ViewModels
             {
                 password = value;
                 OnPropertyChanged(nameof(Password));
+            }
+        }
+
+        public string ButtonText
+        {
+            get => buttonText;
+            set
+            {
+                buttonText = value;
+                OnPropertyChanged(nameof(ButtonText));
             }
         }
 

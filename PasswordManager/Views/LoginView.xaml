@@ -88,7 +88,7 @@
                 <Button x:Name="btnLogin"
                         Command="{Binding LoginCommand}"
                         Style="{StaticResource Windows11ButtonStyle}"
-                        Content="Log In"
+                        Content="{Binding ButtonText}"
                         IsDefault="True" />
             </StackPanel>
         </Grid>
