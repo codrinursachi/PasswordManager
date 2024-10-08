@@ -19,7 +19,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class MainViewModel : ViewModelBase, IPasswordSettable
+    class MainViewModel : ViewModelBase, IPasswordSettable, IRefreshable
     {
         private ViewModelBase currentChildView;
         private string caption;
@@ -163,10 +163,7 @@ namespace PasswordManager.ViewModels
             Categories.Clear();
             var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories.Add(rootNode);
-            if (CurrentChildView is CategoryViewModel child)
-            {
-                child.Refresh();
-            }
+            ((IRefreshable)currentChildView).Refresh();            
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -214,10 +211,7 @@ namespace PasswordManager.ViewModels
             OverlayVisibility = false;
             GetDatabases();
             SelectedDb = 0;
-            if (CurrentChildView is CategoryViewModel)
-            {
-                Refresh();
-            }
+            Refresh();
         }
 
         private void ExecuteShowPasswordFilePickerDialogueViewCommand(object obj)

@@ -215,6 +215,7 @@ namespace PasswordManager.ViewModels
 
             Password = string.Empty;
             Array.Fill(PasswordAsCharArray, '0');
+            ((IRefreshable)obj).Refresh();
         }
 
         private void ExecuteShowPasswordGeneratorCommand(object obj)

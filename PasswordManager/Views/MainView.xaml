@@ -97,25 +97,24 @@
                                  Command="{Binding ShowCategoryViewCommand}"
                                  MinHeight="35"
                                  Height="auto">
-          
-                            <TreeView x:Name="Categories"
-                                      ItemsSource="{Binding Categories}"
-                                      Height="auto"
-                                      Width="auto"
-                                      SelectedItemChanged="CategoriesSelectedItemChanged"
-                                      Background="Transparent"
-                                      BorderThickness="0"
-                                      GotMouseCapture="Categories_GotMouseCapture">
-                                <TreeView.ItemTemplate>
-                                    <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                        <TextBlock x:Name="categoryItem"
-                                                   Style="{StaticResource menuButtonText}"
-                                                   Margin="0"
-                                                   Text="{Binding Name}"
-                                                   Foreground="{StaticResource TextBrush}" />
-                                    </HierarchicalDataTemplate>
-                                </TreeView.ItemTemplate>
-                            </TreeView>
+                        <TreeView x:Name="Categories"
+                                  ItemsSource="{Binding Categories}"
+                                  Height="auto"
+                                  Width="auto"
+                                  SelectedItemChanged="CategoriesSelectedItemChanged"
+                                  Background="Transparent"
+                                  BorderThickness="0"
+                                  PreviewMouseLeftButtonDown="Categories_PreviewMouseLeftButtonDown">
+                            <TreeView.ItemTemplate>
+                                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                    <TextBlock x:Name="categoryItem"
+                                               Style="{StaticResource menuButtonText}"
+                                               Margin="0"
+                                               Text="{Binding Name}"
+                                               Foreground="{StaticResource TextBrush}"/>
+                                </HierarchicalDataTemplate>
+                            </TreeView.ItemTemplate>
+                        </TreeView>
                     </RadioButton>
                 </StackPanel>
             </Border>

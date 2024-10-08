@@ -41,13 +41,13 @@ namespace PasswordManager.Views
             viewModel.Filter = (CategoryNodeModel)e.NewValue;
         }
 
-        private void Categories_GotMouseCapture(object sender, MouseEventArgs e)
+        private void Categories_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (!(((MainViewModel)DataContext).CurrentChildView is CategoryViewModel))
             {
                 categoryRadio.IsChecked = true;
                 ((MainViewModel)DataContext).ShowCategoryViewCommand.Execute(null);
-                ((TreeViewItem)Categories.ItemContainerGenerator.ContainerFromIndex(0)).IsExpanded=true;
+                ((TreeViewItem)Categories.ItemContainerGenerator.ContainerFromIndex(0)).IsExpanded = true;
             }
         }
     }
