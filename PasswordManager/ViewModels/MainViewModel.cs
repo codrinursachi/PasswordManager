@@ -15,6 +15,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
@@ -47,7 +48,7 @@ namespace PasswordManager.ViewModels
         public ICommand ShowCategoryViewCommand { get; }
         public ICommand ShowPasswordCreationViewCommand { get; }
         public ICommand ShowPasswordFilePickerDialogueViewCommand { get; }
-
+        public Brush RandomBrush { get => new SolidColorBrush(Color.FromRgb((byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240))); }
         public string Caption
         {
             get => caption;

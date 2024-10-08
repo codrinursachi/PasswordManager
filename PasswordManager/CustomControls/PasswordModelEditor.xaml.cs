@@ -49,13 +49,7 @@ namespace PasswordManager.CustomControls
         {
             if (e.Key == Key.Space)
             {
-                if (string.IsNullOrWhiteSpace(((TextBox)sender).Text))
-                {
-                    return;
-                }
-                string tag = ((TextBox)sender).Text.Trim();
-                ((PasswordCreationViewModel)this.DataContext).CompletedTags.Add(tag);
-                ((TextBox)sender).Text = "";
+                txtTagLostFocus(sender, null);
             }
         }
 
@@ -66,7 +60,7 @@ namespace PasswordManager.CustomControls
                 return;
             }
 
-            string tag = ((TextBox)sender).Text.Trim();
+            string tag = "#"+((TextBox)sender).Text.Trim().Trim('#');
             ((PasswordCreationViewModel)this.DataContext).CompletedTags.Add(tag);
             ((TextBox)sender).Text = "";
         }
