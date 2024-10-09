@@ -33,8 +33,9 @@
         </DataTemplate>
     </Window.Resources>
     <Border CornerRadius="10"
-            BorderThickness="1"
-            Background="{StaticResource BackgroundBrush}">
+            Background="{StaticResource BackgroundBrush}"
+            BorderThickness="0.5"
+            BorderBrush="Black">
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250" />

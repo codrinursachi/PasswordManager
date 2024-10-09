@@ -100,5 +100,13 @@ namespace PasswordManager.CustomControls
             DeletePassword.DeletePasswordById(((PasswordToShowDTO)pwdList.SelectedItem).Id, ((IDatabaseChangeable)DataContext).Database, DBPass);
             PasswordList.Remove((PasswordToShowDTO)pwdList.SelectedItem);
         }
+
+        private void pwdList_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            if (pwdList.SelectedItem == null)
+            {
+                e.Handled = true;
+            }
+        }
     }
 }

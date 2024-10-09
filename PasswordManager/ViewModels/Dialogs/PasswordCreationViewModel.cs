@@ -10,6 +10,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
@@ -33,6 +34,9 @@ namespace PasswordManager.ViewModels
         private string notes;
         private bool addButtonVisible;
         private bool editButtonVisible;
+        private string urlErrorMessage;
+        private string usernameErrorMessage;
+        private string passwordErrorMessage;
 
         public PasswordCreationViewModel()
         {
@@ -188,9 +192,41 @@ namespace PasswordManager.ViewModels
         }
 
         public byte[] DBPass { get; set; }
+        public string UrlErrorMessage
+        {
+            get => urlErrorMessage;
+            set
+            {
+                urlErrorMessage = value;
+                OnPropertyChanged(nameof(UrlErrorMessage));
+            }
+        }
+        public string UsernameErrorMessage
+        {
+            get => usernameErrorMessage;
+            set
+            {
+                usernameErrorMessage = value;
+                OnPropertyChanged(nameof(UsernameErrorMessage));
+            }
+        }
+        public string PasswordErrorMessage
+        {
+            get => passwordErrorMessage;
+            set
+            {
+                passwordErrorMessage = value;
+                OnPropertyChanged(nameof(PasswordErrorMessage));
+            }
+        }
 
         public void ExecuteAddPasswordCommand(object obj)
         {
+            if (!Validate())
+            {
+                return;
+            }
+
             string tags = string.Join(" ", CompletedTags);
             PasswordModel newPassword = new() { Username = Username, Password = PasswordAsCharArray, Url = Url, ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
             PasswordRepository passwordRepository = new(Database + ".json", DBPass);
@@ -201,6 +237,11 @@ namespace PasswordManager.ViewModels
 
         public void ExecuteEditPasswordCommand(object obj)
         {
+            if (!Validate())
+            {
+                return;
+            }
+
             string tags = string.Join(" ", CompletedTags);
             PasswordModel newPassword = new() { Username = Username, Password = PasswordAsCharArray, Url = Url, ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
             PasswordRepository passwordRepository = new(Database + ".json", DBPass);
@@ -217,6 +258,14 @@ namespace PasswordManager.ViewModels
             Password = string.Empty;
             Array.Fill(PasswordAsCharArray, '0');
             ((IRefreshable)obj).Refresh();
+        }
+
+        private bool Validate()
+        {
+            UrlErrorMessage = !string.IsNullOrEmpty(Url) && Uri.IsWellFormedUriString(Url, UriKind.RelativeOrAbsolute) ? string.Empty : "URL must be valid";
+            UsernameErrorMessage = !string.IsNullOrEmpty(Username) && Username.Length >= 5 ? string.Empty : "Username must be longer than 4 characters";
+            PasswordErrorMessage = PasswordAsCharArray.Length >= 5 ? string.Empty : "Password must be longer than 4 characters";
+            return (UrlErrorMessage + UsernameErrorMessage + PasswordErrorMessage).Length == 0;
         }
 
         private void ExecuteShowPasswordGeneratorCommand(object obj)

@@ -27,8 +27,9 @@
                  Converter="{StaticResource BooleanToVisibility}" />
     </Window.Visibility>
     <Border CornerRadius="10"
-            BorderThickness="1"
-            Background="{StaticResource BackgroundBrush}">
+            Background="{StaticResource BackgroundBrush}"
+            BorderThickness="0.5"
+            BorderBrush="Black">
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="30" />
