@@ -3,6 +3,7 @@ using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
 using PasswordManager.Utilities;
+using PasswordManager.ViewModels.CustomControls;
 using PasswordManager.Views;
 using System;
 using System.Collections.Generic;
@@ -66,12 +67,12 @@ namespace PasswordManager.ViewModels
                 currentChildView = value;
                 OnPropertyChanged(nameof(CurrentChildView));
                 ((IPasswordSettable)CurrentChildView).DBPass = DBPass;
-                ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb] + ".json";
+                ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb];
                 ((IRefreshable)CurrentChildView).Refresh();
                 Refresh();
             }
         }
-        public ObservableCollection<string> Databases { get; set; } = new();
+        public ObservableCollection<string> Databases { get; set; } = [];
 
         public int SelectedDb
         {
@@ -82,7 +83,7 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(SelectedDb));
                 if (selectedDb >= 0)
                 {
-                    ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb] + ".json";
+                    ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb];
                     ((IRefreshable)CurrentChildView).Refresh();
                 }
             }
@@ -160,7 +161,9 @@ namespace PasswordManager.ViewModels
 
         public void Refresh()
         {
-            PasswordRepository passwordRepository = new(Databases[SelectedDb] + ".json", DBPass);
+            GetDatabases();
+            SelectedDb = 0;
+            PasswordRepository passwordRepository = new(Databases[SelectedDb], DBPass);
             Categories.Clear();
             var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories.Add(rootNode);
@@ -206,8 +209,8 @@ namespace PasswordManager.ViewModels
         {
             OverlayVisibility = true;
             PasswordCreationView passwordCreationView = new();
-            ((IPasswordSettable)passwordCreationView.DataContext).DBPass = DBPass;
-            ((IDatabaseChangeable)passwordCreationView.DataContext).Database = Databases[SelectedDb];
+            ((IPasswordSettable)passwordCreationView.pwdCreator.DataContext).DBPass = DBPass;
+            ((IDatabaseChangeable)passwordCreationView.pwdCreator.DataContext).Database = Databases[SelectedDb];
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
             GetDatabases();
@@ -229,7 +232,7 @@ namespace PasswordManager.ViewModels
                 }
 
                 passwordsToImport = JsonSerializer.Deserialize<List<PasswordModel>>(passwords);
-                PasswordRepository passwordRepository = new(Databases[SelectedDb] + ".json", dBPass);
+                PasswordRepository passwordRepository = new(Databases[SelectedDb], dBPass);
                 foreach (var password in passwordsToImport)
                 {
                     passwordRepository.Add(password);

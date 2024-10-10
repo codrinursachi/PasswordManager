@@ -1,4 +1,5 @@
-﻿using PasswordManager.Interfaces;
+﻿using PasswordManager.DTO;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
 using PasswordManager.Utilities;
@@ -8,17 +9,14 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Net;
-using System.Security;
-using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 
-namespace PasswordManager.ViewModels
+namespace PasswordManager.ViewModels.CustomControls
 {
-    public class PasswordCreationViewModel : ViewModelBase, IDatabaseChangeable, IPasswordSettable, IPasswordPair
+    class PasswordEditorViewModel : ViewModelBase, IDatabaseChangeable, IPasswordSettable, IPasswordPair
     {
         List<string> categoryPaths;
         string tags;
@@ -37,8 +35,9 @@ namespace PasswordManager.ViewModels
         private string urlErrorMessage;
         private string usernameErrorMessage;
         private string passwordErrorMessage;
+        private PasswordModel passwordModel;
 
-        public PasswordCreationViewModel()
+        public PasswordEditorViewModel()
         {
             CategoryPaths = [];
             ShowPasswordGeneratorViewCommand = new ViewModelCommand(ExecuteShowPasswordGeneratorCommand);
@@ -62,7 +61,7 @@ namespace PasswordManager.ViewModels
             set
             {
                 addButtonVisible = value;
-                editButtonVisible = !value;
+                EditButtonVisible = !value;
                 OnPropertyChanged(nameof(AddButtonVisible));
             }
         }
@@ -165,8 +164,8 @@ namespace PasswordManager.ViewModels
                 CategoryPaths.Clear();
                 if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", value + ".json")))
                 {
-                    passwordRepository = new(Database + ".json", DBPass);
-                    CategoryPaths.AddRange(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
+                    passwordRepository = new(value, DBPass);
+                    CategoryPaths.AddRange(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null));
                 }
             }
         }
@@ -219,7 +218,33 @@ namespace PasswordManager.ViewModels
                 OnPropertyChanged(nameof(PasswordErrorMessage));
             }
         }
-
+        public PasswordModel PasswordModel
+        {
+            get => passwordModel;
+            set
+            {
+                passwordModel = value;
+                Array.Clear(PasswordAsCharArray);
+                Id = passwordModel.Id;
+                Url = passwordModel.Url;
+                Username = passwordModel.Username;
+                PasswordAsCharArray = passwordModel.Password;
+                ExpirationDate = passwordModel.ExpirationDate;
+                CategoryPath = passwordModel.CategoryPath;
+                Favorite = passwordModel.Favorite;
+                Notes = passwordModel.Notes;
+                InitialDatabase = Database;
+                CompletedTags.Clear();
+                if (string.IsNullOrEmpty(passwordModel.Tags))
+                {
+                    return;
+                }
+                foreach (var tag in passwordModel.Tags.Split())
+                {
+                    CompletedTags.Add(tag);
+                }
+            }
+        }
         public void ExecuteAddPasswordCommand(object obj)
         {
             if (!Validate())
@@ -229,7 +254,7 @@ namespace PasswordManager.ViewModels
 
             string tags = string.Join(" ", CompletedTags);
             PasswordModel newPassword = new() { Username = Username, Password = PasswordAsCharArray, Url = Url, ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
-            PasswordRepository passwordRepository = new(Database + ".json", DBPass);
+            PasswordRepository passwordRepository = new(Database, DBPass);
             passwordRepository.Add(newPassword);
             Array.Fill(PasswordAsCharArray, '0');
             CloseAction?.Invoke();
@@ -237,17 +262,17 @@ namespace PasswordManager.ViewModels
 
         public void ExecuteEditPasswordCommand(object obj)
         {
-            if (!Validate())
+            if (PasswordModel == null || !Validate())
             {
                 return;
             }
 
             string tags = string.Join(" ", CompletedTags);
             PasswordModel newPassword = new() { Username = Username, Password = PasswordAsCharArray, Url = Url, ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
-            PasswordRepository passwordRepository = new(Database + ".json", DBPass);
+            PasswordRepository passwordRepository = new(Database, DBPass);
             if (InitialDatabase != Database)
             {
-                DeletePassword.DeletePasswordById(Id, InitialDatabase + ".json", DBPass);
+                DeletePassword.DeletePasswordById(Id, InitialDatabase, DBPass);
                 passwordRepository.Add(newPassword);
             }
             else
@@ -270,7 +295,7 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteShowPasswordGeneratorCommand(object obj)
         {
-            var PasswordGen = new PasswordGeneratorView();
+            PasswordGeneratorView PasswordGen = new();
             OverlayVisibility = true;
             if (PasswordGen.ShowDialog() == true)
             {

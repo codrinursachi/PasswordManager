@@ -1,4 +1,5 @@
 ﻿using PasswordManager.ViewModels;
+using PasswordManager.ViewModels.CustomControls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace PasswordManager.Views
         public PasswordCreationView()
         {
             InitializeComponent();
-            ((PasswordCreationViewModel)DataContext).CloseAction = Close;
+            ((PasswordEditorViewModel)pwdCreator.DataContext).CloseAction = Close;
         }
     }
 }

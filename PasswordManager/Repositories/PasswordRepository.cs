@@ -24,8 +24,8 @@ namespace PasswordManager.Repositories
         public PasswordRepository(string dataBaseName, byte[] password)
         {
             this.password = password;
-            this.dataBaseName = dataBaseName;
-            var dbPath= Path.Combine(pathToDb, dataBaseName);
+            this.dataBaseName = dataBaseName + ".json";
+            var dbPath = Path.Combine(pathToDb, this.dataBaseName);
             if (!File.Exists(dbPath))
             {
                 File.Create(dbPath).Close();
@@ -78,7 +78,7 @@ namespace PasswordManager.Repositories
                 return null;
             }
 
-            password.Password=Decrypt(password.Password).ToCharArray();
+            password.Password = Decrypt(password.Password).ToCharArray();
             return password;
         }
 
@@ -97,7 +97,7 @@ namespace PasswordManager.Repositories
             }
             var fileName = Path.Combine(pathToDb, dataBaseName);
             List<PasswordModel> passwords = [];
-            
+
             string data = File.ReadAllText(fileName);
             if (data.Length > 0)
             {
@@ -111,7 +111,7 @@ namespace PasswordManager.Repositories
         private void WritePasswords(List<PasswordModel> passwords)
         {
             var fileName = Path.Combine(pathToDb, dataBaseName);
-            File.WriteAllText(fileName,Encrypt(JsonSerializer.Serialize(passwords).ToCharArray()));
+            File.WriteAllText(fileName, Encrypt(JsonSerializer.Serialize(passwords).ToCharArray()));
         }
 
         private string Encrypt(char[] input)

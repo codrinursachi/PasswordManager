@@ -1,5 +1,8 @@
 ﻿using PasswordManager.DTO;
+using PasswordManager.Interfaces;
+using PasswordManager.Models;
 using PasswordManager.ViewModels;
+using PasswordManager.ViewModels.CustomControls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -60,9 +63,9 @@ namespace PasswordManager.CustomControls
                 return;
             }
 
-            string tag = "#"+((TextBox)sender).Text.Trim().Trim('#');
-            ((PasswordCreationViewModel)this.DataContext).CompletedTags.Add(tag);
-            ((TextBox)sender).Text = "";
+            string tag = "#" + ((TextBox)sender).Text.Trim().Trim('#');
+            ((PasswordEditorViewModel)DataContext).CompletedTags.Add(tag);
+            ((TextBox)sender).Text = string.Empty;
         }
 
         private void TagsMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -71,7 +74,7 @@ namespace PasswordManager.CustomControls
             {
                 return;
             }
-            ((PasswordCreationViewModel)this.DataContext).CompletedTags.Remove(Tags.SelectedItem.ToString());
+            ((PasswordEditorViewModel)DataContext).CompletedTags.Remove(Tags.SelectedItem.ToString());
         }
 
         private void txtCat_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

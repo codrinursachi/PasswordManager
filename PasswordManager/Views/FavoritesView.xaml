@@ -19,7 +19,6 @@
                                        SearchCriteria="{Binding SearchFilter, Mode=TwoWay}"/>
 
         <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
-                                         DBPass="{Binding DBPass}"
                                          Grid.Row="1"/>
     </Grid>
 </UserControl>

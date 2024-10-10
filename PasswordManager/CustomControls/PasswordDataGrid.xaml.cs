@@ -30,7 +30,6 @@ namespace PasswordManager.CustomControls
     public partial class PasswordDataGrid : UserControl
     {
         public static readonly DependencyProperty PasswordListProperty = DependencyProperty.Register("PasswordList", typeof(ObservableCollection<PasswordToShowDTO>), typeof(PasswordDataGrid));
-        public static readonly DependencyProperty DBPassProperty = DependencyProperty.Register("DBPass", typeof(byte[]), typeof(PasswordDataGrid));
 
         private char[] storedPass;
         private DispatcherTimer timer;
@@ -38,18 +37,13 @@ namespace PasswordManager.CustomControls
         public PasswordDataGrid()
         {
             InitializeComponent();
+            ((PasswordEditorViewModel)pwdEditor.DataContext).AddButtonVisible = false;
         }
 
         public ObservableCollection<PasswordToShowDTO> PasswordList
         {
             get { return (ObservableCollection<PasswordToShowDTO>)GetValue(PasswordListProperty); }
             set { SetValue(PasswordListProperty, value); }
-        }
-
-        public byte[] DBPass
-        {
-            get { return (byte[])GetValue(DBPassProperty); }
-            set { SetValue(DBPassProperty, value); }
         }
 
         private void SetupTimer()
@@ -78,9 +72,9 @@ namespace PasswordManager.CustomControls
             {
                 return;
             }
-            ((IPasswordSettable)Resources["ViewModel"]).DBPass = DBPass;
-            ((IDatabaseChangeable)Resources["ViewModel"]).Database = ((IDatabaseChangeable)DataContext).Database[..^".json".Length];
-            ((PasswordDataGridViewModel)Resources["ViewModel"]).PasswordModel = selectedItem.ToPasswordModel();
+            ((IPasswordSettable)pwdEditor.DataContext).DBPass = ((IPasswordSettable)DataContext).DBPass;
+            ((IDatabaseChangeable)pwdEditor.DataContext).Database = ((IDatabaseChangeable)DataContext).Database;
+            ((PasswordEditorViewModel)pwdEditor.DataContext).PasswordModel = selectedItem.ToPasswordModel();
         }
 
         private void MenuItemUsername_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -90,14 +84,14 @@ namespace PasswordManager.CustomControls
 
         private void MenuItemPassword_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id, ((IDatabaseChangeable)DataContext).Database, DBPass);
+            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id, ((IDatabaseChangeable)DataContext).Database, ((IPasswordSettable)DataContext).DBPass);
             Clipboard.SetDataObject(new string(storedPass));
             SetupTimer();
         }
 
         private void MenuItemDelete_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            DeletePassword.DeletePasswordById(((PasswordToShowDTO)pwdList.SelectedItem).Id, ((IDatabaseChangeable)DataContext).Database, DBPass);
+            DeletePassword.DeletePasswordById(((PasswordToShowDTO)pwdList.SelectedItem).Id, ((IDatabaseChangeable)DataContext).Database, ((IPasswordSettable)DataContext).DBPass);
             PasswordList.Remove((PasswordToShowDTO)pwdList.SelectedItem);
         }
 

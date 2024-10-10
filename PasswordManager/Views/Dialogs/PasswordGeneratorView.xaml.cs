@@ -32,21 +32,6 @@ namespace PasswordManager.Views
             Close();
         }
 
-        private void btnCloseClick(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void btnMinimizeClick(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void pnlControlBarMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            DragMove();
-        }
-
         private void alphaNumDec_Click(object sender, RoutedEventArgs e)
         {
             if (txtAlphaNums.Text == "0")

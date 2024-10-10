@@ -23,13 +23,13 @@ namespace PasswordManager.Views
         public MainView()
         {
             InitializeComponent();
-            this.MouseMove += ((MainViewModel)this.DataContext).OnActivity;
-            this.KeyDown += ((MainViewModel)this.DataContext).OnActivity;
+            MouseMove += ((MainViewModel)DataContext).OnActivity;
+            KeyDown += ((MainViewModel)DataContext).OnActivity;
         }
 
         private void dtbSelectorMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            ((MainViewModel)this.DataContext).GetDatabases();
+            ((MainViewModel)DataContext).GetDatabases();
             CollectionViewSource.GetDefaultView(dtbSelector)?.Refresh();
             App.Current.Properties["ShouldRefresh"] = true;
         }
