@@ -15,7 +15,7 @@ namespace PasswordManagerTests.Models
             PasswordModel password = new();
             password.Id = 1;
             password.Username = "admin";
-            password.Password = "admin";
+            password.Password = "admin".ToCharArray();
             password.Url = "admin.com";
             password.ExpirationDate = default;
             password.CategoryPath = "admin/admin";
@@ -24,7 +24,7 @@ namespace PasswordManagerTests.Models
             password.Notes = "admin notes";
             Assert.Equal(1, password.Id);
             Assert.Equal("admin", password.Username);
-            Assert.Equal("admin", password.Password);
+            Assert.Equal("admin".ToCharArray(), password.Password);
             Assert.Equal("admin.com", password.Url);
             Assert.Equal(default, password.ExpirationDate);
             Assert.Equal("admin/admin", password.CategoryPath);

@@ -17,10 +17,10 @@ namespace PasswordManagerTests.Repositories
         {
             string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
-            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
+            PasswordModel password = new() { Username = "admin", Password = "admin".ToCharArray(), Url = "admin.com" };
             passwordRepository.Add(password);
             Assert.NotNull(passwordRepository.GetAllPasswords().FirstOrDefault(p => p.Id == password.Id));
-            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file + ".json"));
         }
 
         [Fact]
@@ -28,10 +28,10 @@ namespace PasswordManagerTests.Repositories
         {
             string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
-            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
+            PasswordModel password = new() { Username = "admin", Password = "admin".ToCharArray(), Url = "admin.com" };
             passwordRepository.Add(password);
             Assert.NotNull(passwordRepository.GetPasswordById(password.Id));
-            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file + ".json"));
         }
 
         [Fact]
@@ -39,12 +39,14 @@ namespace PasswordManagerTests.Repositories
         {
             string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
-            PasswordModel password = new PasswordModel { Username = "admin1", Password = "admin", Url = "admin.com" };
-            PasswordModel passwordEdit = new PasswordModel { Username = "root", Password = "root", Url = "admin.com" };
+            PasswordModel password = new() { Username = "admin1", Password = "admin".ToCharArray(), Url = "admin.com" };
+            PasswordModel passwordEdit = new() { Username = "root", Password = "root".ToCharArray(), Url = "admin.com" };
             passwordRepository.Add(password);
             passwordRepository.Edit(password.Id, passwordEdit);
-            Assert.Equal(passwordRepository.GetPasswordById(passwordEdit.Id), passwordEdit);
-            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
+            Assert.Equal(passwordRepository.GetPasswordById(password.Id).Username, passwordEdit.Username);
+            Assert.Equal(passwordRepository.GetPasswordById(password.Id).Password, passwordEdit.Password);
+            Assert.Equal(passwordRepository.GetPasswordById(password.Id).Url, passwordEdit.Url);
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file + ".json"));
         }
 
         [Fact]
@@ -52,11 +54,11 @@ namespace PasswordManagerTests.Repositories
         {
             string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
-            PasswordModel password = new PasswordModel { Username = "admin2", Password = "admin", Url = "admin.com" };
+            PasswordModel password = new() { Username = "admin2", Password = "admin".ToCharArray(), Url = "admin.com" };
             passwordRepository.Add(password);
             passwordRepository.Remove(password.Id);
             Assert.Null(passwordRepository.GetAllPasswords().FirstOrDefault(p => p == password));
-            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file + ".json"));
         }
     }
 }

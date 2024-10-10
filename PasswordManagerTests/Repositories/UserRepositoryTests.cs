@@ -14,8 +14,8 @@ namespace PasswordManagerTests.Repositories
         {
             string file = Path.GetRandomFileName();
             UserRepository userRepository = new(file);
-            Assert.True(userRepository.AuthenticateUser("admin"));
-            Assert.False(userRepository.AuthenticateUser("pass"));
+            Assert.True(userRepository.AuthenticateUser("admin".ToCharArray()));
+            Assert.False(userRepository.AuthenticateUser("pass".ToCharArray()));
             File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", file));
         }
     }

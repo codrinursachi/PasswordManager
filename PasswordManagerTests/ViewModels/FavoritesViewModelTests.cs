@@ -21,18 +21,20 @@ namespace PasswordManagerTests.ViewModels
         {
             string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
-            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
-            PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com", Favorite = true };
-            PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com", Favorite = true };
+            PasswordModel password = new() { Username = "admin", Password = "admin".ToCharArray(), Url = "admin.com" };
+            PasswordModel password2 = new() { Username = "admin2", Password = "admin2".ToCharArray(), Url = "admin2.com", Favorite = true };
+            PasswordModel password3 = new() { Username = "admin3", Password = "admin3".ToCharArray(), Url = "admin3.com", Favorite = true };
             passwordRepository.Add(password);
             passwordRepository.Add(password2);
             passwordRepository.Add(password3);
-            FavoritesViewModel allPasswordsViewModel = new();
-            allPasswordsViewModel.Database = file;
-            allPasswordsViewModel.DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser);
+            FavoritesViewModel allPasswordsViewModel = new()
+            {
+                Database = file,
+                DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser)
+            };
             allPasswordsViewModel.Refresh();
             Assert.Equal(2, allPasswordsViewModel.Passwords.Count);
-            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file + ".json"));
         }
 
         [Fact]
@@ -40,9 +42,9 @@ namespace PasswordManagerTests.ViewModels
         {
             string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
-            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com" };
-            PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com", Favorite = true };
-            PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com", Favorite = true };
+            PasswordModel password = new() { Username = "admin", Password = "admin".ToCharArray(), Url = "admin.com" };
+            PasswordModel password2 = new() { Username = "admin2", Password = "admin2".ToCharArray(), Url = "admin2.com", Favorite = true };
+            PasswordModel password3 = new() { Username = "admin3", Password = "admin3".ToCharArray(), Url = "admin3.com", Favorite = true };
             passwordRepository.Add(password);
             passwordRepository.Add(password2);
             passwordRepository.Add(password3);
@@ -51,7 +53,7 @@ namespace PasswordManagerTests.ViewModels
             allPasswordsViewModel.DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser);
             allPasswordsViewModel.SearchFilter = "admin2";
             Assert.Single(allPasswordsViewModel.Passwords);
-            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file + ".json"));
         }
     }
 }

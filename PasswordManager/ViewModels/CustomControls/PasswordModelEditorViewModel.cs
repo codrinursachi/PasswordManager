@@ -16,7 +16,7 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels.CustomControls
 {
-    class PasswordModelEditorViewModel : ViewModelBase, IDatabaseChangeable, IPasswordSettable, IPasswordPair
+    public class PasswordModelEditorViewModel : ViewModelBase, IDatabaseChangeable, IPasswordSettable, IPasswordPair
     {
         List<string> categoryPaths;
         string tags;

@@ -29,7 +29,7 @@ namespace PasswordManagerTests.DTOs
             PasswordToShowDTO passwordDTO = passwordModel.ToPasswordToShowDTO();
             Assert.Equal(1, passwordDTO.Id);
             Assert.Equal("admin", passwordDTO.Username);
-            Assert.Equal("admin", passwordDTO.Password);
+            Assert.Equal("admin".ToCharArray(), passwordDTO.Password);
             Assert.Equal("admin.com", passwordDTO.Url);
             Assert.Equal("No expiration", passwordDTO.ExpirationDate);
             Assert.Equal("admin/admin", passwordDTO.CategoryPath);
@@ -56,7 +56,7 @@ namespace PasswordManagerTests.DTOs
             PasswordToShowDTO passwordDTO = passwordModel.ToPasswordToShowDTO();
             Assert.Equal(1, passwordDTO.Id);
             Assert.Equal("admin", passwordDTO.Username);
-            Assert.Equal("admin", passwordDTO.Password);
+            Assert.Equal("admin".ToCharArray(), passwordDTO.Password);
             Assert.Equal("admin.com", passwordDTO.Url);
             Assert.Equal((DateTime.Now + TimeSpan.FromDays(1)).ToShortDateString(), passwordDTO.ExpirationDate);
             Assert.Equal("admin/admin", passwordDTO.CategoryPath);
@@ -83,7 +83,7 @@ namespace PasswordManagerTests.DTOs
             PasswordToShowDTO passwordDTO = passwordModel.ToPasswordToShowDTO();
             Assert.Equal(1, passwordDTO.Id);
             Assert.Equal("admin", passwordDTO.Username);
-            Assert.Equal("admin", passwordDTO.Password);
+            Assert.Equal("admin".ToCharArray(), passwordDTO.Password);
             Assert.Equal("admin.com", passwordDTO.Url);
             Assert.Equal("Expired", passwordDTO.ExpirationDate);
             Assert.Equal("admin/admin", passwordDTO.CategoryPath);
@@ -110,7 +110,7 @@ namespace PasswordManagerTests.DTOs
             PasswordModel passwordModel = passwordDTO.ToPasswordModel();
             Assert.Equal(1, passwordModel.Id);
             Assert.Equal("admin", passwordModel.Username);
-            Assert.Equal("admin", passwordModel.Password);
+            Assert.Equal("admin".ToCharArray(), passwordModel.Password);
             Assert.Equal("admin.com", passwordModel.Url);
             Assert.Equal(default, passwordModel.ExpirationDate);
             Assert.Equal("admin/admin", passwordModel.CategoryPath);
@@ -128,7 +128,7 @@ namespace PasswordManagerTests.DTOs
                 Username = "admin",
                 Password = "admin".ToCharArray(),
                 Url = "admin.com",
-                ExpirationDate = (DateTime.Now+TimeSpan.FromDays(7)).ToShortDateString(),
+                ExpirationDate = (DateTime.Today+TimeSpan.FromDays(7)).ToShortDateString(),
                 CategoryPath = "admin/admin",
                 Tags = "#tag1 #tag2 #tag3",
                 Favorite = true,
@@ -137,9 +137,9 @@ namespace PasswordManagerTests.DTOs
             PasswordModel passwordModel = passwordDTO.ToPasswordModel();
             Assert.Equal(1, passwordModel.Id);
             Assert.Equal("admin", passwordModel.Username);
-            Assert.Equal("admin", passwordModel.Password);
+            Assert.Equal("admin".ToCharArray(), passwordModel.Password);
             Assert.Equal("admin.com", passwordModel.Url);
-            Assert.Equal(DateTime.Now + TimeSpan.FromDays(7), passwordModel.ExpirationDate);
+            Assert.Equal(DateTime.Today + TimeSpan.FromDays(7), passwordModel.ExpirationDate);
             Assert.Equal("admin/admin", passwordModel.CategoryPath);
             Assert.Equal("#tag1 #tag2 #tag3", passwordModel.Tags);
             Assert.True(passwordDTO.Favorite);
@@ -164,7 +164,7 @@ namespace PasswordManagerTests.DTOs
             PasswordModel passwordModel = passwordDTO.ToPasswordModel();
             Assert.Equal(1, passwordModel.Id);
             Assert.Equal("admin", passwordModel.Username);
-            Assert.Equal("admin", passwordModel.Password);
+            Assert.Equal("admin".ToCharArray(), passwordModel.Password);
             Assert.Equal("admin.com", passwordModel.Url);
             Assert.Equal(default, passwordModel.ExpirationDate);
             Assert.Equal("admin/admin", passwordModel.CategoryPath);

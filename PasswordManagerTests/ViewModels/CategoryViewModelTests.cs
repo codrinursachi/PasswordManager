@@ -17,9 +17,9 @@ namespace PasswordManagerTests.ViewModels
         {
             string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
-            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com", CategoryPath = "admin\\1" };
-            PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com", CategoryPath = "admin\\2" };
-            PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com", CategoryPath = "admin\\3" };
+            PasswordModel password = new() { Username = "admin", Password = "admin".ToCharArray(), Url = "admin.com", CategoryPath = "admin\\1" };
+            PasswordModel password2 = new() { Username = "admin2", Password = "admin2".ToCharArray(), Url = "admin2.com", CategoryPath = "admin\\2" };
+            PasswordModel password3 = new() { Username = "admin3", Password = "admin3".ToCharArray(), Url = "admin3.com", CategoryPath = "admin\\3" };
             passwordRepository.Add(password);
             passwordRepository.Add(password2);
             passwordRepository.Add(password3);
@@ -28,7 +28,7 @@ namespace PasswordManagerTests.ViewModels
             categoryViewModel.DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser);
             categoryViewModel.Refresh();
             Assert.Equal(3, categoryViewModel.Passwords.Count);
-            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file + ".json"));
         }
 
         [Fact]
@@ -36,9 +36,9 @@ namespace PasswordManagerTests.ViewModels
         {
             string file = Path.GetRandomFileName();
             PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
-            PasswordModel password = new PasswordModel { Username = "admin", Password = "admin", Url = "admin.com", CategoryPath = "admin\\1" };
-            PasswordModel password2 = new PasswordModel { Username = "admin2", Password = "admin2", Url = "admin2.com", CategoryPath = "admin\\2" };
-            PasswordModel password3 = new PasswordModel { Username = "admin3", Password = "admin3", Url = "admin3.com", CategoryPath = "admin\\3" };
+            PasswordModel password = new() { Username = "admin", Password = "admin".ToCharArray(), Url = "admin.com", CategoryPath = "admin\\1" };
+            PasswordModel password2 = new() { Username = "admin2", Password = "admin2".ToCharArray(), Url = "admin2.com", CategoryPath = "admin\\2" };
+            PasswordModel password3 = new() { Username = "admin3", Password = "admin3".ToCharArray(), Url = "admin3.com", CategoryPath = "admin\\3" };
             passwordRepository.Add(password);
             passwordRepository.Add(password2);
             passwordRepository.Add(password3);
@@ -61,7 +61,7 @@ namespace PasswordManagerTests.ViewModels
             }
             categoryViewModel.Filter = current;
             Assert.Single(categoryViewModel.Passwords);
-            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file));
+            File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file + ".json"));
         }
     }
 }

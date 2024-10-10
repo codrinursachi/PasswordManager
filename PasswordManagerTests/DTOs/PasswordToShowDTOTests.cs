@@ -13,19 +13,21 @@ namespace PasswordManagerTests.DTOs
         [Fact]
         public void ShouldStorePasswordDTOData()
         {
-            PasswordToShowDTO password = new();
-            password.Id = 1;
-            password.Username = "admin";
-            password.Password = "admin".ToCharArray();
-            password.Url = "admin.com";
-            password.ExpirationDate = "No expiration";
-            password.CategoryPath = "admin/admin";
-            password.Tags = "#tag1 #tag2 #tag3";
-            password.Favorite = true;
-            password.Notes = "admin notes";
+            PasswordToShowDTO password = new()
+            {
+                Id = 1,
+                Username = "admin",
+                Password = "admin".ToCharArray(),
+                Url = "admin.com",
+                ExpirationDate = "No expiration",
+                CategoryPath = "admin/admin",
+                Tags = "#tag1 #tag2 #tag3",
+                Favorite = true,
+                Notes = "admin notes"
+            };
             Assert.Equal(1, password.Id);
             Assert.Equal("admin", password.Username);
-            Assert.Equal("admin", password.Password);
+            Assert.Equal("admin".ToCharArray(), password.Password);
             Assert.Equal("admin.com", password.Url);
             Assert.Equal("No expiration", password.ExpirationDate);
             Assert.Equal("admin/admin", password.CategoryPath);

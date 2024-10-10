@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PasswordManagerTests.ViewModels
 {
-    internal class TagsViewModelTests
+    public class TagsViewModelTests
     {
     }
 }
