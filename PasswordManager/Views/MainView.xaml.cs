@@ -1,4 +1,5 @@
 ﻿using PasswordManager.Models;
+using PasswordManager.Utilities;
 using PasswordManager.ViewModels;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -23,17 +24,9 @@ namespace PasswordManager.Views
         public MainView()
         {
             InitializeComponent();
-            MouseMove += ((MainViewModel)DataContext).OnActivity;
-            KeyDown += ((MainViewModel)DataContext).OnActivity;
+            MouseMove += AutoLocker.OnActivity;
+            KeyDown += AutoLocker.OnActivity;
         }
-
-        private void dtbSelectorMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            ((MainViewModel)DataContext).GetDatabases();
-            CollectionViewSource.GetDefaultView(dtbSelector)?.Refresh();
-            App.Current.Properties["ShouldRefresh"] = true;
-        }
-
 
         private void CategoriesSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
@@ -43,7 +36,7 @@ namespace PasswordManager.Views
 
         private void Categories_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (!(((MainViewModel)DataContext).CurrentChildView is CategoryViewModel))
+            if (((MainViewModel)DataContext).CurrentChildView is not CategoryViewModel)
             {
                 categoryRadio.IsChecked = true;
                 ((MainViewModel)DataContext).ShowCategoryViewCommand.Execute(null);

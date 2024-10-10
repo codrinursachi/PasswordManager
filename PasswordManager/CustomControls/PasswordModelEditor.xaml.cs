@@ -64,7 +64,7 @@ namespace PasswordManager.CustomControls
             }
 
             string tag = "#" + ((TextBox)sender).Text.Trim().Trim('#');
-            ((PasswordEditorViewModel)DataContext).CompletedTags.Add(tag);
+            ((PasswordModelEditorViewModel)DataContext).CompletedTags.Add(tag);
             ((TextBox)sender).Text = string.Empty;
         }
 
@@ -74,7 +74,7 @@ namespace PasswordManager.CustomControls
             {
                 return;
             }
-            ((PasswordEditorViewModel)DataContext).CompletedTags.Remove(Tags.SelectedItem.ToString());
+            ((PasswordModelEditorViewModel)DataContext).CompletedTags.Remove(Tags.SelectedItem.ToString());
         }
 
         private void txtCat_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)

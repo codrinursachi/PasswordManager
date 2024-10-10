@@ -27,7 +27,6 @@ namespace PasswordManager.ViewModels
         private string caption;
         private int selectedDb = 0;
         private byte[] dBPass;
-        private DispatcherTimer timer;
         private bool overlayVisibility;
         public MainViewModel()
         {
@@ -38,7 +37,7 @@ namespace PasswordManager.ViewModels
             ShowPasswordCreationViewCommand = new ViewModelCommand(ExecuteShowPasswordCreationViewCommand);
             ShowPasswordFilePickerDialogueViewCommand = new ViewModelCommand(ExecuteShowPasswordFilePickerDialogueViewCommand);
             GetDatabases();
-            SetupTimer();
+            AutoLocker.SetupTimer();
             BackupCreator backupCreator = new();
             backupCreator.CreateBackupIfNecessary();
         }
@@ -145,20 +144,6 @@ namespace PasswordManager.ViewModels
             }
         }
 
-        public void OnActivity(object? sender, EventArgs e)
-        {
-            timer.Stop();
-            timer.Start();
-        }
-
-        public void SetupTimer()
-        {
-            timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(60);
-            timer.Tick += TimerTick;
-            timer.Start();
-        }
-
         public void Refresh()
         {
             GetDatabases();
@@ -169,14 +154,7 @@ namespace PasswordManager.ViewModels
             Categories.Add(rootNode);
             ((IRefreshable)currentChildView).Refresh();            
         }
-
-        private void TimerTick(object sender, EventArgs e)
-        {
-            App.Current.Properties["timeout"] = true;
-            timer.Stop();
-            Application.Current.Shutdown();
-        }
-
+                
         private void ExecuteShowCategoryViewCommand(object obj)
         {
             if (currentChildView is CategoryViewModel)

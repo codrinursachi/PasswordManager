@@ -145,8 +145,7 @@
                         <ComboBox x:Name="dtbSelector"
                                   Style="{StaticResource Windows11ComboBoxStyle}"
                                   ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                  SelectedIndex="{Binding SelectedDb}"
-                                  MouseLeftButtonUp="dtbSelectorMouseLeftButtonDown" />
+                                  SelectedIndex="{Binding SelectedDb}"/>
                         <Button x:Name="btnAddPass"
                                 Style="{StaticResource Windows11ButtonStyle}"
                                 Margin="25,0,25,0"

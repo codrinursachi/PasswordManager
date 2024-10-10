@@ -37,7 +37,7 @@ namespace PasswordManager.CustomControls
         public PasswordDataGrid()
         {
             InitializeComponent();
-            ((PasswordEditorViewModel)pwdEditor.DataContext).AddButtonVisible = false;
+            ((PasswordModelEditorViewModel)pwdEditor.DataContext).AddButtonVisible = false;
         }
 
         public ObservableCollection<PasswordToShowDTO> PasswordList
@@ -74,7 +74,7 @@ namespace PasswordManager.CustomControls
             }
             ((IPasswordSettable)pwdEditor.DataContext).DBPass = ((IPasswordSettable)DataContext).DBPass;
             ((IDatabaseChangeable)pwdEditor.DataContext).Database = ((IDatabaseChangeable)DataContext).Database;
-            ((PasswordEditorViewModel)pwdEditor.DataContext).PasswordModel = selectedItem.ToPasswordModel();
+            ((PasswordModelEditorViewModel)pwdEditor.DataContext).PasswordModel = selectedItem.ToPasswordModel();
         }
 
         private void MenuItemUsername_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

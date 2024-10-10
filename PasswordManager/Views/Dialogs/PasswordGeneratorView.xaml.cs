@@ -1,4 +1,5 @@
-﻿using PasswordManager.ViewModels;
+﻿using PasswordManager.Utilities;
+using PasswordManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,8 @@ namespace PasswordManager.Views
         {
             InitializeComponent();
             ((PasswordGeneratorViewModel)DataContext).CloseAction = Unload;
+            MouseMove += AutoLocker.OnActivity;
+            KeyDown += AutoLocker.OnActivity;
         }
 
         private void Unload()
