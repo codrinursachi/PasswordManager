@@ -23,9 +23,11 @@ namespace PasswordManagerTests.ViewModels
             passwordRepository.Add(password);
             passwordRepository.Add(password2);
             passwordRepository.Add(password3);
-            CategoryViewModel categoryViewModel = new();
-            categoryViewModel.Database = file;
-            categoryViewModel.DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser);
+            CategoryViewModel categoryViewModel = new()
+            {
+                Database = file,
+                DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser)
+            };
             categoryViewModel.Refresh();
             Assert.Equal(3, categoryViewModel.Passwords.Count);
             File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file + ".json"));
@@ -42,9 +44,11 @@ namespace PasswordManagerTests.ViewModels
             passwordRepository.Add(password);
             passwordRepository.Add(password2);
             passwordRepository.Add(password3);
-            CategoryViewModel categoryViewModel = new();
-            categoryViewModel.Database = file;
-            categoryViewModel.DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser);
+            CategoryViewModel categoryViewModel = new()
+            {
+                Database = file,
+                DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser)
+            };
             var root = new CategoryNodeModel { Name = "Categories" };
             var parts = "admin\\2".Split('\\');
             var current = root;
