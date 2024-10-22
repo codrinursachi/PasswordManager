@@ -25,9 +25,6 @@
         <DataTemplate DataType="{x:Type viewModel:FavoritesViewModel}">
             <local:FavoritesView />
         </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:TagsViewModel}">
-            <local:TagsView />
-        </DataTemplate>
         <DataTemplate DataType="{x:Type viewModel:CategoryViewModel}">
             <local:CategoryView />
         </DataTemplate>
@@ -86,11 +83,6 @@
                     <RadioButton Style="{StaticResource menuButton}"
                                  Command="{Binding ShowFavoritesViewCommand}">
                         <TextBlock Text="Favorites"
-                                   Style="{StaticResource menuButtonText}" />
-                    </RadioButton>
-                    <RadioButton Style="{StaticResource menuButton}"
-                                 Command="{Binding ShowLabelsViewCommand}">
-                        <TextBlock Text="Tags"
                                    Style="{StaticResource menuButtonText}" />
                     </RadioButton>
                     <RadioButton x:Name="categoryRadio"

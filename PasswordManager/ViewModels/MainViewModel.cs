@@ -32,7 +32,6 @@ namespace PasswordManager.ViewModels
         {
             ShowAllPasswordsViewCommand = new ViewModelCommand(ExecuteShowAllPasswordsViewCommand);
             ShowFavoritesViewCommand = new ViewModelCommand(ExecuteShowFavoritesViewCommand);
-            ShowLabelsViewCommand = new ViewModelCommand(ExecuteShowLabelsViewCommand);
             ShowCategoryViewCommand = new ViewModelCommand(ExecuteShowCategoryViewCommand);
             ShowPasswordCreationViewCommand = new ViewModelCommand(ExecuteShowPasswordCreationViewCommand);
             ShowPasswordFilePickerDialogueViewCommand = new ViewModelCommand(ExecuteShowPasswordFilePickerDialogueViewCommand);
@@ -44,7 +43,6 @@ namespace PasswordManager.ViewModels
 
         public ICommand ShowAllPasswordsViewCommand { get; }
         public ICommand ShowFavoritesViewCommand { get; }
-        public ICommand ShowLabelsViewCommand { get; }
         public ICommand ShowCategoryViewCommand { get; }
         public ICommand ShowPasswordCreationViewCommand { get; }
         public ICommand ShowPasswordFilePickerDialogueViewCommand { get; }
@@ -163,12 +161,6 @@ namespace PasswordManager.ViewModels
             }
             CurrentChildView = new CategoryViewModel();
             Caption = "Categories";
-        }
-
-        private void ExecuteShowLabelsViewCommand(object obj)
-        {
-            CurrentChildView = new TagsViewModel();
-            Caption = "Tags";
         }
 
         private void ExecuteShowFavoritesViewCommand(object obj)
