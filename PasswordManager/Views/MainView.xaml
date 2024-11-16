@@ -10,9 +10,6 @@
         Title="MainWindow"
         Height="740"
         Width="1700"
-        WindowStyle="None"
-        Background="Transparent"
-        AllowsTransparency="True"
         WindowStartupLocation="CenterScreen">
     <Window.DataContext>
         <viewModel:MainViewModel />
@@ -29,10 +26,7 @@
             <local:CategoryView />
         </DataTemplate>
     </Window.Resources>
-    <Border CornerRadius="10"
-            Background="{StaticResource BackgroundBrush}"
-            BorderThickness="0.5"
-            BorderBrush="Black">
+    
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="250" />
@@ -68,7 +62,6 @@
                             </Border>
                         </Border>
                         <TextBlock Text="Password Manager"
-                                   Foreground="{DynamicResource TextBrush}"
                                    FontSize="20"
                                    FontWeight="Medium"
                                    VerticalAlignment="Center"
@@ -77,13 +70,13 @@
                     <RadioButton Style="{StaticResource menuButton}"
                                  Command="{Binding ShowAllPasswordsViewCommand}"
                                  IsChecked="True">
-                        <TextBlock Text="All Passwords"
-                                   Style="{StaticResource menuButtonText}" />
+                        <TextBlock Text="All Passwords" 
+                                   Margin="20,0,0,0"/>
                     </RadioButton>
                     <RadioButton Style="{StaticResource menuButton}"
                                  Command="{Binding ShowFavoritesViewCommand}">
-                        <TextBlock Text="Favorites"
-                                   Style="{StaticResource menuButtonText}" />
+                        <TextBlock Text="Favorites" 
+                                   Margin="20,0,0,0"/>
                     </RadioButton>
                     <RadioButton x:Name="categoryRadio"
                                  Style="{StaticResource menuButton}"
@@ -101,10 +94,8 @@
                             <TreeView.ItemTemplate>
                                 <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                     <TextBlock x:Name="categoryItem"
-                                               Style="{StaticResource menuButtonText}"
                                                Margin="0"
-                                               Text="{Binding Name}"
-                                               Foreground="{StaticResource TextBrush}"/>
+                                               Text="{Binding Name}"/>
                                 </HierarchicalDataTemplate>
                             </TreeView.ItemTemplate>
                         </TreeView>
@@ -114,37 +105,30 @@
             <Border CornerRadius="0,10,10,0"
                     Grid.Column="1">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25" />
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="40" />
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <customcontrols:PanelControlBar MaximizeVisible="True"
-                                                    IsMainWindow="True" />
-                    <TextBlock Text="{Binding Caption}"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition Height="40" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="{Binding Caption}"
                                Margin="25,0,0,0"
-                               Grid.Row="2"
-                               Foreground="{StaticResource TextBrush}"
+                               Grid.Row="1"
                                FontSize="24"
                                FontWeight="Medium"
                                VerticalAlignment="Center"
                                HorizontalAlignment="Left" />
-                    <StackPanel Grid.Row="2"
+                    <StackPanel Grid.Row="1"
                                 Orientation="Horizontal"
                                 HorizontalAlignment="Right"
                                 VerticalAlignment="Center">
                         <ComboBox x:Name="dtbSelector"
-                                  Style="{StaticResource Windows11ComboBoxStyle}"
                                   ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                                   SelectedIndex="{Binding SelectedDb}"/>
                         <Button x:Name="btnAddPass"
-                                Style="{StaticResource Windows11ButtonStyle}"
                                 Margin="25,0,25,0"
                                 Command="{Binding ShowPasswordCreationViewCommand}"
                                 Content="+ Add Password" />
                         <Button x:Name="btnImportPass"
-                                Style="{StaticResource Windows11ButtonStyle}"
                                 Margin="0,0,25,0"
                                 Command="{Binding ShowPasswordFilePickerDialogueViewCommand}"
                                 Content="Import passwords" />
@@ -162,5 +146,4 @@
                     Visibility="{Binding OverlayVisibility, Converter={StaticResource BooleanToVisibility}}"
                     CornerRadius="10" />
         </Grid>
-    </Border>
 </Window>

@@ -28,7 +28,6 @@ namespace PasswordManager.ViewModels
 
         private void ExecuteAcceptPasswordCommand(object obj)
         {
-            Clipboard.SetDataObject(GeneratedPassword);
             CloseAction.Invoke();
         }
 
@@ -48,6 +47,7 @@ namespace PasswordManager.ViewModels
 
             Random.Shared.Shuffle(GeneratedPassword);
             var textbox = (TextBox)obj;
+            textbox.Clear();
             foreach (char c in GeneratedPassword)
             {
                 textbox.Text += c;
