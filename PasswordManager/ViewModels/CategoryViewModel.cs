@@ -15,7 +15,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    public partial class CategoryViewModel : ObservableObject, IRefreshable, IDatabaseChangeable, IPasswordSettable
+    public partial class CategoryViewModel : ViewModel, IRefreshable, IDatabaseChangeable, IPasswordSettable
     {
         [ObservableProperty]
         private CategoryNodeModel filter;

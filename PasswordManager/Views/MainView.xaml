@@ -130,7 +130,7 @@
                             Content="Import passwords" />
                 </StackPanel>
                 <ContentControl x:Name="childView"
-                                Content="{Binding CurrentChildView}"
+                                Content="{Binding Navigation.CurrentView}"
                                 Grid.Row="3"
                                 Margin="25" />
             </Grid>

@@ -12,9 +12,6 @@
         Width="600"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
-    <Window.DataContext>
-        <viewModel:LoginViewModel />
-    </Window.DataContext>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
     </Window.Resources>

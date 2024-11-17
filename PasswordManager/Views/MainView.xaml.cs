@@ -22,10 +22,9 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class MainView : Window
     {
-        public MainView(byte[] DBPass)
+        public MainView()
         {
             InitializeComponent();
-            DataContext = new MainViewModel(DBPass);
             MouseMove += AutoLocker.OnActivity;
             KeyDown += AutoLocker.OnActivity;
         }

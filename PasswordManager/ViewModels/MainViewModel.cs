@@ -39,9 +39,12 @@ namespace PasswordManager.ViewModels
         private List<string> databases = [];
         [ObservableProperty]
         private List<CategoryNodeModel> categories;
-        public MainViewModel(byte[] DBPass)
+        [ObservableProperty]
+        private INavigationService navigation;
+        public MainViewModel(byte[] dBPass, INavigationService navService)
         {
-            this.DBPass = DBPass;
+            Navigation=navService;
+            DBPass = dBPass;
             GetDatabases();
             AutoLocker.SetupTimer();
             BackupCreator backupCreator = new();
@@ -51,11 +54,11 @@ namespace PasswordManager.ViewModels
 
         public Brush RandomBrush { get => new SolidColorBrush(Color.FromRgb((byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240))); }
         
-        partial void OnCurrentChildViewChanged(ObservableObject value)
+        void NavigationExecuted()
         {
-            ((IPasswordSettable)value).DBPass = DBPass;
-            ((IDatabaseChangeable)value).Database = Databases[SelectedDb];
-            ((IRefreshable)value).Refresh();
+            ((IPasswordSettable)Navigation.CurrentView).DBPass = DBPass;
+            ((IDatabaseChangeable)Navigation.CurrentView).Database = Databases[SelectedDb];
+            ((IRefreshable)Navigation.CurrentView).Refresh();
             Refresh();
         }
 
@@ -67,10 +70,10 @@ namespace PasswordManager.ViewModels
 
         public CategoryNodeModel Filter
         {
-            get => ((CategoryViewModel)CurrentChildView).Filter;
+            get => ((CategoryViewModel)Navigation.CurrentView).Filter;
             set
             {
-                if (currentChildView is CategoryViewModel child)
+                if (Navigation.CurrentView is CategoryViewModel child)
                 {
                     child.Filter = value;
                 }
@@ -104,32 +107,35 @@ namespace PasswordManager.ViewModels
             PasswordRepository passwordRepository = new(Databases[SelectedDb], DBPass);
             var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories=[rootNode];
-            ((IRefreshable)currentChildView).Refresh();            
+            ((IRefreshable)Navigation.CurrentView).Refresh();            
         }
 
         [RelayCommand]
         private void ShowCategoryView(object obj)
         {
-            if (currentChildView is CategoryViewModel)
+            if (Navigation.CurrentView is CategoryViewModel)
             {
                 return;
             }
-            CurrentChildView = new CategoryViewModel();
+            Navigation.NavigateTo<CategoryViewModel>();
             Caption = "Categories";
+            NavigationExecuted();
         }
 
         [RelayCommand]
         private void ShowFavoritesView(object obj)
         {
-            CurrentChildView = new FavoritesViewModel();
+            Navigation.NavigateTo<FavoritesViewModel>();
             Caption = "Favorites";
+            NavigationExecuted();
         }
 
         [RelayCommand]
         private void ShowAllPasswordsView(object obj)
         {
-            CurrentChildView = new AllPasswordsViewModel();
+            Navigation.NavigateTo<AllPasswordsViewModel>();
             Caption = "All Passwords";
+            NavigationExecuted();
         }
 
         [RelayCommand]
