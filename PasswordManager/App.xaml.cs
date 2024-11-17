@@ -24,8 +24,7 @@ namespace PasswordManager
             {
                 if (loginView.IsVisible == false && loginView.IsLoaded && (((IPasswordSettable)loginView.DataContext).DBPass != null))
                 {
-                    var mainView = new MainView();
-                    ((IPasswordSettable)mainView.DataContext).DBPass = ((IPasswordSettable)loginView.DataContext).DBPass;
+                    var mainView = new MainView(((IPasswordSettable)loginView.DataContext).DBPass);
                     mainView.Show();
                     loginView.Close();
                 }

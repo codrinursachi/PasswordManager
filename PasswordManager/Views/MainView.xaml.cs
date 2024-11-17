@@ -1,4 +1,5 @@
-﻿using PasswordManager.Models;
+﻿using PasswordManager.Interfaces;
+using PasswordManager.Models;
 using PasswordManager.Utilities;
 using PasswordManager.ViewModels;
 using System.Runtime.InteropServices;
@@ -21,13 +22,13 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class MainView : Window
     {
-        public MainView()
+        public MainView(byte[] DBPass)
         {
             InitializeComponent();
+            DataContext = new MainViewModel(DBPass);
             MouseMove += AutoLocker.OnActivity;
             KeyDown += AutoLocker.OnActivity;
         }
-
         private void CategoriesSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var viewModel = (MainViewModel)DataContext;

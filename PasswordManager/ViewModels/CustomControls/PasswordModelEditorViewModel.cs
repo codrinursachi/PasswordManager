@@ -194,7 +194,7 @@ namespace PasswordManager.ViewModels.CustomControls
         }
 
         [RelayCommand]
-        private void ShowPasswordGenerator(object obj)
+        private void ShowPasswordGenerator()
         {
             PasswordGeneratorView PasswordGen = new();
             OverlayVisibility = true;

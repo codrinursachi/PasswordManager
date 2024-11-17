@@ -11,9 +11,6 @@
         Height="740"
         Width="1700"
         WindowStartupLocation="CenterScreen">
-    <Window.DataContext>
-        <viewModel:MainViewModel />
-    </Window.DataContext>
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <DataTemplate DataType="{x:Type viewModel:AllPasswordsViewModel}">
@@ -26,123 +23,123 @@
             <local:CategoryView />
         </DataTemplate>
     </Window.Resources>
-    
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="250" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Border CornerRadius="10,0,0,10"
-                    Grid.Column="0">
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal"
-                                Height="35"
-                                Margin="15,25,0,40">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Border CornerRadius="10,0,0,10"
+                Grid.Column="0">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            Height="35"
+                            Margin="15,25,0,40">
+                    <Border CornerRadius="15"
+                            Height="30"
+                            Width="30">
+                        <Border.Background>
+                            <LinearGradientBrush StartPoint="0,0"
+                                                 EndPoint="1,1">
+                                <GradientStop Color="{StaticResource winBorderColor1}"
+                                              Offset="0" />
+                                <GradientStop Color="{StaticResource winBorderColor2}"
+                                              Offset="0.75" />
+                                <GradientStop Color="{StaticResource winBorderColor3}"
+                                              Offset="1" />
+                            </LinearGradientBrush>
+                        </Border.Background>
                         <Border CornerRadius="15"
                                 Height="30"
                                 Width="30">
                             <Border.Background>
-                                <LinearGradientBrush StartPoint="0,0"
-                                                     EndPoint="1,1">
-                                    <GradientStop Color="{StaticResource winBorderColor1}"
-                                                  Offset="0" />
-                                    <GradientStop Color="{StaticResource winBorderColor2}"
-                                                  Offset="0.75" />
-                                    <GradientStop Color="{StaticResource winBorderColor3}"
-                                                  Offset="1" />
-                                </LinearGradientBrush>
+                                <ImageBrush ImageSource="/Images/Logo.png"
+                                            Opacity="0.2" />
                             </Border.Background>
-                            <Border CornerRadius="15"
-                                    Height="30"
-                                    Width="30">
-                                <Border.Background>
-                                    <ImageBrush ImageSource="/Images/Logo.png"
-                                                Opacity="0.2" />
-                                </Border.Background>
-                            </Border>
                         </Border>
-                        <TextBlock Text="Password Manager"
-                                   FontSize="20"
-                                   FontWeight="Medium"
-                                   VerticalAlignment="Center"
-                                   Margin="10,0,0,0" />
-                    </StackPanel>
-                    <RadioButton Style="{StaticResource menuButton}"
-                                 Command="{Binding ShowAllPasswordsViewCommand}">
-                        <TextBlock Text="All Passwords" 
-                                   Margin="20,0,0,0"/>
-                    </RadioButton>
-                    <RadioButton Style="{StaticResource menuButton}"
-                                 Command="{Binding ShowFavoritesViewCommand}">
-                        <TextBlock Text="Favorites" 
-                                   Margin="20,0,0,0"/>
-                    </RadioButton>
-                    <RadioButton x:Name="categoryRadio"
-                                 Style="{StaticResource menuButton}"
-                                 Command="{Binding ShowCategoryViewCommand}"
-                                 MinHeight="35"
-                                 Height="auto">
-                        <TreeView x:Name="Categories"
-                                  ItemsSource="{Binding Categories}"
-                                  Height="auto"
-                                  Width="auto"
-                                  SelectedItemChanged="CategoriesSelectedItemChanged"
-                                  Background="Transparent"
-                                  BorderThickness="0"
-                                  PreviewMouseLeftButtonDown="Categories_PreviewMouseLeftButtonDown">
-                            <TreeView.ItemTemplate>
-                                <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                    <TextBlock x:Name="categoryItem"
-                                               Margin="0"
-                                               Text="{Binding Name}"/>
-                                </HierarchicalDataTemplate>
-                            </TreeView.ItemTemplate>
-                        </TreeView>
-                    </RadioButton>
+                    </Border>
+                    <TextBlock Text="Password Manager"
+                               FontSize="20"
+                               FontWeight="Medium"
+                               VerticalAlignment="Center"
+                               Margin="10,0,0,0" />
                 </StackPanel>
-            </Border>
-            <Border CornerRadius="0,10,10,0"
-                    Grid.Column="1">
-                <Grid>
+                <RadioButton Style="{StaticResource menuButton}"
+                             Command="{Binding ShowAllPasswordsViewCommand}"
+                             IsChecked="True">
+                    <TextBlock Text="All Passwords"
+                               Margin="20,0,0,0" />
+                </RadioButton>
+                <RadioButton Style="{StaticResource menuButton}"
+                             Command="{Binding ShowFavoritesViewCommand}">
+                    <TextBlock Text="Favorites"
+                               Margin="20,0,0,0" />
+                </RadioButton>
+                <RadioButton x:Name="categoryRadio"
+                             Style="{StaticResource menuButton}"
+                             Command="{Binding ShowCategoryViewCommand}"
+                             MinHeight="35"
+                             Height="auto"
+                             PreviewMouseLeftButtonDown="Categories_PreviewMouseLeftButtonDown">
+                    <TreeView x:Name="Categories"
+                              ItemsSource="{Binding Categories}"
+                              Height="auto"
+                              Width="auto"
+                              SelectedItemChanged="CategoriesSelectedItemChanged"
+                              Background="Transparent"
+                              BorderThickness="0">
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                <TextBlock x:Name="categoryItem"
+                                           Margin="0"
+                                           Text="{Binding Name}" />
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </RadioButton>
+            </StackPanel>
+        </Border>
+        <Border CornerRadius="0,10,10,0"
+                Grid.Column="1">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30" />
                     <RowDefinition Height="40" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <TextBlock Text="{Binding Caption}"
-                               Margin="25,0,0,0"
-                               Grid.Row="1"
-                               FontSize="24"
-                               FontWeight="Medium"
-                               VerticalAlignment="Center"
-                               HorizontalAlignment="Left" />
-                    <StackPanel Grid.Row="1"
-                                Orientation="Horizontal"
-                                HorizontalAlignment="Right"
-                                VerticalAlignment="Center">
-                        <ComboBox x:Name="dtbSelector"
-                                  ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                                  SelectedIndex="{Binding SelectedDb}"/>
-                        <Button x:Name="btnAddPass"
-                                Margin="25,0,25,0"
-                                Command="{Binding ShowPasswordCreationViewCommand}"
-                                Content="+ Add Password" />
-                        <Button x:Name="btnImportPass"
-                                Margin="0,0,25,0"
-                                Command="{Binding ShowPasswordFilePickerDialogueViewCommand}"
-                                Content="Import passwords" />
-                    </StackPanel>
-                    <ContentControl x:Name="childView"
-                                    Content="{Binding CurrentChildView}"
-                                    Grid.Row="3"
-                                    Margin="25" />
-                </Grid>
-            </Border>
-            <Border x:Name="Overlay"
-                    Background="Black"
-                    Opacity="0.5"
-                    Grid.ColumnSpan="2"
-                    Visibility="{Binding OverlayVisibility, Converter={StaticResource BooleanToVisibility}}"
-                    CornerRadius="10" />
-        </Grid>
+                           Margin="25,0,0,0"
+                           Grid.Row="1"
+                           FontSize="24"
+                           FontWeight="Medium"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Left" />
+                <StackPanel Grid.Row="1"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center">
+                    <ComboBox x:Name="dtbSelector"
+                              ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              SelectedIndex="{Binding SelectedDb}" />
+                    <Button x:Name="btnAddPass"
+                            Margin="25,0,25,0"
+                            Command="{Binding ShowPasswordCreationViewCommand}"
+                            Content="+ Add Password" />
+                    <Button x:Name="btnImportPass"
+                            Margin="0,0,25,0"
+                            Command="{Binding ShowPasswordFilePickerDialogueViewCommand}"
+                            Content="Import passwords" />
+                </StackPanel>
+                <ContentControl x:Name="childView"
+                                Content="{Binding CurrentChildView}"
+                                Grid.Row="3"
+                                Margin="25" />
+            </Grid>
+        </Border>
+        <Border x:Name="Overlay"
+                Background="Black"
+                Opacity="0.5"
+                Grid.ColumnSpan="2"
+                Visibility="{Binding OverlayVisibility, Converter={StaticResource BooleanToVisibility}}"
+                CornerRadius="10" />
+    </Grid>
 </Window>

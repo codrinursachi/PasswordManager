@@ -39,12 +39,14 @@ namespace PasswordManager.ViewModels
         private List<string> databases = [];
         [ObservableProperty]
         private List<CategoryNodeModel> categories;
-        public MainViewModel()
+        public MainViewModel(byte[] DBPass)
         {
+            this.DBPass = DBPass;
             GetDatabases();
             AutoLocker.SetupTimer();
             BackupCreator backupCreator = new();
             backupCreator.CreateBackupIfNecessary();
+            ShowAllPasswordsViewCommand.Execute(null);
         }
 
         public Brush RandomBrush { get => new SolidColorBrush(Color.FromRgb((byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240))); }
