@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
@@ -18,13 +20,17 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
 {
-    class LoginViewModel : ViewModelBase, IPasswordSettable, IPasswordPair
+    partial class LoginViewModel : ObservableValidator, IPasswordSettable, IPasswordPair
     {
-        public ICommand LoginCommand { get; }
+        [ObservableProperty]
         private string errorMessage;
-        private bool isViewVisible = true;
         private UserRepository userRepository;
+        [ObservableProperty]
+        private bool isViewVisible = true;
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(LoginUserCommand))]
         private string password;
+        [ObservableProperty]
         private string buttonText;
 
         public LoginViewModel()
@@ -39,51 +45,12 @@ namespace PasswordManager.ViewModels
                 ButtonText = "Log in";
             }
             userRepository = new UserRepository("UserLogin.json");
-            LoginCommand = new ViewModelCommand(ExecuteLoginCommand, CanExecuteOperationCommand);
-        }
-
-        public string ErrorMessage
-        {
-            get => errorMessage;
-            set
-            {
-                errorMessage = value;
-                OnPropertyChanged(nameof(ErrorMessage));
-            }
-        }
-        public bool IsViewVisible
-        {
-            get => isViewVisible;
-            set
-            {
-                isViewVisible = value;
-                OnPropertyChanged(nameof(IsViewVisible));
-            }
         }
 
         public byte[] DBPass { get; set; }
         public char[] PasswordAsCharArray { get; set; } = [];
-        public string Password
-        {
-            get => password;
-            set
-            {
-                password = value;
-                OnPropertyChanged(nameof(Password));
-            }
-        }
-
-        public string ButtonText
-        {
-            get => buttonText;
-            set
-            {
-                buttonText = value;
-                OnPropertyChanged(nameof(ButtonText));
-            }
-        }
-
-        private bool CanExecuteOperationCommand(object obj)
+       
+        private bool CanLogin()
         {
             bool validData;
             if (PasswordAsCharArray.Length < 3)
@@ -98,7 +65,8 @@ namespace PasswordManager.ViewModels
             return validData;
         }
 
-        private void ExecuteLoginCommand(object obj)
+        [RelayCommand(CanExecute = nameof(CanLogin))]
+        private void LoginUser()
         {
             var isValidUser = userRepository.AuthenticateUser(PasswordAsCharArray);
             if (isValidUser)
