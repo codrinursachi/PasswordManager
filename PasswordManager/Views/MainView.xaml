@@ -68,8 +68,7 @@
                                    Margin="10,0,0,0" />
                     </StackPanel>
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Command="{Binding ShowAllPasswordsViewCommand}"
-                                 IsChecked="True">
+                                 Command="{Binding ShowAllPasswordsViewCommand}">
                         <TextBlock Text="All Passwords" 
                                    Margin="20,0,0,0"/>
                     </RadioButton>

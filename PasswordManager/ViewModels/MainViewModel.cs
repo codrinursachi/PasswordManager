@@ -1,4 +1,6 @@
-﻿using Microsoft.Win32;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Win32;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
@@ -21,92 +23,44 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    class MainViewModel : ViewModelBase, IPasswordSettable, IRefreshable
+    partial class MainViewModel : ObservableObject, IPasswordSettable, IRefreshable
     {
-        private ViewModelBase currentChildView;
+        [ObservableProperty]
+        private ObservableObject currentChildView;
+        [ObservableProperty]
         private string caption;
+        [ObservableProperty]
         private int selectedDb = 0;
+        [ObservableProperty]
         private byte[] dBPass;
+        [ObservableProperty]
         private bool overlayVisibility;
+        [ObservableProperty]
+        private List<string> databases = [];
+        [ObservableProperty]
+        private List<CategoryNodeModel> categories;
         public MainViewModel()
         {
-            ShowAllPasswordsViewCommand = new ViewModelCommand(ExecuteShowAllPasswordsViewCommand);
-            ShowFavoritesViewCommand = new ViewModelCommand(ExecuteShowFavoritesViewCommand);
-            ShowCategoryViewCommand = new ViewModelCommand(ExecuteShowCategoryViewCommand);
-            ShowPasswordCreationViewCommand = new ViewModelCommand(ExecuteShowPasswordCreationViewCommand);
-            ShowPasswordFilePickerDialogueViewCommand = new ViewModelCommand(ExecuteShowPasswordFilePickerDialogueViewCommand);
             GetDatabases();
             AutoLocker.SetupTimer();
             BackupCreator backupCreator = new();
             backupCreator.CreateBackupIfNecessary();
         }
 
-        public ICommand ShowAllPasswordsViewCommand { get; }
-        public ICommand ShowFavoritesViewCommand { get; }
-        public ICommand ShowCategoryViewCommand { get; }
-        public ICommand ShowPasswordCreationViewCommand { get; }
-        public ICommand ShowPasswordFilePickerDialogueViewCommand { get; }
         public Brush RandomBrush { get => new SolidColorBrush(Color.FromRgb((byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240))); }
-        public string Caption
+        
+        partial void OnCurrentChildViewChanged(ObservableObject value)
         {
-            get => caption;
-            set
-            {
-                caption = value;
-                OnPropertyChanged(nameof(Caption));
-            }
-        }
-        public ViewModelBase CurrentChildView
-        {
-            get => currentChildView;
-            set
-            {
-                currentChildView = value;
-                OnPropertyChanged(nameof(CurrentChildView));
-                ((IPasswordSettable)CurrentChildView).DBPass = DBPass;
-                ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb];
-                ((IRefreshable)CurrentChildView).Refresh();
-                Refresh();
-            }
-        }
-        public ObservableCollection<string> Databases { get; set; } = [];
-
-        public int SelectedDb
-        {
-            get => selectedDb;
-            set
-            {
-                selectedDb = value;
-                OnPropertyChanged(nameof(SelectedDb));
-                if (selectedDb >= 0)
-                {
-                    ((IDatabaseChangeable)CurrentChildView).Database = Databases[selectedDb];
-                    ((IRefreshable)CurrentChildView).Refresh();
-                }
-            }
+            ((IPasswordSettable)value).DBPass = DBPass;
+            ((IDatabaseChangeable)value).Database = Databases[SelectedDb];
+            ((IRefreshable)value).Refresh();
+            Refresh();
         }
 
-        public bool OverlayVisibility
+        partial void OnSelectedDbChanged(int value)
         {
-            get => overlayVisibility;
-            set
-            {
-                overlayVisibility = value;
-                OnPropertyChanged(nameof(OverlayVisibility));
-            }
-        }
-
-        public byte[] DBPass
-        {
-            get
-            {
-                return dBPass;
-            }
-            set
-            {
-                dBPass = value;
-                ExecuteShowAllPasswordsViewCommand(null);
-            }
+            ((IDatabaseChangeable)CurrentChildView).Database = Databases[value];
+            ((IRefreshable)CurrentChildView).Refresh();
         }
 
         public CategoryNodeModel Filter
@@ -121,8 +75,6 @@ namespace PasswordManager.ViewModels
             }
         }
 
-        public ObservableCollection<CategoryNodeModel> Categories { get; set; } = new();
-
         public void GetDatabases()
         {
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
@@ -130,30 +82,31 @@ namespace PasswordManager.ViewModels
             {
                 Directory.CreateDirectory(path);
             }
-            Databases.Clear();
+            List<string> databases = [];
             foreach (var db in Directory.GetFiles(path))
             {
-                Databases.Add(db[(path + "\\").Length..^".json".Length]);
+                databases.Add(db[(path + "\\").Length..^".json".Length]);
             }
-            if (Databases.Count == 0)
+            if (databases.Count == 0)
             {
                 File.Create(Path.Combine(path, "default.json")).Close();
-                Databases.Add("default");
+                databases.Add("default");
             }
+
+            Databases = databases;
         }
 
         public void Refresh()
         {
             GetDatabases();
-            SelectedDb = 0;
             PasswordRepository passwordRepository = new(Databases[SelectedDb], DBPass);
-            Categories.Clear();
             var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
-            Categories.Add(rootNode);
+            Categories=[rootNode];
             ((IRefreshable)currentChildView).Refresh();            
         }
-                
-        private void ExecuteShowCategoryViewCommand(object obj)
+
+        [RelayCommand]
+        private void ShowCategoryView(object obj)
         {
             if (currentChildView is CategoryViewModel)
             {
@@ -163,19 +116,22 @@ namespace PasswordManager.ViewModels
             Caption = "Categories";
         }
 
-        private void ExecuteShowFavoritesViewCommand(object obj)
+        [RelayCommand]
+        private void ShowFavoritesView(object obj)
         {
             CurrentChildView = new FavoritesViewModel();
             Caption = "Favorites";
         }
 
-        private void ExecuteShowAllPasswordsViewCommand(object obj)
+        [RelayCommand]
+        private void ShowAllPasswordsView(object obj)
         {
             CurrentChildView = new AllPasswordsViewModel();
             Caption = "All Passwords";
         }
 
-        private void ExecuteShowPasswordCreationViewCommand(object obj)
+        [RelayCommand]
+        private void ShowPasswordCreationView(object obj)
         {
             OverlayVisibility = true;
             PasswordCreationView passwordCreationView = new();
@@ -184,11 +140,11 @@ namespace PasswordManager.ViewModels
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
             GetDatabases();
-            SelectedDb = 0;
             Refresh();
         }
 
-        private void ExecuteShowPasswordFilePickerDialogueViewCommand(object obj)
+        [RelayCommand]
+        private void ShowPasswordFilePickerDialogueView(object obj)
         {
             OverlayVisibility = true;
             OpenFileDialog openFileDialog = new();

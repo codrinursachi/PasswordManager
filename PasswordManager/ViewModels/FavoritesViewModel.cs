@@ -1,4 +1,5 @@
-﻿using PasswordManager.DTO;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using PasswordManager.DTO;
 using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
@@ -14,7 +15,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    public class FavoritesViewModel : ViewModelBase, IRefreshable, IDatabaseChangeable, IPasswordSettable
+    public class FavoritesViewModel : ObservableObject, IRefreshable, IDatabaseChangeable, IPasswordSettable
     {
         string searchFilter;
         public FavoritesViewModel()
