@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,29 +11,24 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
 {
-    class PasswordGeneratorViewModel : ViewModelBase
+    partial class PasswordGeneratorViewModel : ObservableObject
     {
         private string alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         private string symbols = "!\\\";#$%&'()*+,-./:;<=>?@[]^`{|}~";
-        public PasswordGeneratorViewModel()
-        {
-            GeneratePasswordCommand = new ViewModelCommand(ExecuteGeneratePasswordCommand);
-            AcceptPasswordCommand = new ViewModelCommand(ExecuteAcceptPasswordCommand);
-        }
         public int AlphaNumCount { get; set; } = 5;
         public int SymbolsCount { get; set; } = 5;
         public Action CloseAction { get; set; }
 
         public char[] GeneratedPassword { get; set; } = [];
-        public ICommand GeneratePasswordCommand { get; }
-        public ICommand AcceptPasswordCommand { get; }
 
-        private void ExecuteAcceptPasswordCommand(object obj)
+        [RelayCommand]
+        private void AcceptPassword(object obj)
         {
             CloseAction.Invoke();
         }
 
-        private void ExecuteGeneratePasswordCommand(object obj)
+        [RelayCommand]
+        private void GeneratePassword(object obj)
         {
             Array.Fill(GeneratedPassword, '0');
             GeneratedPassword = new char[AlphaNumCount + SymbolsCount];

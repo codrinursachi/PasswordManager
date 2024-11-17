@@ -76,15 +76,5 @@ namespace PasswordManager.CustomControls
             }
             ((PasswordModelEditorViewModel)DataContext).CompletedTags.Remove(Tags.SelectedItem.ToString());
         }
-
-        private void txtCat_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            ((TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender)).Focus();
-        }
-
-        private void ComboBox_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            ((TextBox)((ComboBox)sender).Template.FindName("PART_EditableTextBox", (ComboBox)sender)).Focus();
-        }
     }
 }

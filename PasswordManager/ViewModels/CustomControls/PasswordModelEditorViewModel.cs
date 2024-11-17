@@ -1,4 +1,6 @@
-﻿using PasswordManager.DTO;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using PasswordManager.DTO;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
@@ -16,31 +18,41 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels.CustomControls
 {
-    public class PasswordModelEditorViewModel : ViewModelBase, IDatabaseChangeable, IPasswordSettable, IPasswordPair
+    public partial class PasswordModelEditorViewModel : ObservableObject, IDatabaseChangeable, IPasswordSettable, IPasswordPair
     {
-        List<string> categoryPaths;
-        string tags;
-        string database;
+        public ObservableCollection<string> CategoryPaths { get; set; } = [];
+        [ObservableProperty]
+        private string tags;
+        private string database;
+        [ObservableProperty]
         private bool overlayVisibility;
         private PasswordRepository passwordRepository;
+        [ObservableProperty]
         private string username;
+        [ObservableProperty]
         private string password;
+        [ObservableProperty]
         private string url;
+        [ObservableProperty]
         private DateTime expirationDate = DateTime.Today;
+        [ObservableProperty]
         private string categoryPath;
+        [ObservableProperty]
         private bool favorite;
+        [ObservableProperty]
         private string notes;
         private bool addButtonVisible;
         private bool editButtonVisible;
+        [ObservableProperty] 
         private string urlErrorMessage;
+        [ObservableProperty]
         private string usernameErrorMessage;
+        [ObservableProperty]
         private string passwordErrorMessage;
         private PasswordModel passwordModel;
 
         public PasswordModelEditorViewModel()
         {
-            CategoryPaths = [];
-            ShowPasswordGeneratorViewCommand = new ViewModelCommand(ExecuteShowPasswordGeneratorCommand);
             DatabaseItems = [];
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
             foreach (var db in Directory.GetFiles(path))
@@ -48,13 +60,9 @@ namespace PasswordManager.ViewModels.CustomControls
                 DatabaseItems.Add(db[(path + "\\").Length..^".json".Length]);
             }
 
-            AddPasswordCommand = new ViewModelCommand(ExecuteAddPasswordCommand);
-            EditPasswordCommand = new ViewModelCommand(ExecuteEditPasswordCommand);
             AddButtonVisible = true;
         }
-        public ICommand AddPasswordCommand { get; }
-        public ICommand EditPasswordCommand { get; }
-        public ICommand ShowPasswordGeneratorViewCommand { get; }
+
         public bool AddButtonVisible
         {
             get => addButtonVisible;
@@ -78,81 +86,10 @@ namespace PasswordManager.ViewModels.CustomControls
 
         public int Id { get; set; }
 
-        public string Username
-        {
-            get => username;
-            set
-            {
-                username = value;
-                OnPropertyChanged(nameof(Username));
-            }
-        }
-        public string Password
-        {
-            get => password;
-            set
-            {
-                password = value;
-                OnPropertyChanged(nameof(Password));
-            }
-        }
-
         public char[] PasswordAsCharArray { get; set; } = [];
-        public string Url
-        {
-            get => url;
-            set
-            {
-                url = value;
-                OnPropertyChanged(nameof(Url));
-            }
-        }
-        public DateTime ExpirationDate
-        {
-            get => expirationDate;
-            set
-            {
-                expirationDate = value;
-                OnPropertyChanged(nameof(ExpirationDate));
-            }
-        }
-        public string CategoryPath
-        {
-            get => categoryPath;
-            set
-            {
-                categoryPath = value;
-                OnPropertyChanged(nameof(CategoryPath));
-            }
-        }
 
-        public List<string> CategoryPaths
-        {
-            get => categoryPaths;
-            set
-            {
-                categoryPaths = value;
-                OnPropertyChanged(nameof(CategoryPaths));
-            }
-        }
         public ObservableCollection<string> CompletedTags { get; set; } = [];
-        public string Tags
-        {
-            get => tags;
-            set
-            {
-                tags = value;
-                OnPropertyChanged(nameof(Tags));
-            }
-        }
-        public bool Favorite
-        {
-            get => favorite; set
-            {
-                favorite = value;
-                OnPropertyChanged(nameof(Favorite));
-            }
-        }
+
         public string InitialDatabase { get; set; }
         public string Database
         {
@@ -165,59 +102,19 @@ namespace PasswordManager.ViewModels.CustomControls
                 if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", value + ".json")))
                 {
                     passwordRepository = new(value, DBPass);
-                    CategoryPaths.AddRange(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null));
+                    foreach(var pass in (passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null)))
+                    {
+                        CategoryPaths.Add(pass);
+                    }
                 }
             }
         }
-        public string Notes
-        {
-            get => notes;
-            set
-            {
-                notes = value;
-                OnPropertyChanged(nameof(Notes));
-            }
-        }
+
         public List<string> DatabaseItems { get; }
         public Action CloseAction { get; set; }
-        public bool OverlayVisibility
-        {
-            get => overlayVisibility;
-            set
-            {
-                overlayVisibility = value;
-                OnPropertyChanged(nameof(OverlayVisibility));
-            }
-        }
 
         public byte[] DBPass { get; set; }
-        public string UrlErrorMessage
-        {
-            get => urlErrorMessage;
-            set
-            {
-                urlErrorMessage = value;
-                OnPropertyChanged(nameof(UrlErrorMessage));
-            }
-        }
-        public string UsernameErrorMessage
-        {
-            get => usernameErrorMessage;
-            set
-            {
-                usernameErrorMessage = value;
-                OnPropertyChanged(nameof(UsernameErrorMessage));
-            }
-        }
-        public string PasswordErrorMessage
-        {
-            get => passwordErrorMessage;
-            set
-            {
-                passwordErrorMessage = value;
-                OnPropertyChanged(nameof(PasswordErrorMessage));
-            }
-        }
+
         public PasswordModel PasswordModel
         {
             get => passwordModel;
@@ -245,7 +142,9 @@ namespace PasswordManager.ViewModels.CustomControls
                 }
             }
         }
-        public void ExecuteAddPasswordCommand(object obj)
+
+        [RelayCommand]
+        public void AddPassword(object obj)
         {
             if (!Validate())
             {
@@ -260,7 +159,8 @@ namespace PasswordManager.ViewModels.CustomControls
             CloseAction?.Invoke();
         }
 
-        public void ExecuteEditPasswordCommand(object obj)
+        [RelayCommand]
+        public void EditPassword(object obj)
         {
             if (PasswordModel == null || !Validate())
             {
@@ -293,7 +193,8 @@ namespace PasswordManager.ViewModels.CustomControls
             return (UrlErrorMessage + UsernameErrorMessage + PasswordErrorMessage).Length == 0;
         }
 
-        private void ExecuteShowPasswordGeneratorCommand(object obj)
+        [RelayCommand]
+        private void ShowPasswordGenerator(object obj)
         {
             PasswordGeneratorView PasswordGen = new();
             OverlayVisibility = true;
