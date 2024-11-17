@@ -15,24 +15,19 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    public class CategoryViewModel : ObservableObject, IRefreshable, IDatabaseChangeable, IPasswordSettable
+    public partial class CategoryViewModel : ObservableObject, IRefreshable, IDatabaseChangeable, IPasswordSettable
     {
+        [ObservableProperty]
         private CategoryNodeModel filter;
 
-        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = new();
-        public CategoryNodeModel Filter
-        {
-            get => filter;
-            set
-            {
-                filter = value;
-                FilterPass();
-            }
-        }
-
+        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = [];
+        
         public string Database { get; set; }
         public byte[] DBPass { get; set; }
-
+        partial void OnFilterChanged(CategoryNodeModel value)
+        {
+            Refresh();
+        }
         public void Refresh()
         {
             FilterPass();
@@ -52,7 +47,7 @@ namespace PasswordManager.ViewModels
             }
 
             string filter = string.Empty;
-            List<string> path = new();
+            List<string> path = [];
             var node = Filter;
             path.Add(node.Name);
             while (node.Parent.Name != "Categories")

@@ -15,22 +15,19 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    public class AllPasswordsViewModel : ObservableObject, IRefreshable, IDatabaseChangeable, IPasswordSettable
+    public partial class AllPasswordsViewModel : ObservableObject, IRefreshable, IDatabaseChangeable, IPasswordSettable
     {
+        [ObservableProperty]
         string searchFilter;
-        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = new();
-        public string SearchFilter
-        {
-            get => searchFilter;
-            set
-            {
-                searchFilter = value;
-                Refresh();
-            }
-        }
-
+        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = [];
+        
         public string Database { get; set; }
         public byte[] DBPass { get; set; }
+
+        partial void OnSearchFilterChanged(string value)
+        {
+            Refresh();
+        }
 
         public void Refresh()
         {
