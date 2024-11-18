@@ -39,7 +39,13 @@ namespace PasswordManager.ViewModels
         private IDatabaseStorageService databaseStorageService;
         private IModalDialogProviderService modalDialogOpenerService;
         private IDatabaseInfoProviderService databaseInfoProviderService;
-        public MainViewModel(IDatabaseInfoProviderService databaseInfoProviderService, INavigationService navService,IModalDialogProviderService modalDialogOpenerService, IDatabaseStorageService databaseStorageService)
+        private IPasswordImporterService passwordImporterService;
+        public MainViewModel(
+            IDatabaseInfoProviderService databaseInfoProviderService, 
+            INavigationService navService,
+            IModalDialogProviderService modalDialogOpenerService, 
+            IDatabaseStorageService databaseStorageService,
+            IPasswordImporterService passwordImporterService)
         {
             this.databaseStorageService = databaseStorageService;
             this.databaseInfoProviderService = databaseInfoProviderService;
@@ -47,6 +53,7 @@ namespace PasswordManager.ViewModels
             this.databaseInfoProviderService.CurrentDatabase = selectedDb;
             Navigation = navService;
             this.modalDialogOpenerService=modalDialogOpenerService;
+            this.passwordImporterService=passwordImporterService;
             AutoLocker.SetupTimer();
             BackupCreator backupCreator = new();
             backupCreator.CreateBackupIfNecessary();
@@ -88,7 +95,7 @@ namespace PasswordManager.ViewModels
         }
 
         [RelayCommand]
-        private void ShowCategoryView(object obj)
+        private void ShowCategoryView()
         {
             if (Navigation.CurrentView is CategoryViewModel)
             {
@@ -100,7 +107,7 @@ namespace PasswordManager.ViewModels
         }
 
         [RelayCommand]
-        private void ShowFavoritesView(object obj)
+        private void ShowFavoritesView()
         {
             Navigation.NavigateTo<FavoritesViewModel>();
             Caption = "Favorites";
@@ -108,7 +115,7 @@ namespace PasswordManager.ViewModels
         }
 
         [RelayCommand]
-        private void ShowAllPasswordsView(object obj)
+        private void ShowAllPasswordsView()
         {
             Navigation.NavigateTo<AllPasswordsViewModel>();
             Caption = "All Passwords";
@@ -116,7 +123,7 @@ namespace PasswordManager.ViewModels
         }
 
         [RelayCommand]
-        private void ShowPasswordCreationView(object obj)
+        private void ShowPasswordCreationView()
         {
             OverlayVisibility = true;
             var passwordCreationView = modalDialogOpenerService.ProvideModal<PasswordCreationView>();
@@ -126,27 +133,10 @@ namespace PasswordManager.ViewModels
         }
 
         [RelayCommand]
-        private void ShowPasswordFilePickerDialogueView(object obj)
+        private void ShowPasswordFilePickerDialogueView()
         {
             OverlayVisibility = true;
-            OpenFileDialog openFileDialog = new();
-            if (openFileDialog.ShowDialog() == true)
-            {
-                string passwords = File.ReadAllText(openFileDialog.FileName);
-                List<PasswordModel> passwordsToImport;
-                if (string.IsNullOrEmpty(passwords))
-                {
-                    return;
-                }
-
-                passwordsToImport = JsonSerializer.Deserialize<List<PasswordModel>>(passwords);
-                PasswordRepository passwordRepository = new(SelectedDb, databaseInfoProviderService.DBPass);
-                foreach (var password in passwordsToImport)
-                {
-                    passwordRepository.Add(password);
-                }
-            }
-
+            passwordImporterService.StartPasswordImport();
             OverlayVisibility = false;
             Refresh();
         }
