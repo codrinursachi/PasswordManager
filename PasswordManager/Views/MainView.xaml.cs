@@ -22,12 +22,20 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class MainView : Window
     {
-        public MainView()
+        INavigationToChildViewService navigationToChildViewService;
+        public MainView(INavigationToChildViewService navigationToChildViewService, IDataContextProviderService dataContextProviderService)
         {
             InitializeComponent();
             MouseMove += AutoLocker.OnActivity;
             KeyDown += AutoLocker.OnActivity;
+            DataContext = dataContextProviderService.ProvideDataContext<MainViewModel>();
+            Binding childBind = new("ChildView")
+            {
+                Source = navigationToChildViewService
+            };
+            childView.SetBinding(ContentProperty, childBind);
         }
+
         private void CategoriesSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             var viewModel = (MainViewModel)DataContext;
@@ -36,7 +44,7 @@ namespace PasswordManager.Views
 
         private void Categories_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (((MainViewModel)DataContext).CurrentChildView is not CategoryViewModel)
+            if (((MainViewModel)DataContext).Navigation.CurrentView is not CategoryViewModel)
             {
                 categoryRadio.IsChecked = true;
                 ((MainViewModel)DataContext).ShowCategoryViewCommand.Execute(null);

@@ -1,16 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using PasswordManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace PasswordManager.Interfaces
 {
-    public interface INavigationService
+    public interface IDataContextProviderService
     {
-        ViewModel CurrentView { get; set; }
-        void NavigateTo<TViewModel>() where TViewModel:ViewModel;
+        ObservableObject ProvideDataContext<TDataContext>() where TDataContext : ObservableObject;
     }
 }

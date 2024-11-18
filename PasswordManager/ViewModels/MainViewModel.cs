@@ -26,8 +26,6 @@ namespace PasswordManager.ViewModels
     partial class MainViewModel : ObservableObject, IPasswordSettable, IRefreshable
     {
         [ObservableProperty]
-        private ObservableObject currentChildView;
-        [ObservableProperty]
         private string caption;
         [ObservableProperty]
         private int selectedDb = 0;
@@ -36,16 +34,18 @@ namespace PasswordManager.ViewModels
         [ObservableProperty]
         private bool overlayVisibility;
         [ObservableProperty]
-        private List<string> databases = [];
-        [ObservableProperty]
         private List<CategoryNodeModel> categories;
         [ObservableProperty]
         private INavigationService navigation;
-        public MainViewModel(byte[] dBPass, INavigationService navService)
+        [ObservableProperty]
+        private IDatabaseStorageService databaseStorageService;
+        private IModalDialogProviderService modalDialogOpenerService;
+        public MainViewModel(byte[] dBPass, INavigationService navService,IModalDialogProviderService modalDialogOpenerService, IDatabaseStorageService databaseStorageService)
         {
-            Navigation=navService;
             DBPass = dBPass;
-            GetDatabases();
+            Navigation = navService;
+            this.modalDialogOpenerService=modalDialogOpenerService;
+            DatabaseStorageService = databaseStorageService;
             AutoLocker.SetupTimer();
             BackupCreator backupCreator = new();
             backupCreator.CreateBackupIfNecessary();
@@ -53,19 +53,19 @@ namespace PasswordManager.ViewModels
         }
 
         public Brush RandomBrush { get => new SolidColorBrush(Color.FromRgb((byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240))); }
-        
+
         void NavigationExecuted()
         {
             ((IPasswordSettable)Navigation.CurrentView).DBPass = DBPass;
-            ((IDatabaseChangeable)Navigation.CurrentView).Database = Databases[SelectedDb];
+            ((IDatabaseChangeable)Navigation.CurrentView).Database = DatabaseStorageService.Databases[SelectedDb];
             ((IRefreshable)Navigation.CurrentView).Refresh();
             Refresh();
         }
 
         partial void OnSelectedDbChanged(int value)
         {
-            ((IDatabaseChangeable)CurrentChildView).Database = Databases[value];
-            ((IRefreshable)CurrentChildView).Refresh();
+            ((IDatabaseChangeable)Navigation.CurrentView).Database = DatabaseStorageService.Databases[value];
+            Refresh();
         }
 
         public CategoryNodeModel Filter
@@ -80,34 +80,13 @@ namespace PasswordManager.ViewModels
             }
         }
 
-        public void GetDatabases()
-        {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            List<string> databases = [];
-            foreach (var db in Directory.GetFiles(path))
-            {
-                databases.Add(db[(path + "\\").Length..^".json".Length]);
-            }
-            if (databases.Count == 0)
-            {
-                File.Create(Path.Combine(path, "default.json")).Close();
-                databases.Add("default");
-            }
-
-            Databases = databases;
-        }
-
         public void Refresh()
         {
-            GetDatabases();
-            PasswordRepository passwordRepository = new(Databases[SelectedDb], DBPass);
+            DatabaseStorageService.Refresh();
+            PasswordRepository passwordRepository = new(DatabaseStorageService.Databases[SelectedDb], DBPass);
             var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
-            Categories=[rootNode];
-            ((IRefreshable)Navigation.CurrentView).Refresh();            
+            Categories = [rootNode];
+            ((IRefreshable)Navigation.CurrentView).Refresh();
         }
 
         [RelayCommand]
@@ -142,12 +121,11 @@ namespace PasswordManager.ViewModels
         private void ShowPasswordCreationView(object obj)
         {
             OverlayVisibility = true;
-            PasswordCreationView passwordCreationView = new();
-            ((IPasswordSettable)passwordCreationView.pwdCreator.DataContext).DBPass = DBPass;
-            ((IDatabaseChangeable)passwordCreationView.pwdCreator.DataContext).Database = Databases[SelectedDb];
+            var passwordCreationView = modalDialogOpenerService.ProvideModal<PasswordCreationView>();
+            ((IPasswordSettable)passwordCreationView.DataContext).DBPass = DBPass;
+            ((IDatabaseChangeable)passwordCreationView.DataContext).Database = DatabaseStorageService.Databases[SelectedDb];
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
-            GetDatabases();
             Refresh();
         }
 
@@ -166,7 +144,7 @@ namespace PasswordManager.ViewModels
                 }
 
                 passwordsToImport = JsonSerializer.Deserialize<List<PasswordModel>>(passwords);
-                PasswordRepository passwordRepository = new(Databases[SelectedDb], dBPass);
+                PasswordRepository passwordRepository = new(DatabaseStorageService.Databases[SelectedDb], dBPass);
                 foreach (var password in passwordsToImport)
                 {
                     passwordRepository.Add(password);
@@ -174,7 +152,7 @@ namespace PasswordManager.ViewModels
             }
 
             OverlayVisibility = false;
-            ((IRefreshable)CurrentChildView).Refresh();
+            Refresh();
         }
 
         private CategoryNodeModel BuildTree(List<string> paths)

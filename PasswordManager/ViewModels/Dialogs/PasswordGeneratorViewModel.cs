@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PasswordManager.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,14 +18,20 @@ namespace PasswordManager.ViewModels
         private string symbols = "!\\\";#$%&'()*+,-./:;<=>?@[]^`{|}~";
         public int AlphaNumCount { get; set; } = 5;
         public int SymbolsCount { get; set; } = 5;
-        public Action CloseAction { get; set; }
 
         public char[] GeneratedPassword { get; set; } = [];
 
         [RelayCommand]
         private void AcceptPassword(object obj)
         {
-            CloseAction.Invoke();
+            foreach(Window window in App.Current.Windows)
+            {
+                if (window is PasswordGeneratorView)
+                {
+                    window.DialogResult = true;
+                    window.Close();
+                }
+            }
         }
 
         [RelayCommand]

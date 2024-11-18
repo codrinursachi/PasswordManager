@@ -10,6 +10,5 @@
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
-    <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
-                                     Grid.Column="2"/>
+    <ContentControl x:Name="pwdDataGrid"/>
 </UserControl>

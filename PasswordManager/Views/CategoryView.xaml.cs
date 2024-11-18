@@ -1,4 +1,6 @@
-﻿using PasswordManager.Models;
+﻿using PasswordManager.CustomControls;
+using PasswordManager.Interfaces;
+using PasswordManager.Models;
 using PasswordManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -22,9 +24,17 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class CategoryView : UserControl
     {
-        public CategoryView()
+        public CategoryView(IUserControlProviderService userControlProviderService, IDataContextProviderService dataContextProviderService)
         {
             InitializeComponent();
+            DataContext = dataContextProviderService.ProvideDataContext<CategoryViewModel>();
+            var dataGrid = userControlProviderService.ProvideUserControl<PasswordDataGrid>();
+            pwdDataGrid.Content = dataGrid;
+            Binding dataGridBinding = new("Passwords")
+            {
+                Source = DataContext
+            };
+            dataGrid.SetBinding(PasswordDataGrid.PasswordListProperty, dataGridBinding);
         }
     }
 }

@@ -1,16 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using PasswordManager.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace PasswordManager.Interfaces
 {
-    public interface INavigationService
+    public interface INavigationToChildViewService
     {
-        ViewModel CurrentView { get; set; }
-        void NavigateTo<TViewModel>() where TViewModel:ViewModel;
+        UserControl ChildView { get; set; }
+        void SetChildView(ObservableObject childView);
     }
 }

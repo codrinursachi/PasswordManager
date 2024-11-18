@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
+using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
 using PasswordManager.Services;
 using PasswordManager.ViewModels;
@@ -8,6 +10,7 @@ using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace PasswordManager
 {
@@ -20,25 +23,41 @@ namespace PasswordManager
         public App()
         {
             IServiceCollection services = new ServiceCollection();
-            services.AddSingleton<LoginView>(serviceProvider => new LoginView()
-            {
-                DataContext=serviceProvider.GetRequiredService<LoginViewModel>()
-            });
-            services.AddSingleton<MainView>(serviceProvider => new MainView()
-            {
-                DataContext = serviceProvider.GetRequiredService<MainViewModel>()
-            });
+            services.AddSingleton<LoginView>();
+            services.AddSingleton<MainView>();
+            services.AddTransient<PasswordCreationView>();
+            services.AddTransient<PasswordGeneratorView>();
+
+            services.AddSingleton<AllPasswordsView>();
+            services.AddSingleton<FavoritesView>();
+            services.AddSingleton<CategoryView>();
+            services.AddTransient<PasswordSearch>();
+            services.AddTransient<PasswordDataGrid>();
+            services.AddTransient<PasswordModelEditor>();
 
             services.AddSingleton<LoginViewModel>();
-            services.AddSingleton<MainViewModel>(serviceProvider => new MainViewModel(((IPasswordSettable)serviceProvider.GetRequiredService<LoginView>().DataContext).DBPass, serviceProvider.GetRequiredService<INavigationService>()));
+            services.AddSingleton<MainViewModel>(serviceProvider => new MainViewModel(
+                ((IPasswordSettable)serviceProvider.GetRequiredService<LoginView>().DataContext).DBPass,
+                serviceProvider.GetRequiredService<INavigationService>(),
+                serviceProvider.GetRequiredService<IModalDialogProviderService>(),
+                serviceProvider.GetRequiredService<IDatabaseStorageService>()));
             services.AddSingleton<AllPasswordsViewModel>();
             services.AddSingleton<CategoryViewModel>();
             services.AddSingleton<FavoritesViewModel>();
             services.AddSingleton<PasswordGeneratorViewModel>();
-            services.AddSingleton<PasswordModelEditorViewModel>();
+            services.AddTransient<PasswordModelEditorViewModel>();
             services.AddSingleton<INavigationService, NavigationService>();
+            services.AddSingleton<INavigationToChildViewService, NavigationToChildViewService>();
+            services.AddSingleton<IModalDialogProviderService, ModalDialogProviderService>();
+            services.AddSingleton<IDatabaseStorageService, DatabaseStorageService>();
+            services.AddSingleton<IUserControlProviderService, UserControlProviderService>();
+            services.AddSingleton<IDataContextProviderService, DataContextProviderService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
+            services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => dataContextType => (ObservableObject)serviceProvider.GetRequiredService(dataContextType));
+            services.AddSingleton<Func<Type, Window>>(serviceProvider => dialogType => (Window)serviceProvider.GetRequiredService(dialogType));
+            services.AddSingleton<Func<Type, UserControl>>(serviceProvider => userControlType => (UserControl)serviceProvider.GetRequiredService(userControlType));
+
 
             serviceProvider = services.BuildServiceProvider();
         }

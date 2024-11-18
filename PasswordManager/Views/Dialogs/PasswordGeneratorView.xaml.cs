@@ -1,4 +1,5 @@
-﻿using PasswordManager.Utilities;
+﻿using PasswordManager.Interfaces;
+using PasswordManager.Utilities;
 using PasswordManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -21,18 +22,12 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class PasswordGeneratorView : Window
     {
-        public PasswordGeneratorView()
+        public PasswordGeneratorView(IDataContextProviderService dataContextProviderService)
         {
             InitializeComponent();
-            ((PasswordGeneratorViewModel)DataContext).CloseAction = Unload;
             MouseMove += AutoLocker.OnActivity;
             KeyDown += AutoLocker.OnActivity;
-        }
-
-        private void Unload()
-        {
-            DialogResult = true;
-            Close();
+            DataContext = dataContextProviderService.ProvideDataContext<PasswordGeneratorViewModel>();
         }
 
         private void alphaNumDec_Click(object sender, RoutedEventArgs e)

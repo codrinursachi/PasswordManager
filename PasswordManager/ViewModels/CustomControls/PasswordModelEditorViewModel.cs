@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PasswordManager.CustomControls;
 using PasswordManager.DTO;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
@@ -50,9 +51,13 @@ namespace PasswordManager.ViewModels.CustomControls
         [ObservableProperty]
         private string passwordErrorMessage;
         private PasswordModel passwordModel;
-
-        public PasswordModelEditorViewModel()
+        [ObservableProperty]
+        IDatabaseStorageService databaseStorageService;
+        IModalDialogProviderService modalDialogProviderService;
+        public PasswordModelEditorViewModel(IDatabaseStorageService databaseStorageService, IModalDialogProviderService modalDialogProviderService)
         {
+            DatabaseStorageService = databaseStorageService;
+            this.modalDialogProviderService = modalDialogProviderService;
             DatabaseItems = [];
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
             foreach (var db in Directory.GetFiles(path))
@@ -156,7 +161,13 @@ namespace PasswordManager.ViewModels.CustomControls
             PasswordRepository passwordRepository = new(Database, DBPass);
             passwordRepository.Add(newPassword);
             Array.Fill(PasswordAsCharArray, '0');
-            CloseAction?.Invoke();
+            foreach (Window window in App.Current.Windows)
+            {
+                if (window is PasswordCreationView)
+                {
+                    window.Close();
+                }
+            }
         }
 
         [RelayCommand]
@@ -196,11 +207,11 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         private void ShowPasswordGenerator()
         {
-            PasswordGeneratorView PasswordGen = new();
+            var passwordGen = modalDialogProviderService.ProvideModal<PasswordGeneratorView>();
             OverlayVisibility = true;
-            if (PasswordGen.ShowDialog() == true)
+            if (passwordGen.ShowDialog() == true)
             {
-                var passGenDataContext = (PasswordGeneratorViewModel)PasswordGen.DataContext;
+                var passGenDataContext = (PasswordGeneratorViewModel)passwordGen.DataContext;
                 Password = string.Concat(Enumerable.Repeat('*', passGenDataContext.GeneratedPassword.Length));
                 PasswordAsCharArray = passGenDataContext.GeneratedPassword;
             }

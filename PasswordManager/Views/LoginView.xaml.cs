@@ -1,4 +1,6 @@
-﻿using System;
+﻿using PasswordManager.Interfaces;
+using PasswordManager.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +21,10 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class LoginView : Window
     {
-        public LoginView()
+        public LoginView(IDataContextProviderService dataContextProviderService)
         {
             InitializeComponent();
+            DataContext=dataContextProviderService.ProvideDataContext<LoginViewModel>();
         }
 
         private void btnMinimizeClick(object sender, RoutedEventArgs e)

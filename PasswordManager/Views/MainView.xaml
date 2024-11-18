@@ -13,15 +13,6 @@
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
-        <DataTemplate DataType="{x:Type viewModel:AllPasswordsViewModel}">
-            <local:AllPasswordsView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:FavoritesViewModel}">
-            <local:FavoritesView />
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type viewModel:CategoryViewModel}">
-            <local:CategoryView />
-        </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -118,7 +109,7 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center">
                     <ComboBox x:Name="dtbSelector"
-                              ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              ItemsSource="{Binding DatabaseStorageService.Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                               SelectedIndex="{Binding SelectedDb}" />
                     <Button x:Name="btnAddPass"
                             Margin="25,0,25,0"
@@ -130,7 +121,6 @@
                             Content="Import passwords" />
                 </StackPanel>
                 <ContentControl x:Name="childView"
-                                Content="{Binding Navigation.CurrentView}"
                                 Grid.Row="3"
                                 Margin="25" />
             </Grid>

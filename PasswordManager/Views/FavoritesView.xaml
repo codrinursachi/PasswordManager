@@ -15,10 +15,10 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <customcontrols:PasswordSearch Grid.Row="0"
-                                       SearchCriteria="{Binding SearchFilter, Mode=TwoWay}"/>
-
-        <customcontrols:PasswordDataGrid PasswordList="{Binding Passwords}"
-                                         Grid.Row="1"/>
+        <ContentControl x:Name="pwdSearch"
+                        Grid.Row="0"
+                        Height="40" />
+        <ContentControl x:Name="pwdDataGrid"
+                        Grid.Row="1" />
     </Grid>
 </UserControl>

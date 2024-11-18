@@ -1,4 +1,6 @@
-﻿using PasswordManager.Models;
+﻿using PasswordManager.CustomControls;
+using PasswordManager.Interfaces;
+using PasswordManager.Models;
 using PasswordManager.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -22,9 +24,25 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class AllPasswordsView : UserControl
     {
-        public AllPasswordsView()
+        public AllPasswordsView(IUserControlProviderService userControlProviderService, IDataContextProviderService dataContextProviderService)
         {
             InitializeComponent();
+            DataContext = dataContextProviderService.ProvideDataContext<AllPasswordsViewModel>();
+            var search= userControlProviderService.ProvideUserControl<PasswordSearch>();
+            pwdSearch.Content = search;
+            Binding searchBind = new("SearchFilter")
+            {
+                Source = DataContext,
+                Mode = BindingMode.TwoWay
+            };
+            search.SetBinding(PasswordSearch.searchCriteriaProperty, searchBind);
+            var dataGrid= userControlProviderService.ProvideUserControl<PasswordDataGrid>();
+            pwdDataGrid.Content = dataGrid;
+            Binding dataGridBinding = new("Passwords")
+            {
+                Source = DataContext
+            };
+            dataGrid.SetBinding(PasswordDataGrid.PasswordListProperty, dataGridBinding);
         }
     }
 }

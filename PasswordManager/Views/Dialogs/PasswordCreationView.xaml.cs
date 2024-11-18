@@ -1,4 +1,6 @@
-﻿using PasswordManager.Utilities;
+﻿using PasswordManager.CustomControls;
+using PasswordManager.Interfaces;
+using PasswordManager.Utilities;
 using PasswordManager.ViewModels;
 using PasswordManager.ViewModels.CustomControls;
 using System;
@@ -23,12 +25,12 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class PasswordCreationView : Window
     {
-        public PasswordCreationView()
+        public PasswordCreationView(IUserControlProviderService userControlProviderService)
         {
             InitializeComponent();
-            ((PasswordModelEditorViewModel)pwdCreator.DataContext).CloseAction = Close;
             MouseMove += AutoLocker.OnActivity;
             KeyDown += AutoLocker.OnActivity;
+            pwdCreator.Content=userControlProviderService.ProvideUserControl<PasswordModelEditor>();
         }
     }
 }
