@@ -15,9 +15,11 @@ namespace PasswordManager.Services
     public class PasswordImporterService : IPasswordImporterService
     {
         private IDatabaseInfoProviderService databaseInfoProviderService;
-        public PasswordImporterService(IDatabaseInfoProviderService databaseInfoProviderService)
+        private IPasswordManagementService passwordManagementService;
+        public PasswordImporterService(IDatabaseInfoProviderService databaseInfoProviderService, IPasswordManagementService passwordManagementService)
         {
             this.databaseInfoProviderService = databaseInfoProviderService;
+            this.passwordManagementService = passwordManagementService;
         }
         public void StartPasswordImport()
         {
@@ -25,17 +27,16 @@ namespace PasswordManager.Services
             if (openFileDialog.ShowDialog() == true)
             {
                 string passwords = File.ReadAllText(openFileDialog.FileName);
-                List<PasswordModel> passwordsToImport;
                 if (string.IsNullOrEmpty(passwords))
                 {
                     return;
                 }
 
-                passwordsToImport = JsonSerializer.Deserialize<List<PasswordModel>>(passwords);
-                PasswordRepository passwordRepository = new(databaseInfoProviderService.CurrentDatabase, databaseInfoProviderService.DBPass);
+                List<PasswordModel> passwordsToImport = JsonSerializer.Deserialize<List<PasswordModel>>(passwords);
+                //PasswordRepository passwordRepository = new(databaseInfoProviderService.CurrentDatabase, databaseInfoProviderService.DBPass);
                 foreach (var password in passwordsToImport)
                 {
-                    passwordRepository.Add(password);
+                    passwordManagementService.Add(password);
                 }
             }
 

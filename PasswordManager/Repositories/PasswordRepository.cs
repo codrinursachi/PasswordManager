@@ -1,4 +1,5 @@
-﻿using PasswordManager.Models;
+﻿using PasswordManager.Interfaces;
+using PasswordManager.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,25 +16,31 @@ using System.Windows.Media;
 
 namespace PasswordManager.Repositories
 {
-    public class PasswordRepository
+    public class PasswordRepository:IPasswordRepository
     {
         readonly string pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
-        readonly byte[] password;
-        readonly string dataBaseName;
-
-        public PasswordRepository(string dataBaseName, byte[] password)
+        //readonly byte[] password;
+        //readonly string dataBaseName;
+        private IDatabaseInfoProviderService databaseInfoProviderService;
+        public PasswordRepository(IDatabaseInfoProviderService databaseInfoProviderService)
         {
-            this.password = password;
-            this.dataBaseName = dataBaseName + ".json";
-            var dbPath = Path.Combine(pathToDb, this.dataBaseName);
-            if (!File.Exists(dbPath))
-            {
-                File.Create(dbPath).Close();
-            }
+            this.databaseInfoProviderService = databaseInfoProviderService;
+            //this.password = password;
+            //this.dataBaseName = dataBaseName + ".json";
+            //var dbPath = Path.Combine(pathToDb, this.dataBaseName);
+            //if (!File.Exists(dbPath))
+            //{
+            //    File.Create(dbPath).Close();
+            //}
         }
 
         public void Add(PasswordModel passwordModel)
         {
+            var dbPath = Path.Combine(pathToDb, databaseInfoProviderService.CurrentDatabase+".json");
+            if (!File.Exists(dbPath))
+            {
+                File.Create(dbPath).Close();
+            }
             List<PasswordModel> passwords = GetPasswordsFromFile();
             passwordModel.Id = passwords.Count == 0 ? 1 : passwords.Max(p => p.Id) + 1;
             var encryptedPass = Encrypt(passwordModel.Password);
@@ -91,11 +98,11 @@ namespace PasswordManager.Repositories
 
         private List<PasswordModel> GetPasswordsFromFile()
         {
-            if (dataBaseName == ".json")
+            if (string.IsNullOrEmpty(databaseInfoProviderService.CurrentDatabase))
             {
                 return null;
             }
-            var fileName = Path.Combine(pathToDb, dataBaseName);
+            var fileName = Path.Combine(pathToDb, databaseInfoProviderService.CurrentDatabase+".json");
             List<PasswordModel> passwords = [];
 
             string data = File.ReadAllText(fileName);
@@ -110,7 +117,7 @@ namespace PasswordManager.Repositories
 
         private void WritePasswords(List<PasswordModel> passwords)
         {
-            var fileName = Path.Combine(pathToDb, dataBaseName);
+            var fileName = Path.Combine(pathToDb, databaseInfoProviderService.CurrentDatabase + ".json");
             File.WriteAllText(fileName, Encrypt(JsonSerializer.Serialize(passwords).ToCharArray()));
         }
 
@@ -130,7 +137,7 @@ namespace PasswordManager.Repositories
         private Aes GenerateAES()
         {
             Aes AES = Aes.Create();
-            byte[] passwordBytes = ProtectedData.Unprotect(password, null, DataProtectionScope.CurrentUser);
+            byte[] passwordBytes = ProtectedData.Unprotect(databaseInfoProviderService.DBPass, null, DataProtectionScope.CurrentUser);
             byte[] aesKey = SHA256.HashData(passwordBytes);
             byte[] aesIV = MD5.HashData(passwordBytes);
             AES.Key = aesKey;

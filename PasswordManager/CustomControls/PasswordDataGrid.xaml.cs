@@ -34,12 +34,14 @@ namespace PasswordManager.CustomControls
         private char[] storedPass;
         private DispatcherTimer timer;
 
-        public PasswordDataGrid(IUserControlProviderService userControlProviderService)
+        private IPasswordManagementService passwordManagementService;
+        public PasswordDataGrid(IUserControlProviderService userControlProviderService, IPasswordManagementService passwordManagementService)
         {
             InitializeComponent();
-            var passwordModelEditor= userControlProviderService.ProvideUserControl<PasswordModelEditor>();
+            var passwordModelEditor = userControlProviderService.ProvideUserControl<PasswordModelEditor>();
             ((PasswordModelEditorViewModel)passwordModelEditor.DataContext).AddButtonVisible = false;
             pwdEditor.Content = passwordModelEditor;
+            this.passwordManagementService = passwordManagementService;
         }
 
         public ObservableCollection<PasswordToShowDTO> PasswordList
@@ -84,14 +86,14 @@ namespace PasswordManager.CustomControls
 
         private void MenuItemPassword_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            storedPass = GetPasswordClearText.GetPasswordClearTextById(((PasswordToShowDTO)pwdList.SelectedItem).Id, ((IDatabaseChangeable)DataContext).Database, ((IPasswordSettable)DataContext).DBPass);
+            storedPass = passwordManagementService.GetPasswordById(((PasswordToShowDTO)pwdList.SelectedItem).Id).Password;
             Clipboard.SetDataObject(new string(storedPass));
             SetupTimer();
         }
 
         private void MenuItemDelete_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            DeletePassword.DeletePasswordById(((PasswordToShowDTO)pwdList.SelectedItem).Id, ((IDatabaseChangeable)DataContext).Database, ((IPasswordSettable)DataContext).DBPass);
+            passwordManagementService.Remove(((PasswordToShowDTO)pwdList.SelectedItem).Id);
             PasswordList.Remove((PasswordToShowDTO)pwdList.SelectedItem);
         }
 

@@ -55,8 +55,14 @@ namespace PasswordManager.ViewModels.CustomControls
         private IDatabaseStorageService databaseStorageService;
         private IModalDialogProviderService modalDialogProviderService;
         private IDatabaseInfoProviderService databaseInfoProviderService;
-        public PasswordModelEditorViewModel(IDatabaseInfoProviderService databaseInfoProviderService, IDatabaseStorageService databaseStorageService, IModalDialogProviderService modalDialogProviderService)
+        private IPasswordManagementService passwordManagementService;
+        public PasswordModelEditorViewModel(
+            IDatabaseInfoProviderService databaseInfoProviderService, 
+            IDatabaseStorageService databaseStorageService, 
+            IModalDialogProviderService modalDialogProviderService,
+            IPasswordManagementService passwordManagementService)
         {
+            this.passwordManagementService = passwordManagementService;
             this.databaseInfoProviderService = databaseInfoProviderService;
             DBPass=databaseInfoProviderService.DBPass;
             Database = databaseInfoProviderService.CurrentDatabase;
@@ -110,8 +116,9 @@ namespace PasswordManager.ViewModels.CustomControls
                 CategoryPaths.Clear();
                 if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", value + ".json")))
                 {
-                    passwordRepository = new(value, DBPass);
-                    foreach(var pass in (passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null)))
+                    databaseInfoProviderService.CurrentDatabase = value;
+                    //passwordRepository = new(value, DBPass);
+                    foreach(var pass in (passwordManagementService.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null)))
                     {
                         CategoryPaths.Add(pass);
                     }
@@ -163,8 +170,8 @@ namespace PasswordManager.ViewModels.CustomControls
 
             string tags = string.Join(" ", CompletedTags);
             PasswordModel newPassword = new() { Username = Username, Password = PasswordAsCharArray, Url = Url, ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
-            PasswordRepository passwordRepository = new(Database, DBPass);
-            passwordRepository.Add(newPassword);
+            //PasswordRepository passwordRepository = new(Database, DBPass);
+            passwordManagementService.Add(newPassword);
             Array.Fill(PasswordAsCharArray, '0');
             foreach (Window window in App.Current.Windows)
             {
@@ -185,15 +192,17 @@ namespace PasswordManager.ViewModels.CustomControls
 
             string tags = string.Join(" ", CompletedTags);
             PasswordModel newPassword = new() { Username = Username, Password = PasswordAsCharArray, Url = Url, ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
-            PasswordRepository passwordRepository = new(Database, DBPass);
+            //PasswordRepository passwordRepository = new(Database, DBPass);
             if (InitialDatabase != Database)
             {
-                DeletePassword.DeletePasswordById(Id, InitialDatabase, DBPass);
-                passwordRepository.Add(newPassword);
+                databaseInfoProviderService.CurrentDatabase = InitialDatabase;
+                passwordManagementService.Remove(Id);
+                databaseInfoProviderService.CurrentDatabase = Database;
+                passwordManagementService.Add(newPassword);
             }
             else
             {
-                passwordRepository.Edit(Id, newPassword);
+                passwordManagementService.Edit(Id, newPassword);
             }
 
             Password = string.Empty;

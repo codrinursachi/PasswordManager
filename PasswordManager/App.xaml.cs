@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
+using PasswordManager.Repositories;
 using PasswordManager.Services;
 using PasswordManager.ViewModels;
 using PasswordManager.ViewModels.CustomControls;
@@ -51,6 +52,8 @@ namespace PasswordManager
             services.AddSingleton<IDataContextProviderService, DataContextProviderService>();
             services.AddSingleton<IDatabaseInfoProviderService, DatabaseInfoProviderService>();
             services.AddSingleton<IPasswordImporterService, PasswordImporterService>();
+            services.AddSingleton<IPasswordRepository, PasswordRepository>();
+            services.AddSingleton<IPasswordManagementService, PasswordManagementService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => dataContextType => (ObservableObject)serviceProvider.GetRequiredService(dataContextType));

@@ -40,12 +40,14 @@ namespace PasswordManager.ViewModels
         private IModalDialogProviderService modalDialogOpenerService;
         private IDatabaseInfoProviderService databaseInfoProviderService;
         private IPasswordImporterService passwordImporterService;
+        private IPasswordManagementService passwordManagementService;
         public MainViewModel(
             IDatabaseInfoProviderService databaseInfoProviderService, 
             INavigationService navService,
             IModalDialogProviderService modalDialogOpenerService, 
             IDatabaseStorageService databaseStorageService,
-            IPasswordImporterService passwordImporterService)
+            IPasswordImporterService passwordImporterService,
+            IPasswordManagementService passwordManagementService)
         {
             this.databaseStorageService = databaseStorageService;
             this.databaseInfoProviderService = databaseInfoProviderService;
@@ -54,6 +56,7 @@ namespace PasswordManager.ViewModels
             Navigation = navService;
             this.modalDialogOpenerService=modalDialogOpenerService;
             this.passwordImporterService=passwordImporterService;
+            this.passwordManagementService=passwordManagementService;
             AutoLocker.SetupTimer();
             BackupCreator backupCreator = new();
             backupCreator.CreateBackupIfNecessary();
@@ -88,8 +91,7 @@ namespace PasswordManager.ViewModels
         public void Refresh()
         {
             DatabaseStorageService.Refresh();
-            PasswordRepository passwordRepository = new(databaseInfoProviderService.CurrentDatabase, databaseInfoProviderService.DBPass);
-            var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
+            var rootNode=passwordManagementService.GetPasswordsCategoryRoot();
             Categories = [rootNode];
             ((IRefreshable)Navigation.CurrentView).Refresh();
         }
@@ -129,6 +131,7 @@ namespace PasswordManager.ViewModels
             var passwordCreationView = modalDialogOpenerService.ProvideModal<PasswordCreationView>();
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
+            SelectedDb=databaseInfoProviderService.CurrentDatabase;
             Refresh();
         }
 
@@ -139,29 +142,6 @@ namespace PasswordManager.ViewModels
             passwordImporterService.StartPasswordImport();
             OverlayVisibility = false;
             Refresh();
-        }
-
-        private CategoryNodeModel BuildTree(List<string> paths)
-        {
-            var root = new CategoryNodeModel { Name = "Categories" };
-            foreach (var path in paths)
-            {
-                var parts = path.Split('\\');
-                var current = root;
-                foreach (var part in parts)
-                {
-                    var child = current.Children.FirstOrDefault(p => p.Name == part);
-                    if (child == null)
-                    {
-                        child = new CategoryNodeModel { Name = part, Parent = current };
-                        current.Children.Add(child);
-                    }
-
-                    current = child;
-                }
-            }
-
-            return root;
         }
     }
 }
