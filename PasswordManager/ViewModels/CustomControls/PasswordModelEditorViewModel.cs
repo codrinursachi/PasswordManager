@@ -52,10 +52,14 @@ namespace PasswordManager.ViewModels.CustomControls
         private string passwordErrorMessage;
         private PasswordModel passwordModel;
         [ObservableProperty]
-        IDatabaseStorageService databaseStorageService;
-        IModalDialogProviderService modalDialogProviderService;
-        public PasswordModelEditorViewModel(IDatabaseStorageService databaseStorageService, IModalDialogProviderService modalDialogProviderService)
+        private IDatabaseStorageService databaseStorageService;
+        private IModalDialogProviderService modalDialogProviderService;
+        private IDatabaseInfoProviderService databaseInfoProviderService;
+        public PasswordModelEditorViewModel(IDatabaseInfoProviderService databaseInfoProviderService, IDatabaseStorageService databaseStorageService, IModalDialogProviderService modalDialogProviderService)
         {
+            this.databaseInfoProviderService = databaseInfoProviderService;
+            DBPass=databaseInfoProviderService.DBPass;
+            Database = databaseInfoProviderService.CurrentDatabase;
             DatabaseStorageService = databaseStorageService;
             this.modalDialogProviderService = modalDialogProviderService;
             DatabaseItems = [];
@@ -135,6 +139,7 @@ namespace PasswordManager.ViewModels.CustomControls
                 CategoryPath = passwordModel.CategoryPath;
                 Favorite = passwordModel.Favorite;
                 Notes = passwordModel.Notes;
+                Database = databaseInfoProviderService.CurrentDatabase;
                 InitialDatabase = Database;
                 CompletedTags.Clear();
                 if (string.IsNullOrEmpty(passwordModel.Tags))

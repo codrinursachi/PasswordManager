@@ -40,7 +40,6 @@ namespace PasswordManager.CustomControls
             var passwordModelEditor= userControlProviderService.ProvideUserControl<PasswordModelEditor>();
             ((PasswordModelEditorViewModel)passwordModelEditor.DataContext).AddButtonVisible = false;
             pwdEditor.Content = passwordModelEditor;
-
         }
 
         public ObservableCollection<PasswordToShowDTO> PasswordList
@@ -75,8 +74,6 @@ namespace PasswordManager.CustomControls
             {
                 return;
             }
-            ((IPasswordSettable)((PasswordModelEditor)pwdEditor.Content).DataContext).DBPass = ((IPasswordSettable)DataContext).DBPass;
-            ((IDatabaseChangeable)((PasswordModelEditor)pwdEditor.Content).DataContext).Database = ((IDatabaseChangeable)DataContext).Database;
             ((PasswordModelEditorViewModel)((PasswordModelEditor)pwdEditor.Content).DataContext).PasswordModel = selectedItem.ToPasswordModel();
         }
 

@@ -20,7 +20,12 @@ namespace PasswordManager.ViewModels
         [ObservableProperty]
         string searchFilter;
         public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = [];
-        
+        private IDatabaseInfoProviderService databaseInfoProviderService;
+        public AllPasswordsViewModel(IDatabaseInfoProviderService databaseInfoProviderService)
+        {
+            this.databaseInfoProviderService = databaseInfoProviderService;
+        }
+
         public string Database { get; set; }
         public byte[] DBPass { get; set; }
 
@@ -31,11 +36,7 @@ namespace PasswordManager.ViewModels
 
         public void Refresh()
         {
-            if (Database == null)
-            {
-                return;
-            }
-            var passwordRepository = new PasswordRepository(Database, DBPass);
+            var passwordRepository = new PasswordRepository(databaseInfoProviderService.CurrentDatabase, databaseInfoProviderService.DBPass);
             Passwords.Clear();
             foreach (var password in passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()))
             {

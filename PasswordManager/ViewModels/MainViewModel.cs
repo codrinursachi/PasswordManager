@@ -23,14 +23,12 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    partial class MainViewModel : ObservableObject, IPasswordSettable, IRefreshable
+    partial class MainViewModel : ObservableObject,IRefreshable
     {
         [ObservableProperty]
         private string caption;
         [ObservableProperty]
-        private int selectedDb = 0;
-        [ObservableProperty]
-        private byte[] dBPass;
+        private string selectedDb = string.Empty;
         [ObservableProperty]
         private bool overlayVisibility;
         [ObservableProperty]
@@ -40,12 +38,15 @@ namespace PasswordManager.ViewModels
         [ObservableProperty]
         private IDatabaseStorageService databaseStorageService;
         private IModalDialogProviderService modalDialogOpenerService;
-        public MainViewModel(byte[] dBPass, INavigationService navService,IModalDialogProviderService modalDialogOpenerService, IDatabaseStorageService databaseStorageService)
+        private IDatabaseInfoProviderService databaseInfoProviderService;
+        public MainViewModel(IDatabaseInfoProviderService databaseInfoProviderService, INavigationService navService,IModalDialogProviderService modalDialogOpenerService, IDatabaseStorageService databaseStorageService)
         {
-            DBPass = dBPass;
+            this.databaseStorageService = databaseStorageService;
+            this.databaseInfoProviderService = databaseInfoProviderService;
+            selectedDb = DatabaseStorageService.Databases[0];
+            this.databaseInfoProviderService.CurrentDatabase = selectedDb;
             Navigation = navService;
             this.modalDialogOpenerService=modalDialogOpenerService;
-            DatabaseStorageService = databaseStorageService;
             AutoLocker.SetupTimer();
             BackupCreator backupCreator = new();
             backupCreator.CreateBackupIfNecessary();
@@ -56,15 +57,12 @@ namespace PasswordManager.ViewModels
 
         void NavigationExecuted()
         {
-            ((IPasswordSettable)Navigation.CurrentView).DBPass = DBPass;
-            ((IDatabaseChangeable)Navigation.CurrentView).Database = DatabaseStorageService.Databases[SelectedDb];
-            ((IRefreshable)Navigation.CurrentView).Refresh();
             Refresh();
         }
 
-        partial void OnSelectedDbChanged(int value)
+        partial void OnSelectedDbChanged(string value)
         {
-            ((IDatabaseChangeable)Navigation.CurrentView).Database = DatabaseStorageService.Databases[value];
+            databaseInfoProviderService.CurrentDatabase = value;
             Refresh();
         }
 
@@ -83,7 +81,7 @@ namespace PasswordManager.ViewModels
         public void Refresh()
         {
             DatabaseStorageService.Refresh();
-            PasswordRepository passwordRepository = new(DatabaseStorageService.Databases[SelectedDb], DBPass);
+            PasswordRepository passwordRepository = new(databaseInfoProviderService.CurrentDatabase, databaseInfoProviderService.DBPass);
             var rootNode = BuildTree(passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList());
             Categories = [rootNode];
             ((IRefreshable)Navigation.CurrentView).Refresh();
@@ -122,8 +120,6 @@ namespace PasswordManager.ViewModels
         {
             OverlayVisibility = true;
             var passwordCreationView = modalDialogOpenerService.ProvideModal<PasswordCreationView>();
-            ((IPasswordSettable)passwordCreationView.DataContext).DBPass = DBPass;
-            ((IDatabaseChangeable)passwordCreationView.DataContext).Database = DatabaseStorageService.Databases[SelectedDb];
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
             Refresh();
@@ -144,7 +140,7 @@ namespace PasswordManager.ViewModels
                 }
 
                 passwordsToImport = JsonSerializer.Deserialize<List<PasswordModel>>(passwords);
-                PasswordRepository passwordRepository = new(DatabaseStorageService.Databases[SelectedDb], dBPass);
+                PasswordRepository passwordRepository = new(SelectedDb, databaseInfoProviderService.DBPass);
                 foreach (var password in passwordsToImport)
                 {
                     passwordRepository.Add(password);

@@ -32,9 +32,10 @@ namespace PasswordManager.ViewModels
         private string password;
         [ObservableProperty]
         private string buttonText;
-
-        public LoginViewModel()
+        private IDatabaseInfoProviderService databaseInfoProviderService;
+        public LoginViewModel(IDatabaseInfoProviderService databaseInfoProviderService)
         {
+            this.databaseInfoProviderService = databaseInfoProviderService;
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "UserLogin.json");
             if (!File.Exists(path))
             {
@@ -71,7 +72,7 @@ namespace PasswordManager.ViewModels
             var isValidUser = userRepository.AuthenticateUser(PasswordAsCharArray);
             if (isValidUser)
             {
-                DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes(PasswordAsCharArray), null, DataProtectionScope.CurrentUser);
+                databaseInfoProviderService.DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes(PasswordAsCharArray), null, DataProtectionScope.CurrentUser);
                 Array.Fill(PasswordAsCharArray, '0');
                 IsViewVisible = false;
             }

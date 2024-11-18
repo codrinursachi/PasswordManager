@@ -19,6 +19,11 @@ namespace PasswordManager.ViewModels
     {
         [ObservableProperty]
         private CategoryNodeModel filter;
+        private IDatabaseInfoProviderService databaseInfoProviderService;
+        public CategoryViewModel(IDatabaseInfoProviderService databaseInfoProviderService)
+        {
+            this.databaseInfoProviderService = databaseInfoProviderService;
+        }
 
         public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = [];
         
@@ -35,7 +40,7 @@ namespace PasswordManager.ViewModels
         private void FilterPass()
         {
             Passwords.Clear();
-            PasswordRepository passwordRepository = new(Database, DBPass);
+            PasswordRepository passwordRepository = new(databaseInfoProviderService.CurrentDatabase, databaseInfoProviderService.DBPass);
             if (Filter == null || Filter.Parent == null)
             {
                 foreach (var password in passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()))

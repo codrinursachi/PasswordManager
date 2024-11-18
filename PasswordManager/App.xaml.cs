@@ -36,11 +36,7 @@ namespace PasswordManager
             services.AddTransient<PasswordModelEditor>();
 
             services.AddSingleton<LoginViewModel>();
-            services.AddSingleton<MainViewModel>(serviceProvider => new MainViewModel(
-                ((IPasswordSettable)serviceProvider.GetRequiredService<LoginView>().DataContext).DBPass,
-                serviceProvider.GetRequiredService<INavigationService>(),
-                serviceProvider.GetRequiredService<IModalDialogProviderService>(),
-                serviceProvider.GetRequiredService<IDatabaseStorageService>()));
+            services.AddSingleton<MainViewModel>();
             services.AddSingleton<AllPasswordsViewModel>();
             services.AddSingleton<CategoryViewModel>();
             services.AddSingleton<FavoritesViewModel>();
@@ -52,6 +48,7 @@ namespace PasswordManager
             services.AddSingleton<IDatabaseStorageService, DatabaseStorageService>();
             services.AddSingleton<IUserControlProviderService, UserControlProviderService>();
             services.AddSingleton<IDataContextProviderService, DataContextProviderService>();
+            services.AddSingleton<IDatabaseInfoProviderService, DatabaseInfoProviderService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => dataContextType => (ObservableObject)serviceProvider.GetRequiredService(dataContextType));
@@ -71,7 +68,7 @@ namespace PasswordManager
             }
             loginView.IsVisibleChanged += (s, ev) =>
             {
-                if (loginView.IsVisible == false && loginView.IsLoaded && (((IPasswordSettable)loginView.DataContext).DBPass != null))
+                if (loginView.IsVisible == false && loginView.IsLoaded)
                 {
                     var mainView = serviceProvider.GetRequiredService<MainView>();
                     mainView.Show();
