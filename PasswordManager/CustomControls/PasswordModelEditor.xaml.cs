@@ -42,6 +42,7 @@ namespace PasswordManager.CustomControls
 
         private void datePickerGotMouseCapture(object sender, MouseEventArgs e)
         {
+            datePicker.SelectedDate = DateTime.Today;
             datePicker.Foreground = Brushes.Black;
         }
 
