@@ -29,23 +29,23 @@
                      Value="True">
                 <Setter Property="Background">
                     <Setter.Value>
-                        <SolidColorBrush Color="{StaticResource ActiveColor}"
+                        <SolidColorBrush Color="LightGray"
                                          Opacity="0.5" />
                     </Setter.Value>
                 </Setter>
                 <Setter Property="BorderBrush"
-                        Value="{StaticResource AccentBrush}" />
+                        Value="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}" />
             </Trigger>
             <Trigger Property="IsChecked"
                      Value="True">
                 <Setter Property="Background">
                     <Setter.Value>
-                        <SolidColorBrush Color="{StaticResource ActiveColor}"
+                        <SolidColorBrush Color="LightGray"
                                          Opacity="0.5" />
                     </Setter.Value>
                 </Setter>
                 <Setter Property="BorderBrush"
-                        Value="{StaticResource AccentBrush}" />
+                        Value="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}" />
             </Trigger>
         </Style.Triggers>
     </Style>

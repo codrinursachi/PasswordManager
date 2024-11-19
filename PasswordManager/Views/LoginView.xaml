@@ -57,7 +57,6 @@
                    Margin="0,15,0,0" />
         <customcontrols:PasswordTextBox FontSize="13"
                                         FontWeight="Medium"
-                                        Foreground="{StaticResource TextBrush}"
                                         VerticalContentAlignment="Center"
                                         BorderThickness="0"
                                         Height="28"

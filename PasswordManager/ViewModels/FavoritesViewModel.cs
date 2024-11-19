@@ -37,7 +37,6 @@ namespace PasswordManager.ViewModels
         public void Refresh()
         {
             Passwords.Clear();
-            //PasswordRepository passwordRepository = new(databaseInfoProviderService.CurrentDatabase, databaseInfoProviderService.DBPass);
             foreach (var password in passwordManagementService.GetAllPasswords().Where(p => p.Favorite).Select(p => p.ToPasswordToShowDTO()))
             {
                 List<string> searchData = [];
