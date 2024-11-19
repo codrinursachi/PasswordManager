@@ -36,6 +36,7 @@ namespace PasswordManager.ViewModels
         [ObservableProperty]
         private INavigationService navigation;
         [ObservableProperty]
+        private ObservableCollection<string> databases = [];
         private IDatabaseStorageService databaseStorageService;
         private IModalDialogProviderService modalDialogOpenerService;
         private IDatabaseInfoProviderService databaseInfoProviderService;
@@ -51,7 +52,7 @@ namespace PasswordManager.ViewModels
         {
             this.databaseStorageService = databaseStorageService;
             this.databaseInfoProviderService = databaseInfoProviderService;
-            selectedDb = DatabaseStorageService.Databases[0];
+            selectedDb = databaseStorageService.Databases[0];
             this.databaseInfoProviderService.CurrentDatabase = selectedDb;
             Navigation = navService;
             this.modalDialogOpenerService=modalDialogOpenerService;
@@ -65,15 +66,16 @@ namespace PasswordManager.ViewModels
 
         public Brush RandomBrush { get => new SolidColorBrush(Color.FromRgb((byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240))); }
 
-        void NavigationExecuted()
-        {
-            Refresh();
-        }
-
         partial void OnSelectedDbChanged(string value)
         {
+            if (value == null)
+            {
+                return;
+            }
             databaseInfoProviderService.CurrentDatabase = value;
-            Refresh();
+            var rootNode = passwordManagementService.GetPasswordsCategoryRoot();
+            Categories = [rootNode];
+            ((IRefreshable)Navigation.CurrentView).Refresh();
         }
 
         public CategoryNodeModel Filter
@@ -90,7 +92,13 @@ namespace PasswordManager.ViewModels
 
         public void Refresh()
         {
-            DatabaseStorageService.Refresh();
+            databaseStorageService.Refresh();
+            Databases.Clear();
+            foreach(var db in databaseStorageService.Databases)
+            {
+                Databases.Add(db);
+            }
+            SelectedDb = databaseInfoProviderService.CurrentDatabase;
             var rootNode=passwordManagementService.GetPasswordsCategoryRoot();
             Categories = [rootNode];
             ((IRefreshable)Navigation.CurrentView).Refresh();
@@ -105,7 +113,7 @@ namespace PasswordManager.ViewModels
             }
             Navigation.NavigateTo<CategoryViewModel>();
             Caption = "Categories";
-            NavigationExecuted();
+            Refresh();
         }
 
         [RelayCommand]
@@ -113,7 +121,7 @@ namespace PasswordManager.ViewModels
         {
             Navigation.NavigateTo<FavoritesViewModel>();
             Caption = "Favorites";
-            NavigationExecuted();
+            Refresh();
         }
 
         [RelayCommand]
@@ -121,7 +129,7 @@ namespace PasswordManager.ViewModels
         {
             Navigation.NavigateTo<AllPasswordsViewModel>();
             Caption = "All Passwords";
-            NavigationExecuted();
+            Refresh();
         }
 
         [RelayCommand]
@@ -131,7 +139,6 @@ namespace PasswordManager.ViewModels
             var passwordCreationView = modalDialogOpenerService.ProvideModal<PasswordCreationView>();
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
-            SelectedDb=databaseInfoProviderService.CurrentDatabase;
             Refresh();
         }
 

@@ -109,7 +109,7 @@
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center">
                     <ComboBox x:Name="dtbSelector"
-                              ItemsSource="{Binding DatabaseStorageService.Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
+                              ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                               SelectedValue="{Binding SelectedDb}" />
                     <Button x:Name="btnAddPass"
                             Margin="25,0,25,0"

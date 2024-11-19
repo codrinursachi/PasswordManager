@@ -65,7 +65,7 @@ namespace PasswordManager.Repositories
         {
             List<PasswordModel> passwords = GetPasswordsFromFile();
 
-            return new(passwords.OrderBy(p => p.Url));
+            return new(passwords?.OrderBy(p => p.Url).ToList() ?? []);
         }
 
         public PasswordModel GetPasswordById(int id)
