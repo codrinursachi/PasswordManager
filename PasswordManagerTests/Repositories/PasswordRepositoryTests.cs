@@ -1,5 +1,6 @@
 ﻿using PasswordManager.Models;
 using PasswordManager.Repositories;
+using PasswordManager.Services;
 using PasswordManager.Utilities;
 using System;
 using System.Collections.Generic;
@@ -15,8 +16,18 @@ namespace PasswordManagerTests.Repositories
         [Fact]
         public void ShouldAddAndRetrievePasswordsCorrectly()
         {
-            string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
+            string file = Path.Combine("Temporary", Path.GetRandomFileName());
+            string pathToTemp= Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", "Temporary");
+            if (!Directory.Exists(pathToTemp))
+            {
+                Directory.CreateDirectory(pathToTemp);
+            }
+            DatabaseInfoProviderService databaseInfoProviderService = new()
+            {
+                CurrentDatabase = file,
+                DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser)
+            };
+            PasswordRepository passwordRepository = new(databaseInfoProviderService);
             PasswordModel password = new() { Username = "admin", Password = "admin".ToCharArray(), Url = "admin.com" };
             passwordRepository.Add(password);
             Assert.NotNull(passwordRepository.GetAllPasswords().FirstOrDefault(p => p.Id == password.Id));
@@ -26,8 +37,18 @@ namespace PasswordManagerTests.Repositories
         [Fact]
         public void ShouldRetrievePasswordById()
         {
-            string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
+            string file = Path.Combine("Temporary", Path.GetRandomFileName());
+            string pathToTemp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", "Temporary");
+            if (!Directory.Exists(pathToTemp))
+            {
+                Directory.CreateDirectory(pathToTemp);
+            }
+            DatabaseInfoProviderService databaseInfoProviderService = new()
+            {
+                CurrentDatabase = file,
+                DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser)
+            };
+            PasswordRepository passwordRepository = new(databaseInfoProviderService);
             PasswordModel password = new() { Username = "admin", Password = "admin".ToCharArray(), Url = "admin.com" };
             passwordRepository.Add(password);
             Assert.NotNull(passwordRepository.GetPasswordById(password.Id));
@@ -37,8 +58,18 @@ namespace PasswordManagerTests.Repositories
         [Fact]
         public void ShouldEditPasswordWhenRequested()
         {
-            string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
+            string file = Path.Combine("Temporary", Path.GetRandomFileName());
+            string pathToTemp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", "Temporary");
+            if (!Directory.Exists(pathToTemp))
+            {
+                Directory.CreateDirectory(pathToTemp);
+            }
+            DatabaseInfoProviderService databaseInfoProviderService = new()
+            {
+                CurrentDatabase = file,
+                DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser)
+            };
+            PasswordRepository passwordRepository = new(databaseInfoProviderService);
             PasswordModel password = new() { Username = "admin1", Password = "admin".ToCharArray(), Url = "admin.com" };
             PasswordModel passwordEdit = new() { Username = "root", Password = "root".ToCharArray(), Url = "admin.com" };
             passwordRepository.Add(password);
@@ -52,8 +83,18 @@ namespace PasswordManagerTests.Repositories
         [Fact]
         public void ShouldRemovePasswordWhenRequested()
         {
-            string file = Path.GetRandomFileName();
-            PasswordRepository passwordRepository = new(file, ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser));
+            string file = Path.Combine("Temporary", Path.GetRandomFileName());
+            string pathToTemp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", "Temporary");
+            if (!Directory.Exists(pathToTemp))
+            {
+                Directory.CreateDirectory(pathToTemp);
+            }
+            DatabaseInfoProviderService databaseInfoProviderService = new()
+            {
+                CurrentDatabase = file,
+                DBPass = ProtectedData.Protect(Encoding.UTF8.GetBytes("admin"), null, DataProtectionScope.CurrentUser)
+            };
+            PasswordRepository passwordRepository = new(databaseInfoProviderService);
             PasswordModel password = new() { Username = "admin2", Password = "admin".ToCharArray(), Url = "admin.com" };
             passwordRepository.Add(password);
             passwordRepository.Remove(password.Id);

@@ -13,13 +13,15 @@ namespace PasswordManager.Services
     {
         [ObservableProperty]
         private List<string> databases = [];
-        public DatabaseStorageService()
+        string testing;
+        public DatabaseStorageService(string testing="")
         {
+            this.testing = testing;
             Refresh();
         }
         public void Refresh()
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases",testing);
             if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);

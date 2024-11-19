@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.Services
 {
-    class DatabaseInfoProviderService : IDatabaseInfoProviderService
+    public class DatabaseInfoProviderService : IDatabaseInfoProviderService
     {
         public string CurrentDatabase { get; set; }
         public byte[] DBPass { get; set; }

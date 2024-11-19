@@ -19,19 +19,10 @@ namespace PasswordManager.Repositories
     public class PasswordRepository:IPasswordRepository
     {
         readonly string pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
-        //readonly byte[] password;
-        //readonly string dataBaseName;
         private IDatabaseInfoProviderService databaseInfoProviderService;
         public PasswordRepository(IDatabaseInfoProviderService databaseInfoProviderService)
         {
             this.databaseInfoProviderService = databaseInfoProviderService;
-            //this.password = password;
-            //this.dataBaseName = dataBaseName + ".json";
-            //var dbPath = Path.Combine(pathToDb, this.dataBaseName);
-            //if (!File.Exists(dbPath))
-            //{
-            //    File.Create(dbPath).Close();
-            //}
         }
 
         public void Add(PasswordModel passwordModel)

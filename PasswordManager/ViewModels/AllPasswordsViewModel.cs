@@ -38,7 +38,6 @@ namespace PasswordManager.ViewModels
 
         public void Refresh()
         {
-            //var passwordRepository = new PasswordRepository(databaseInfoProviderService.CurrentDatabase, databaseInfoProviderService.DBPass);
             Passwords.Clear();
             foreach (var password in passwordManagementService.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()))
             {
