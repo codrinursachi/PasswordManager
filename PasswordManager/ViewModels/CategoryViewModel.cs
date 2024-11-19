@@ -15,7 +15,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    public partial class CategoryViewModel : ViewModel, IRefreshable, IDatabaseChangeable, IPasswordSettable
+    public partial class CategoryViewModel : ViewModel, IRefreshable
     {
         [ObservableProperty]
         private CategoryNodeModel filter;
@@ -29,8 +29,6 @@ namespace PasswordManager.ViewModels
 
         public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = [];
         
-        public string Database { get; set; }
-        public byte[] DBPass { get; set; }
         partial void OnFilterChanged(CategoryNodeModel value)
         {
             Refresh();

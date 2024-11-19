@@ -19,7 +19,7 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels.CustomControls
 {
-    public partial class PasswordModelEditorViewModel : ObservableObject, IDatabaseChangeable, IPasswordSettable, IPasswordPair
+    public partial class PasswordModelEditorViewModel : ObservableObject, IPasswordPair
     {
         public ObservableCollection<string> CategoryPaths { get; set; } = [];
         [ObservableProperty]
@@ -64,7 +64,6 @@ namespace PasswordManager.ViewModels.CustomControls
         {
             this.passwordManagementService = passwordManagementService;
             this.databaseInfoProviderService = databaseInfoProviderService;
-            DBPass=databaseInfoProviderService.DBPass;
             Database = databaseInfoProviderService.CurrentDatabase;
             DatabaseStorageService = databaseStorageService;
             this.modalDialogProviderService = modalDialogProviderService;
@@ -120,8 +119,6 @@ namespace PasswordManager.ViewModels.CustomControls
         }
 
         public Action CloseAction { get; set; }
-
-        public byte[] DBPass { get; set; }
 
         public PasswordModel PasswordModel
         {

@@ -15,7 +15,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    public partial class FavoritesViewModel : ViewModel, IRefreshable, IDatabaseChangeable, IPasswordSettable
+    public partial class FavoritesViewModel : ViewModel, IRefreshable
     {
         [ObservableProperty]
         private string searchFilter;
@@ -28,9 +28,6 @@ namespace PasswordManager.ViewModels
         }
 
         public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = [];
-
-        public string Database { get; set; }
-        public byte[] DBPass { get; set; }
 
         partial void OnSearchFilterChanged(string value)
         {

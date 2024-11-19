@@ -15,7 +15,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    public partial class AllPasswordsViewModel : ViewModel, IRefreshable, IDatabaseChangeable, IPasswordSettable
+    public partial class AllPasswordsViewModel : ViewModel, IRefreshable
     {
         [ObservableProperty]
         string searchFilter;
@@ -27,9 +27,6 @@ namespace PasswordManager.ViewModels
             this.passwordManagementService = passwordManagementService;
             this.databaseInfoProviderService = databaseInfoProviderService;
         }
-
-        public string Database { get; set; }
-        public byte[] DBPass { get; set; }
 
         partial void OnSearchFilterChanged(string value)
         {

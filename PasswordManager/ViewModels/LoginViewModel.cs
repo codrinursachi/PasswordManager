@@ -20,7 +20,7 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
 {
-    partial class LoginViewModel : ObservableValidator, IPasswordSettable, IPasswordPair
+    partial class LoginViewModel : ObservableValidator, IPasswordPair
     {
         [ObservableProperty]
         private string errorMessage;
@@ -48,7 +48,6 @@ namespace PasswordManager.ViewModels
             userRepository = new UserRepository("UserLogin.json");
         }
 
-        public byte[] DBPass { get; set; }
         public char[] PasswordAsCharArray { get; set; } = [];
        
         private bool CanLogin()
