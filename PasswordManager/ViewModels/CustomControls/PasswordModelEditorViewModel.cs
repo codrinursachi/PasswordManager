@@ -21,13 +21,14 @@ namespace PasswordManager.ViewModels.CustomControls
 {
     public partial class PasswordModelEditorViewModel : ObservableObject, IPasswordPair
     {
-        public ObservableCollection<string> CategoryPaths { get; set; } = [];
+        [ObservableProperty]
+        private List<string> categoryPaths = [];
+        [ObservableProperty]
+        private ObservableCollection<string> completedTags = [];
         [ObservableProperty]
         private string tags;
-        private string database;
         [ObservableProperty]
         private bool overlayVisibility;
-        private PasswordRepository passwordRepository;
         [ObservableProperty]
         private string username;
         [ObservableProperty]
@@ -42,9 +43,11 @@ namespace PasswordManager.ViewModels.CustomControls
         private bool favorite;
         [ObservableProperty]
         private string notes;
-        private bool addButtonVisible;
-        private bool editButtonVisible;
-        [ObservableProperty] 
+        [ObservableProperty]
+        private bool addButtonVisible = true;
+        [ObservableProperty]
+        private bool editButtonVisible = false;
+        [ObservableProperty]
         private string urlErrorMessage;
         [ObservableProperty]
         private string usernameErrorMessage;
@@ -57,68 +60,26 @@ namespace PasswordManager.ViewModels.CustomControls
         private IDatabaseInfoProviderService databaseInfoProviderService;
         private IPasswordManagementService passwordManagementService;
         public PasswordModelEditorViewModel(
-            IDatabaseInfoProviderService databaseInfoProviderService, 
-            IDatabaseStorageService databaseStorageService, 
+            IDatabaseInfoProviderService databaseInfoProviderService,
+            IDatabaseStorageService databaseStorageService,
             IModalDialogProviderService modalDialogProviderService,
             IPasswordManagementService passwordManagementService)
         {
             this.passwordManagementService = passwordManagementService;
             this.databaseInfoProviderService = databaseInfoProviderService;
-            Database = databaseInfoProviderService.CurrentDatabase;
             DatabaseStorageService = databaseStorageService;
             this.modalDialogProviderService = modalDialogProviderService;
-            
-
-            AddButtonVisible = true;
+            CategoryPaths = passwordManagementService.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
 
-        public bool AddButtonVisible
+        partial void OnAddButtonVisibleChanged(bool value)
         {
-            get => addButtonVisible;
-            set
-            {
-                addButtonVisible = value;
-                EditButtonVisible = !value;
-                OnPropertyChanged(nameof(AddButtonVisible));
-            }
-        }
-
-        public bool EditButtonVisible
-        {
-            get => editButtonVisible;
-            set
-            {
-                editButtonVisible = value;
-                OnPropertyChanged(nameof(EditButtonVisible));
-            }
+            EditButtonVisible = !value;
         }
 
         public int Id { get; set; }
 
         public char[] PasswordAsCharArray { get; set; } = [];
-
-        public ObservableCollection<string> CompletedTags { get; set; } = [];
-
-        public string InitialDatabase { get; set; }
-        public string Database
-        {
-            get => database;
-            set
-            {
-                database = value;
-                OnPropertyChanged(nameof(Database));
-                CategoryPaths.Clear();
-                if (File.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", value + ".json")))
-                {
-                    foreach(var pass in (passwordManagementService.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null)))
-                    {
-                        CategoryPaths.Add(pass);
-                    }
-                }
-            }
-        }
-
-        public Action CloseAction { get; set; }
 
         public PasswordModel PasswordModel
         {
@@ -135,8 +96,6 @@ namespace PasswordManager.ViewModels.CustomControls
                 CategoryPath = passwordModel.CategoryPath;
                 Favorite = passwordModel.Favorite;
                 Notes = passwordModel.Notes;
-                Database = databaseInfoProviderService.CurrentDatabase;
-                InitialDatabase = Database;
                 CompletedTags.Clear();
                 if (string.IsNullOrEmpty(passwordModel.Tags))
                 {
@@ -156,9 +115,18 @@ namespace PasswordManager.ViewModels.CustomControls
             {
                 return;
             }
-            databaseInfoProviderService.CurrentDatabase = Database;
             string tags = string.Join(" ", CompletedTags);
-            PasswordModel newPassword = new() { Username = Username, Password = PasswordAsCharArray, Url = Url, ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
+            PasswordModel newPassword = new()
+            {
+                Username = Username,
+                Password = PasswordAsCharArray,
+                Url = Url,
+                ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate,
+                CategoryPath = CategoryPath,
+                Tags = tags,
+                Favorite = Favorite,
+                Notes = Notes
+            };
             passwordManagementService.Add(newPassword);
             Array.Fill(PasswordAsCharArray, '0');
             foreach (Window window in App.Current.Windows)
@@ -179,19 +147,18 @@ namespace PasswordManager.ViewModels.CustomControls
             }
 
             string tags = string.Join(" ", CompletedTags);
-            PasswordModel newPassword = new() { Username = Username, Password = PasswordAsCharArray, Url = Url, ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate, CategoryPath = CategoryPath, Tags = tags, Favorite = Favorite, Notes = Notes };
-            if (InitialDatabase != Database)
+            PasswordModel newPassword = new()
             {
-                databaseInfoProviderService.CurrentDatabase = InitialDatabase;
-                passwordManagementService.Remove(Id);
-                databaseInfoProviderService.CurrentDatabase = Database;
-                passwordManagementService.Add(newPassword);
-            }
-            else
-            {
-                passwordManagementService.Edit(Id, newPassword);
-            }
-
+                Username = Username,
+                Password = PasswordAsCharArray,
+                Url = Url,
+                ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate,
+                CategoryPath = CategoryPath,
+                Tags = tags,
+                Favorite = Favorite,
+                Notes = Notes
+            };
+            passwordManagementService.Edit(Id, newPassword);
             Password = string.Empty;
             Array.Fill(PasswordAsCharArray, '0');
             ((IRefreshable)obj).Refresh();
