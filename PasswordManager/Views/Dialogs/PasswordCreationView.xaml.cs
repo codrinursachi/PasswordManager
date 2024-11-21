@@ -30,7 +30,9 @@ namespace PasswordManager.Views
             InitializeComponent();
             MouseMove += AutoLocker.OnActivity;
             KeyDown += AutoLocker.OnActivity;
-            pwdCreator.Content=userControlProviderService.ProvideUserControl<PasswordModelEditor>();
+            var passwordModelEditor = userControlProviderService.ProvideUserControl<PasswordModelEditor>();
+            ((PasswordModelEditor)passwordModelEditor).AddButtonVisible = true;
+            pwdCreator.Content=passwordModelEditor;
         }
     }
 }

@@ -53,20 +53,13 @@ namespace PasswordManager.ViewModels.CustomControls
         [ObservableProperty]
         private string notes;
         [ObservableProperty]
-        private bool addButtonVisible = true;
-        [ObservableProperty]
-        private bool editButtonVisible = false;
-        [ObservableProperty]
         private string urlErrorMessage;
         [ObservableProperty]
         private string usernameErrorMessage;
         [ObservableProperty]
         private string passwordErrorMessage;
-        private PasswordModel passwordModel;
         private IModalDialogProviderService modalDialogProviderService;
         private IModalDialogClosingService modalDialogClosingService;
-        private IMessenger generatedPassMessenger;
-        private IMessenger passwordModelMessenger;
         private IPasswordManagementService passwordManagementService;
         public PasswordModelEditorViewModel(
             IModalDialogProviderService modalDialogProviderService,
@@ -78,8 +71,6 @@ namespace PasswordManager.ViewModels.CustomControls
             this.passwordManagementService = passwordManagementService;
             this.modalDialogClosingService = modalDialogClosingService;
             this.modalDialogProviderService = modalDialogProviderService;
-            this.generatedPassMessenger = generatedPassMessenger;
-            this.passwordModelMessenger = passwordModelMessenger;
             generatedPassMessenger.Register<PasswordModelEditorViewModel, char[]>(this, (r,m)=>
             {
                 r.Password = string.Concat(Enumerable.Repeat('*', m.Length));
@@ -87,47 +78,32 @@ namespace PasswordManager.ViewModels.CustomControls
             });
             passwordModelMessenger.Register<PasswordModelEditorViewModel, PasswordModel>(this, (r, m) =>
             {
-                r.PasswordModel = m;
+                Array.Clear(r.PasswordAsCharArray);
+                r.Id = m.Id;
+                r.Url = m.Url;
+                r.Username = m.Username;
+                r.PasswordAsCharArray = m.Password;
+                r.Password = "******";
+                r.ExpirationDate = m.ExpirationDate;
+                r.CategoryPath = m.CategoryPath;
+                r.Favorite = m.Favorite;
+                r.Notes = m.Notes;
+                r.CompletedTags.Clear();
+                if (string.IsNullOrEmpty(m.Tags))
+                {
+                    return;
+                }
+                foreach (var tag in m.Tags.Split())
+                {
+                    r.CompletedTags.Add(tag);
+                }
             });
             CategoryPaths = passwordManagementService.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
-        }
-
-        partial void OnAddButtonVisibleChanged(bool value)
-        {
-            EditButtonVisible = !value;
         }
 
         public int Id { get; set; }
 
         public char[] PasswordAsCharArray { get; set; } = [];
-
-        public PasswordModel PasswordModel
-        {
-            get => passwordModel;
-            set
-            {
-                passwordModel = value;
-                Array.Clear(PasswordAsCharArray);
-                Id = passwordModel.Id;
-                Url = passwordModel.Url;
-                Username = passwordModel.Username;
-                PasswordAsCharArray = passwordModel.Password;
-                Password = "******";
-                ExpirationDate = passwordModel.ExpirationDate;
-                CategoryPath = passwordModel.CategoryPath;
-                Favorite = passwordModel.Favorite;
-                Notes = passwordModel.Notes;
-                CompletedTags.Clear();
-                if (string.IsNullOrEmpty(passwordModel.Tags))
-                {
-                    return;
-                }
-                foreach (var tag in passwordModel.Tags.Split())
-                {
-                    CompletedTags.Add(tag);
-                }
-            }
-        }
 
         [RelayCommand]
         public void AddPassword(object obj)
@@ -158,12 +134,12 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         public void EditPassword(object obj)
         {
-            if (PasswordModel == null)
+            if (Id == default)
             {
                 return;
             }
             ValidateAllProperties();
-            if (PasswordModel == null||HasErrors)
+            if (HasErrors)
             {
                 SetValidationErrorsStrings();
                 return;

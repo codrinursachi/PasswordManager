@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.DTO;
 using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
@@ -19,15 +21,17 @@ namespace PasswordManager.ViewModels
     {
         [ObservableProperty]
         private CategoryNodeModel filter;
-        private IDatabaseInfoProviderService databaseInfoProviderService;
+        public ObservableCollection<PasswordToShowDTO> passwords = [];
         private IPasswordManagementService passwordManagementService;
-        public CategoryViewModel(IDatabaseInfoProviderService databaseInfoProviderService, IPasswordManagementService passwordManagementService)
+        private IMessenger passwordListMessenger;
+        public CategoryViewModel(
+            IPasswordManagementService passwordManagementService,
+            [FromKeyedServices("PasswordList")]IMessenger passwordListMessenger)
         {
-            this.databaseInfoProviderService = databaseInfoProviderService;
             this.passwordManagementService = passwordManagementService;
+            this.passwordListMessenger = passwordListMessenger;
         }
 
-        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = [];
         
         partial void OnFilterChanged(CategoryNodeModel value)
         {
@@ -39,13 +43,12 @@ namespace PasswordManager.ViewModels
         }
         private void FilterPass()
         {
-            Passwords.Clear();
-            //PasswordRepository passwordRepository = new(databaseInfoProviderService.CurrentDatabase, databaseInfoProviderService.DBPass);
+            passwords.Clear();
             if (Filter == null || Filter.Parent == null)
             {
                 foreach (var password in passwordManagementService.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()))
                 {
-                    Passwords.Add(password);
+                    passwords.Add(password);
                 }
 
                 return;
@@ -69,8 +72,10 @@ namespace PasswordManager.ViewModels
 
             foreach (var password in passwordManagementService.GetAllPasswords().Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')).Select(p => p.ToPasswordToShowDTO()))
             {
-                Passwords.Add(password);
+                passwords.Add(password);
             }
+
+            passwordListMessenger.Send(passwords);
         }
     }
 }

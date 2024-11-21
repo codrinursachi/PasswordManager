@@ -38,11 +38,6 @@ namespace PasswordManager.Views
             search.SetBinding(PasswordSearch.searchCriteriaProperty, searchBind);
             var dataGrid = userControlProviderService.ProvideUserControl<PasswordDataGrid>();
             pwdDataGrid.Content = dataGrid;
-            Binding dataGridBinding = new("Passwords")
-            {
-                Source = DataContext
-            };
-            dataGrid.SetBinding(PasswordDataGrid.PasswordListProperty, dataGridBinding);
         }
     }
 }

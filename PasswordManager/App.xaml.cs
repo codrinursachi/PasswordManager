@@ -42,6 +42,7 @@ namespace PasswordManager
             services.AddSingleton<AllPasswordsViewModel>();
             services.AddSingleton<CategoryViewModel>();
             services.AddSingleton<FavoritesViewModel>();
+            services.AddSingleton<PasswordDataGridViewModel>();
             services.AddTransient<PasswordGeneratorViewModel>();
             services.AddTransient<PasswordModelEditorViewModel>();
 
@@ -52,12 +53,14 @@ namespace PasswordManager
             services.AddSingleton<IModalDialogClosingService, ModalDialogClosingService>();
             services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("GeneratedPassword");
             services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("PasswordModel");
+            services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("PasswordList");
             services.AddSingleton<IDatabaseStorageService, DatabaseStorageService>();
             services.AddSingleton<IDatabaseInfoProviderService, DatabaseInfoProviderService>();
             services.AddSingleton<IUserControlProviderService, UserControlProviderService>();
             services.AddSingleton<IPasswordImporterService, PasswordImporterService>();
             services.AddSingleton<IPasswordRepository, PasswordRepository>();
             services.AddSingleton<IPasswordManagementService, PasswordManagementService>();
+            services.AddSingleton<IClipboardService, ClipboardService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => dataContextType => (ObservableObject)serviceProvider.GetRequiredService(dataContextType));

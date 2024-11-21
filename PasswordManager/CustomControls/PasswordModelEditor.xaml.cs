@@ -27,6 +27,7 @@ namespace PasswordManager.CustomControls
     public partial class PasswordModelEditor : UserControl
     {
         public static readonly DependencyProperty AddButtonVisibleProperty = DependencyProperty.Register("AddButtonVisible", typeof(bool), typeof(PasswordModelEditor));
+        public static readonly DependencyProperty EditButtonVisibleProperty = DependencyProperty.Register("EditButtonVisible", typeof(bool), typeof(PasswordModelEditor));
 
         public PasswordModelEditor(IDataContextProviderService dataContextProviderService)
         {
@@ -38,6 +39,12 @@ namespace PasswordManager.CustomControls
         {
             get { return (bool)GetValue(AddButtonVisibleProperty); }
             set { SetValue(AddButtonVisibleProperty, value); }
+        }
+
+        public bool EditButtonVisible
+        {
+            get { return (bool)GetValue(EditButtonVisibleProperty); }
+            set { SetValue(EditButtonVisibleProperty, value); }
         }
 
         private void datePickerGotMouseCapture(object sender, MouseEventArgs e)

@@ -1,4 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.DTO;
 using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
@@ -19,15 +21,17 @@ namespace PasswordManager.ViewModels
     {
         [ObservableProperty]
         private string searchFilter;
-        private IDatabaseInfoProviderService databaseInfoProviderService;
+        public ObservableCollection<PasswordToShowDTO> passwords = [];
         private IPasswordManagementService passwordManagementService;
-        public FavoritesViewModel(IDatabaseInfoProviderService dataBaseInfoProviderService, IPasswordManagementService passwordManagementService)
+        private IMessenger passwordListMessenger;
+        public FavoritesViewModel(
+            IPasswordManagementService passwordManagementService,
+            [FromKeyedServices(key: "PasswordList")] IMessenger passwordListMessenger)
         {
-            this.databaseInfoProviderService = dataBaseInfoProviderService;
             this.passwordManagementService = passwordManagementService;
+            this.passwordListMessenger = passwordListMessenger;
         }
 
-        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = [];
 
         partial void OnSearchFilterChanged(string value)
         {
@@ -36,7 +40,7 @@ namespace PasswordManager.ViewModels
 
         public void Refresh()
         {
-            Passwords.Clear();
+            passwords.Clear();
             foreach (var password in passwordManagementService.GetAllPasswords().Where(p => p.Favorite).Select(p => p.ToPasswordToShowDTO()))
             {
                 List<string> searchData = [];
@@ -62,9 +66,11 @@ namespace PasswordManager.ViewModels
                 }
                 if (string.IsNullOrEmpty(SearchFilter) || searchData.ToHashSet().IsSupersetOf(SearchFilter.Split()))
                 {
-                    Passwords.Add(password);
+                    passwords.Add(password);
                 }
             }
+
+            passwordListMessenger.Send(passwords);
         }
     }
 }
