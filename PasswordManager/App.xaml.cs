@@ -1,4 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
@@ -49,6 +50,7 @@ namespace PasswordManager
             services.AddSingleton<INavigationToChildViewService, NavigationToChildViewService>();
             services.AddSingleton<IModalDialogProviderService, ModalDialogProviderService>();
             services.AddSingleton<IModalDialogClosingService, ModalDialogClosingService>();
+            services.AddSingleton<IMessenger, WeakReferenceMessenger>();
             services.AddSingleton<IDatabaseStorageService, DatabaseStorageService>();
             services.AddSingleton<IDatabaseInfoProviderService, DatabaseInfoProviderService>();
             services.AddSingleton<IUserControlProviderService, UserControlProviderService>();

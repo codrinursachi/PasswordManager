@@ -13,7 +13,6 @@ namespace PasswordManager.Services
         public Stack<Window> ModalDialogs { get; set; } = [];
         public void Close()
         {
-            ModalDialogs.Peek().DialogResult = true;
             ModalDialogs.Pop().Close();
         }
     }
