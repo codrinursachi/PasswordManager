@@ -10,6 +10,7 @@ using PasswordManager.Views;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,7 +20,7 @@ using System.Windows.Input;
 
 namespace PasswordManager.ViewModels.CustomControls
 {
-    public partial class PasswordModelEditorViewModel : ObservableObject, IPasswordPair
+    public partial class PasswordModelEditorViewModel : ObservableValidator, IPasswordPair
     {
         [ObservableProperty]
         private List<string> categoryPaths = [];
@@ -30,10 +31,16 @@ namespace PasswordManager.ViewModels.CustomControls
         [ObservableProperty]
         private bool overlayVisibility;
         [ObservableProperty]
+        [Required(ErrorMessage ="Field cannot be empty")]
+        [MinLength(4, ErrorMessage ="Username must be at least 4 characters")]
         private string username;
         [ObservableProperty]
+        [Required(ErrorMessage = "Field cannot be empty")]
+        [MinLength(6, ErrorMessage = "Password must be at least 6 characters")]
         private string password;
         [ObservableProperty]
+        [Required(ErrorMessage = "Field cannot be empty")]
+        [MinLength(4, ErrorMessage = "URL must be at least 4 characters")]
         private string url;
         [ObservableProperty]
         private DateTime expirationDate = DateTime.Today;
@@ -54,20 +61,13 @@ namespace PasswordManager.ViewModels.CustomControls
         [ObservableProperty]
         private string passwordErrorMessage;
         private PasswordModel passwordModel;
-        [ObservableProperty]
-        private IDatabaseStorageService databaseStorageService;
         private IModalDialogProviderService modalDialogProviderService;
-        private IDatabaseInfoProviderService databaseInfoProviderService;
         private IPasswordManagementService passwordManagementService;
         public PasswordModelEditorViewModel(
-            IDatabaseInfoProviderService databaseInfoProviderService,
-            IDatabaseStorageService databaseStorageService,
             IModalDialogProviderService modalDialogProviderService,
             IPasswordManagementService passwordManagementService)
         {
             this.passwordManagementService = passwordManagementService;
-            this.databaseInfoProviderService = databaseInfoProviderService;
-            DatabaseStorageService = databaseStorageService;
             this.modalDialogProviderService = modalDialogProviderService;
             CategoryPaths = passwordManagementService.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
@@ -111,8 +111,10 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         public void AddPassword(object obj)
         {
-            if (!Validate())
+            ValidateAllProperties();
+            if (HasErrors)
             {
+                DisplayValidationErrors();
                 return;
             }
             string tags = string.Join(" ", CompletedTags);
@@ -141,8 +143,14 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         public void EditPassword(object obj)
         {
-            if (PasswordModel == null || !Validate())
+            if (PasswordModel == null)
             {
+                return;
+            }
+            ValidateAllProperties();
+            if (PasswordModel == null||HasErrors)
+            {
+                DisplayValidationErrors();
                 return;
             }
 
@@ -164,14 +172,6 @@ namespace PasswordManager.ViewModels.CustomControls
             ((IRefreshable)obj).Refresh();
         }
 
-        private bool Validate()
-        {
-            UrlErrorMessage = !string.IsNullOrEmpty(Url) && Uri.IsWellFormedUriString(Url, UriKind.RelativeOrAbsolute) ? string.Empty : "URL must be valid";
-            UsernameErrorMessage = !string.IsNullOrEmpty(Username) && Username.Length >= 5 ? string.Empty : "Username must be longer than 4 characters";
-            PasswordErrorMessage = PasswordAsCharArray.Length >= 5 ? string.Empty : "Password must be longer than 4 characters";
-            return (UrlErrorMessage + UsernameErrorMessage + PasswordErrorMessage).Length == 0;
-        }
-
         [RelayCommand]
         private void ShowPasswordGenerator()
         {
@@ -184,6 +184,20 @@ namespace PasswordManager.ViewModels.CustomControls
                 PasswordAsCharArray = passGenDataContext.GeneratedPassword;
             }
             OverlayVisibility = false;
+        }
+
+        private void DisplayValidationErrors()
+        {
+            UsernameErrorMessage = string.Empty;
+            UrlErrorMessage = string.Empty;
+            PasswordErrorMessage = string.Empty;
+            var errorDict = GetErrors().ToDictionary(e => e.MemberNames.First(), e => e.ErrorMessage);
+            errorDict.TryGetValue(nameof(Username), out usernameErrorMessage);
+            errorDict.TryGetValue(nameof(Url), out urlErrorMessage);
+            errorDict.TryGetValue(nameof(Password), out passwordErrorMessage);
+            OnPropertyChanged(nameof(UsernameErrorMessage));
+            OnPropertyChanged(nameof(UrlErrorMessage));
+            OnPropertyChanged(nameof(PasswordErrorMessage));
         }
     }
 }
