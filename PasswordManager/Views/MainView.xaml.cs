@@ -23,7 +23,9 @@ namespace PasswordManager.Views
     public partial class MainView : Window
     {
         INavigationToChildViewService navigationToChildViewService;
-        public MainView(INavigationToChildViewService navigationToChildViewService, IDataContextProviderService dataContextProviderService)
+        public MainView(
+            INavigationToChildViewService navigationToChildViewService, 
+            IDataContextProviderService dataContextProviderService)
         {
             InitializeComponent();
             MouseMove += AutoLocker.OnActivity;

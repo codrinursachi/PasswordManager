@@ -62,12 +62,15 @@ namespace PasswordManager.ViewModels.CustomControls
         private string passwordErrorMessage;
         private PasswordModel passwordModel;
         private IModalDialogProviderService modalDialogProviderService;
+        private IModalDialogClosingService modalDialogClosingService;
         private IPasswordManagementService passwordManagementService;
         public PasswordModelEditorViewModel(
             IModalDialogProviderService modalDialogProviderService,
+            IModalDialogClosingService modalDialogClosingService,
             IPasswordManagementService passwordManagementService)
         {
             this.passwordManagementService = passwordManagementService;
+            this.modalDialogClosingService = modalDialogClosingService;
             this.modalDialogProviderService = modalDialogProviderService;
             CategoryPaths = passwordManagementService.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
@@ -92,6 +95,7 @@ namespace PasswordManager.ViewModels.CustomControls
                 Url = passwordModel.Url;
                 Username = passwordModel.Username;
                 PasswordAsCharArray = passwordModel.Password;
+                Password = "******";
                 ExpirationDate = passwordModel.ExpirationDate;
                 CategoryPath = passwordModel.CategoryPath;
                 Favorite = passwordModel.Favorite;
@@ -131,13 +135,7 @@ namespace PasswordManager.ViewModels.CustomControls
             };
             passwordManagementService.Add(newPassword);
             Array.Fill(PasswordAsCharArray, '0');
-            foreach (Window window in App.Current.Windows)
-            {
-                if (window is PasswordCreationView)
-                {
-                    window.Close();
-                }
-            }
+            modalDialogClosingService.Close();
         }
 
         [RelayCommand]
@@ -167,7 +165,7 @@ namespace PasswordManager.ViewModels.CustomControls
                 Notes = Notes
             };
             passwordManagementService.Edit(Id, newPassword);
-            Password = string.Empty;
+            Password = "******";
             Array.Fill(PasswordAsCharArray, '0');
             ((IRefreshable)obj).Refresh();
         }
@@ -176,6 +174,7 @@ namespace PasswordManager.ViewModels.CustomControls
         private void ShowPasswordGenerator()
         {
             var passwordGen = modalDialogProviderService.ProvideModal<PasswordGeneratorView>();
+            modalDialogClosingService.ModalDialogs.Push(passwordGen);
             OverlayVisibility = true;
             if (passwordGen.ShowDialog() == true)
             {

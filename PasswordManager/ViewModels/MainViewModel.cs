@@ -39,6 +39,7 @@ namespace PasswordManager.ViewModels
         private ObservableCollection<string> databases = [];
         private IDatabaseStorageService databaseStorageService;
         private IModalDialogProviderService modalDialogOpenerService;
+        private IModalDialogClosingService modalDialogClosingService;
         private IDatabaseInfoProviderService databaseInfoProviderService;
         private IPasswordImporterService passwordImporterService;
         private IPasswordManagementService passwordManagementService;
@@ -46,6 +47,7 @@ namespace PasswordManager.ViewModels
             IDatabaseInfoProviderService databaseInfoProviderService, 
             INavigationService navService,
             IModalDialogProviderService modalDialogOpenerService, 
+            IModalDialogClosingService modalDialogClosingService,
             IDatabaseStorageService databaseStorageService,
             IPasswordImporterService passwordImporterService,
             IPasswordManagementService passwordManagementService)
@@ -56,6 +58,7 @@ namespace PasswordManager.ViewModels
             this.databaseInfoProviderService.CurrentDatabase = selectedDb;
             Navigation = navService;
             this.modalDialogOpenerService=modalDialogOpenerService;
+            this.modalDialogClosingService=modalDialogClosingService;
             this.passwordImporterService=passwordImporterService;
             this.passwordManagementService=passwordManagementService;
             AutoLocker.SetupTimer();
@@ -137,6 +140,7 @@ namespace PasswordManager.ViewModels
         {
             OverlayVisibility = true;
             var passwordCreationView = modalDialogOpenerService.ProvideModal<PasswordCreationView>();
+            modalDialogClosingService.ModalDialogs.Push(passwordCreationView);
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
             Refresh();

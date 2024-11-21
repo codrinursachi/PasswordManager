@@ -41,16 +41,17 @@ namespace PasswordManager
             services.AddSingleton<AllPasswordsViewModel>();
             services.AddSingleton<CategoryViewModel>();
             services.AddSingleton<FavoritesViewModel>();
-            services.AddSingleton<PasswordGeneratorViewModel>();
+            services.AddTransient<PasswordGeneratorViewModel>();
             services.AddTransient<PasswordModelEditorViewModel>();
 
+            services.AddSingleton<IDataContextProviderService, DataContextProviderService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<INavigationToChildViewService, NavigationToChildViewService>();
             services.AddSingleton<IModalDialogProviderService, ModalDialogProviderService>();
+            services.AddSingleton<IModalDialogClosingService, ModalDialogClosingService>();
             services.AddSingleton<IDatabaseStorageService, DatabaseStorageService>();
-            services.AddSingleton<IUserControlProviderService, UserControlProviderService>();
-            services.AddSingleton<IDataContextProviderService, DataContextProviderService>();
             services.AddSingleton<IDatabaseInfoProviderService, DatabaseInfoProviderService>();
+            services.AddSingleton<IUserControlProviderService, UserControlProviderService>();
             services.AddSingleton<IPasswordImporterService, PasswordImporterService>();
             services.AddSingleton<IPasswordRepository, PasswordRepository>();
             services.AddSingleton<IPasswordManagementService, PasswordManagementService>();

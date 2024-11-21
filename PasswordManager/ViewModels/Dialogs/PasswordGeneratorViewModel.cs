@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PasswordManager.Interfaces;
 using PasswordManager.Views;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Policy;
@@ -22,9 +23,15 @@ namespace PasswordManager.ViewModels
         private string alphaNumCountErrorMessage;
         [ObservableProperty]
         private string symbolsCountErrorMessage;
-
         [ObservableProperty]
-        public char[] generatedPassword = [];
+        private char[] generatedPassword = [];
+        private IModalDialogClosingService modalDialogClosingService;
+
+        public PasswordGeneratorViewModel(
+            IModalDialogClosingService modalDialogClosingService)
+        {
+            this.modalDialogClosingService = modalDialogClosingService;
+        }
 
         [RelayCommand]
         public void IncrementAlphaNumCount() => AlphaNumCount++;
@@ -41,14 +48,7 @@ namespace PasswordManager.ViewModels
         [RelayCommand]
         private void AcceptPassword(object obj)
         {
-            foreach (Window window in App.Current.Windows)
-            {
-                if (window is PasswordGeneratorView)
-                {
-                    window.DialogResult = true;
-                    window.Close();
-                }
-            }
+            modalDialogClosingService.Close();
         }
 
         [RelayCommand]
