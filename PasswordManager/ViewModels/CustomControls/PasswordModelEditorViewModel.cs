@@ -114,7 +114,7 @@ namespace PasswordManager.ViewModels.CustomControls
             ValidateAllProperties();
             if (HasErrors)
             {
-                DisplayValidationErrors();
+                SetValidationErrorsStrings();
                 return;
             }
             string tags = string.Join(" ", CompletedTags);
@@ -150,7 +150,7 @@ namespace PasswordManager.ViewModels.CustomControls
             ValidateAllProperties();
             if (PasswordModel == null||HasErrors)
             {
-                DisplayValidationErrors();
+                SetValidationErrorsStrings();
                 return;
             }
 
@@ -186,7 +186,7 @@ namespace PasswordManager.ViewModels.CustomControls
             OverlayVisibility = false;
         }
 
-        private void DisplayValidationErrors()
+        private void SetValidationErrorsStrings()
         {
             UsernameErrorMessage = string.Empty;
             UrlErrorMessage = string.Empty;
