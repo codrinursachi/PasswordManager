@@ -50,7 +50,8 @@ namespace PasswordManager
             services.AddSingleton<INavigationToChildViewService, NavigationToChildViewService>();
             services.AddSingleton<IModalDialogProviderService, ModalDialogProviderService>();
             services.AddSingleton<IModalDialogClosingService, ModalDialogClosingService>();
-            services.AddSingleton<IMessenger, WeakReferenceMessenger>();
+            services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("GeneratedPassword");
+            services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("PasswordModel");
             services.AddSingleton<IDatabaseStorageService, DatabaseStorageService>();
             services.AddSingleton<IDatabaseInfoProviderService, DatabaseInfoProviderService>();
             services.AddSingleton<IUserControlProviderService, UserControlProviderService>();

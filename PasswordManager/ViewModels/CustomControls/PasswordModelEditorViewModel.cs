@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.CustomControls;
 using PasswordManager.DTO;
 using PasswordManager.Interfaces;
@@ -64,22 +65,29 @@ namespace PasswordManager.ViewModels.CustomControls
         private PasswordModel passwordModel;
         private IModalDialogProviderService modalDialogProviderService;
         private IModalDialogClosingService modalDialogClosingService;
-        private IMessenger messenger;
+        private IMessenger generatedPassMessenger;
+        private IMessenger passwordModelMessenger;
         private IPasswordManagementService passwordManagementService;
         public PasswordModelEditorViewModel(
             IModalDialogProviderService modalDialogProviderService,
             IModalDialogClosingService modalDialogClosingService,
-            IMessenger messenger,
+            [FromKeyedServices("GeneratedPassword")] IMessenger generatedPassMessenger,
+            [FromKeyedServices("PasswordModel")] IMessenger passwordModelMessenger,
             IPasswordManagementService passwordManagementService)
         {
             this.passwordManagementService = passwordManagementService;
             this.modalDialogClosingService = modalDialogClosingService;
             this.modalDialogProviderService = modalDialogProviderService;
-            this.messenger = messenger;
-            messenger.Register<PasswordModelEditorViewModel, char[]>(this, (r,m)=>
+            this.generatedPassMessenger = generatedPassMessenger;
+            this.passwordModelMessenger = passwordModelMessenger;
+            generatedPassMessenger.Register<PasswordModelEditorViewModel, char[]>(this, (r,m)=>
             {
                 r.Password = string.Concat(Enumerable.Repeat('*', m.Length));
                 r.PasswordAsCharArray = m;
+            });
+            passwordModelMessenger.Register<PasswordModelEditorViewModel, PasswordModel>(this, (r, m) =>
+            {
+                r.PasswordModel = m;
             });
             CategoryPaths = passwordManagementService.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }

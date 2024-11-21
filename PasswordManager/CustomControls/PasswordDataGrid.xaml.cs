@@ -1,4 +1,6 @@
-﻿using PasswordManager.DTO;
+﻿using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
+using PasswordManager.DTO;
 using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
@@ -35,13 +37,18 @@ namespace PasswordManager.CustomControls
         private DispatcherTimer timer;
 
         private IPasswordManagementService passwordManagementService;
-        public PasswordDataGrid(IUserControlProviderService userControlProviderService, IPasswordManagementService passwordManagementService)
+        private IMessenger passwordModelMessenger;
+        public PasswordDataGrid(
+            IUserControlProviderService userControlProviderService, 
+            IPasswordManagementService passwordManagementService,
+            [FromKeyedServices("PasswordModel")] IMessenger passwordModelMessenger)
         {
             InitializeComponent();
             var passwordModelEditor = userControlProviderService.ProvideUserControl<PasswordModelEditor>();
             ((PasswordModelEditorViewModel)passwordModelEditor.DataContext).AddButtonVisible = false;
             pwdEditor.Content = passwordModelEditor;
             this.passwordManagementService = passwordManagementService;
+            this.passwordModelMessenger = passwordModelMessenger;
         }
 
         public ObservableCollection<PasswordToShowDTO> PasswordList
@@ -76,7 +83,7 @@ namespace PasswordManager.CustomControls
             {
                 return;
             }
-            ((PasswordModelEditorViewModel)((PasswordModelEditor)pwdEditor.Content).DataContext).PasswordModel = selectedItem.ToPasswordModel();
+            passwordModelMessenger.Send(selectedItem.ToPasswordModel());
         }
 
         private void MenuItemUsername_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)

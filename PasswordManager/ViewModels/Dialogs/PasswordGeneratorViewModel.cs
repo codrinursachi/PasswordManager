@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
+using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.Interfaces;
+using PasswordManager.Models;
 using PasswordManager.Views;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Policy;
@@ -27,14 +29,14 @@ namespace PasswordManager.ViewModels
         [ObservableProperty]
         private char[] generatedPassword = [];
         private IModalDialogClosingService modalDialogClosingService;
-        private IMessenger messenger;
+        private IMessenger generatedPassMessenger;
 
         public PasswordGeneratorViewModel(
             IModalDialogClosingService modalDialogClosingService,
-            IMessenger messenger)
+            [FromKeyedServices("GeneratedPassword")]IMessenger generatedPassMessenger)
         {
             this.modalDialogClosingService = modalDialogClosingService;
-            this.messenger = messenger;
+            this.generatedPassMessenger = generatedPassMessenger;
         }
 
         [RelayCommand]
@@ -52,7 +54,7 @@ namespace PasswordManager.ViewModels
         [RelayCommand]
         private void AcceptPassword(object obj)
         {
-            messenger.Send(GeneratedPassword);
+            generatedPassMessenger.Send(GeneratedPassword);
             modalDialogClosingService.Close();
         }
 
