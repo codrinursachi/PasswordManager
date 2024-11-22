@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="/Styles/TextStyles.xaml" />
                 <ResourceDictionary Source="/Styles/ListViewItem.xaml" />
                 <ResourceDictionary Source="/Styles/SeparatorStyles.xaml" />
+                <ResourceDictionary Source="/Styles/DataGridStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

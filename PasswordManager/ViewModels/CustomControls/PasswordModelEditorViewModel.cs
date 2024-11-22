@@ -2,23 +2,11 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using PasswordManager.CustomControls;
-using PasswordManager.DTO;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
-using PasswordManager.Repositories;
-using PasswordManager.Utilities;
 using PasswordManager.Views;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
 
 namespace PasswordManager.ViewModels.CustomControls
 {
@@ -58,6 +46,12 @@ namespace PasswordManager.ViewModels.CustomControls
         private string usernameErrorMessage;
         [ObservableProperty]
         private string passwordErrorMessage;
+        [ObservableProperty]
+        private bool isReadOnly;
+        [ObservableProperty]
+        private bool isEditingEnabled=true;
+        [ObservableProperty]
+        private string currentAvailableAction;
         private IModalDialogProviderService modalDialogProviderService;
         private IModalDialogClosingService modalDialogClosingService;
         private IPasswordManagementService passwordManagementService;
@@ -78,6 +72,9 @@ namespace PasswordManager.ViewModels.CustomControls
             });
             passwordModelMessenger.Register<PasswordModelEditorViewModel, PasswordModel>(this, (r, m) =>
             {
+                IsReadOnly = true;
+                IsEditingEnabled = false;
+                CurrentAvailableAction = "Edit";
                 Array.Clear(r.PasswordAsCharArray);
                 r.Id = m.Id;
                 r.Url = m.Url;
@@ -132,8 +129,13 @@ namespace PasswordManager.ViewModels.CustomControls
         }
 
         [RelayCommand]
-        public void SavePassword(object obj)
+        public void AvailableAction(object obj)
         {
+            if (CurrentAvailableAction == "Edit")
+            {
+                EnableEditing();
+                return;
+            }
             ValidateAllProperties();
             if (HasErrors)
             {
@@ -157,6 +159,13 @@ namespace PasswordManager.ViewModels.CustomControls
             Password = "******";
             Array.Fill(PasswordAsCharArray, '0');
             ((IRefreshable)obj).Refresh();
+        }
+
+        public void EnableEditing()
+        {
+            IsReadOnly = false;
+            IsEditingEnabled = true;
+            CurrentAvailableAction = "Save";
         }
 
         [RelayCommand]
