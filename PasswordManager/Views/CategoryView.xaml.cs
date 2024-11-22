@@ -24,7 +24,9 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class CategoryView : UserControl
     {
-        public CategoryView(IUserControlProviderService userControlProviderService, IDataContextProviderService dataContextProviderService)
+        public CategoryView(
+            IUserControlProviderService userControlProviderService, 
+            IDataContextProviderService dataContextProviderService)
         {
             InitializeComponent();
             DataContext = dataContextProviderService.ProvideDataContext<CategoryViewModel>();

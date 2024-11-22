@@ -7,6 +7,7 @@ using PasswordManager.Repositories;
 using PasswordManager.Utilities;
 using PasswordManager.ViewModels.CustomControls;
 using PasswordManager.Views;
+using PasswordManager.Views.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -69,18 +70,6 @@ namespace PasswordManager.ViewModels
 
         public Brush RandomBrush { get => new SolidColorBrush(Color.FromRgb((byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240))); }
 
-        partial void OnSelectedDbChanged(string value)
-        {
-            if (value == null)
-            {
-                return;
-            }
-            databaseInfoProviderService.CurrentDatabase = value;
-            var rootNode = passwordManagementService.GetPasswordsCategoryRoot();
-            Categories = [rootNode];
-            ((IRefreshable)Navigation.CurrentView).Refresh();
-        }
-
         public CategoryNodeModel Filter
         {
             get => ((CategoryViewModel)Navigation.CurrentView).Filter;
@@ -132,6 +121,18 @@ namespace PasswordManager.ViewModels
         {
             Navigation.NavigateTo<AllPasswordsViewModel>();
             Caption = "All Passwords";
+         
+            Refresh();
+        }
+
+        [RelayCommand]
+        private void OpenDatabaseManager()
+        {
+            OverlayVisibility = true;
+            var databaseManagerView = modalDialogOpenerService.ProvideModal<DataBaseManagerView>();
+            modalDialogClosingService.ModalDialogs.Push(databaseManagerView);
+            databaseManagerView.ShowDialog();
+            OverlayVisibility = false;
             Refresh();
         }
 

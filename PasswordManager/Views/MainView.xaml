@@ -76,8 +76,7 @@
                               Height="auto"
                               Width="auto"
                               SelectedItemChanged="CategoriesSelectedItemChanged"
-                              Background="Transparent"
-                              BorderThickness="0">
+                              Margin="-15,0,0,0">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
                                 <TextBlock x:Name="categoryItem"
@@ -108,9 +107,21 @@
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center">
-                    <ComboBox x:Name="dtbSelector"
-                              ItemsSource="{Binding Databases, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
-                              SelectedValue="{Binding SelectedDb}" />
+                    <Button Command="{Binding OpenDatabaseManagerCommand}"
+                            Width="120"
+                            HorizontalContentAlignment="Left">
+                        <Button.Content>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="75"/>
+                                    <ColumnDefinition Width="20" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="{Binding SelectedDb}" />
+                                <TextBlock Grid.Column="1"
+                                           Text="⚙️" />
+                            </Grid>
+                        </Button.Content>
+                    </Button>
                     <Button x:Name="btnAddPass"
                             Margin="25,0,25,0"
                             Command="{Binding ShowPasswordCreationViewCommand}"

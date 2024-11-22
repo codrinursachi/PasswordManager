@@ -37,5 +37,23 @@ namespace PasswordManager.Services
                 Databases.Add("default");
             }
         }
+
+        public void Add(string dbName)
+        {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", testing);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            File.Create(Path.Combine(path, dbName+".json")).Close();
+            Refresh();
+        }
+
+        public void Remove(string dbName)
+        {
+            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", testing);
+            File.Delete(Path.Combine(path, dbName + ".json"));
+            Refresh();
+        }
     }
 }

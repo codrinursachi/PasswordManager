@@ -51,6 +51,7 @@ namespace PasswordManager.ViewModels
                     passwords.Add(password);
                 }
 
+                passwordListMessenger.Send(passwords);
                 return;
             }
 

@@ -7,7 +7,9 @@ using PasswordManager.Repositories;
 using PasswordManager.Services;
 using PasswordManager.ViewModels;
 using PasswordManager.ViewModels.CustomControls;
+using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views;
+using PasswordManager.Views.Dialogs;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
@@ -29,6 +31,7 @@ namespace PasswordManager
             services.AddSingleton<MainView>();
             services.AddTransient<PasswordCreationView>();
             services.AddTransient<PasswordGeneratorView>();
+            services.AddTransient<DataBaseManagerView>();
 
             services.AddSingleton<AllPasswordsView>();
             services.AddSingleton<FavoritesView>();
@@ -45,6 +48,7 @@ namespace PasswordManager
             services.AddSingleton<PasswordDataGridViewModel>();
             services.AddTransient<PasswordGeneratorViewModel>();
             services.AddTransient<PasswordModelEditorViewModel>();
+            services.AddTransient<DataBaseManagerViewModel>();
 
             services.AddSingleton<IDataContextProviderService, DataContextProviderService>();
             services.AddSingleton<INavigationService, NavigationService>();

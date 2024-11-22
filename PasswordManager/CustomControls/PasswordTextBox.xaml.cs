@@ -33,7 +33,7 @@ namespace PasswordManager.CustomControls
         {
             int position = ((TextBox)sender).CaretIndex - 1;
             var password = ((IPasswordPair)DataContext).PasswordAsCharArray;
-            if ((e.Key == Key.Back || e.Key == Key.Delete) && ((TextBox)sender).Text != null)
+            if ((e.Key == Key.Back || e.Key == Key.Delete) && !string.IsNullOrEmpty(((TextBox)sender).Text))
             {
                 ((IPasswordPair)DataContext).PasswordAsCharArray = [.. password[..(position + 1)], .. password[(position + 2)..]];
             }
