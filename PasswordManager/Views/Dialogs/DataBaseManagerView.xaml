@@ -12,7 +12,7 @@
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
     <StackPanel Margin="20">
-        <TextBlock Text="Database:" />
+        <TextBlock Text="Select Database:" />
         <Separator Style="{StaticResource separatorHorizontalSpacing}" />
         <StackPanel Orientation="Horizontal">
             <ComboBox Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}"
@@ -21,8 +21,9 @@
                       Width="150" />
             <TextBox Visibility="{Binding DatabaseAddingMode,Converter={StaticResource BooleanToVisibilityConverter}}"
                      Text="{Binding NewDbName}"
-                     Width="236"/>
+                     Width="236" />
             <Button VerticalAlignment="Stretch"
+                    Margin="10,0,10,0"
                     Content="➕"
                     Command="{Binding AddDbModeCommand}"
                     Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}" />
@@ -32,8 +33,19 @@
                     Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}" />
         </StackPanel>
         <Separator Style="{StaticResource separatorHorizontalSpacing}" />
-        <Button Content="{Binding CurrentMode}"
-                Command="{Binding ExecuteModeActionCommand}"
-                HorizontalAlignment="Stretch" />
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="10" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button Content="{Binding CurrentMode}"
+                    Command="{Binding ExecuteModeActionCommand}"
+                    HorizontalAlignment="Stretch"/>
+            <Button Grid.Column="2"
+                    Content="Cancel"
+                    Command="{Binding CancelCommand}"
+                    HorizontalAlignment="Stretch"/>
+        </Grid>
     </StackPanel>
 </Window>

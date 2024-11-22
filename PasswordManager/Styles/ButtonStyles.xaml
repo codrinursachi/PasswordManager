@@ -54,7 +54,35 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
-                    <ContentPresenter Content="{TemplateBinding Content}" Margin="25,0,0,0" VerticalAlignment="Center"/>
+                    <Border x:Name="border"
+                            BorderThickness="1"
+                            BorderBrush="Transparent">
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          VerticalAlignment="Center"
+                                          HorizontalAlignment="Stretch" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="BorderBrush">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="LightGray"
+                                                     Opacity="0.3" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                        <Trigger Property="IsPressed"
+                                 Value="True">
+                            <Setter TargetName="border"
+                                    Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="LightGray"
+                                                     Opacity="0.3" />
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>

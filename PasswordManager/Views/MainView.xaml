@@ -22,31 +22,30 @@
         <Border CornerRadius="10,0,0,10"
                 Grid.Column="0">
             <StackPanel>
-                
+                <Border CornerRadius="60"
+                        Height="120"
+                        Width="120"
+                        Margin="0,30,0,30">
+                    <Border.Background>
+                        <LinearGradientBrush StartPoint="0,0"
+                                             EndPoint="1,1">
+                            <GradientStop Color="{StaticResource winBorderColor1}"
+                                          Offset="0" />
+                            <GradientStop Color="{StaticResource winBorderColor2}"
+                                          Offset="0.75" />
+                            <GradientStop Color="{StaticResource winBorderColor3}"
+                                          Offset="1" />
+                        </LinearGradientBrush>
+                    </Border.Background>
                     <Border CornerRadius="60"
                             Height="120"
-                            Width="120"
-                            Margin="0,30,0,30">
+                            Width="120">
                         <Border.Background>
-                            <LinearGradientBrush StartPoint="0,0"
-                                                 EndPoint="1,1">
-                                <GradientStop Color="{StaticResource winBorderColor1}"
-                                              Offset="0" />
-                                <GradientStop Color="{StaticResource winBorderColor2}"
-                                              Offset="0.75" />
-                                <GradientStop Color="{StaticResource winBorderColor3}"
-                                              Offset="1" />
-                            </LinearGradientBrush>
+                            <ImageBrush ImageSource="/Images/Logo.png"
+                                        Opacity="0.2" />
                         </Border.Background>
-                        <Border CornerRadius="60"
-                                Height="120"
-                                Width="120">
-                            <Border.Background>
-                                <ImageBrush ImageSource="/Images/Logo.png"
-                                            Opacity="0.2" />
-                            </Border.Background>
-                        </Border>
                     </Border>
+                </Border>
                 <RadioButton Style="{StaticResource menuButton}"
                              Command="{Binding ShowAllPasswordsViewCommand}"
                              IsChecked="True">
@@ -102,11 +101,12 @@
                             VerticalAlignment="Center">
                     <Button Command="{Binding OpenDatabaseManagerCommand}"
                             Width="120"
-                            HorizontalContentAlignment="Left">
+                            HorizontalContentAlignment="Left"
+                            ToolTip="Databases management">
                         <Button.Content>
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="75"/>
+                                    <ColumnDefinition Width="75" />
                                     <ColumnDefinition Width="20" />
                                 </Grid.ColumnDefinitions>
                                 <TextBlock Text="{Binding SelectedDb}" />

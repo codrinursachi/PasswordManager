@@ -45,7 +45,6 @@ namespace PasswordManager.ViewModels.CustomControls
         {
             if (value == null)
             {
-                IsEditorVisible = false;
                 return;
             }
             IsEditorVisible = true;
@@ -67,6 +66,7 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         public void DeletePassword()
         {
+            IsEditorVisible = false;
             passwordManagementService.Remove(SelectedPass.Id);
             PasswordList.Remove(SelectedPass);
         }

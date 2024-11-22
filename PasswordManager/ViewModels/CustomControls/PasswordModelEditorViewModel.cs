@@ -159,6 +159,7 @@ namespace PasswordManager.ViewModels.CustomControls
             Password = "******";
             Array.Fill(PasswordAsCharArray, '0');
             ((IRefreshable)obj).Refresh();
+            DisableEditing();
         }
 
         public void EnableEditing()
@@ -166,6 +167,14 @@ namespace PasswordManager.ViewModels.CustomControls
             IsReadOnly = false;
             IsEditingEnabled = true;
             CurrentAvailableAction = "Save";
+        }
+
+        [RelayCommand]
+        public void DisableEditing()
+        {
+            IsReadOnly = true;
+            IsEditingEnabled = false;
+            CurrentAvailableAction = "Edit";
         }
 
         [RelayCommand]

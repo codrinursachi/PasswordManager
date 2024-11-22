@@ -7,13 +7,14 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PasswordManager.ViewModels.Dialogs
 {
     public partial class DataBaseManagerViewModel : ObservableValidator
     {
         [ObservableProperty]
-        private List<string> databases = [];
+        private ObservableCollection<string> databases = [];
         [ObservableProperty]
         private string selectedDatabase;
         [ObservableProperty]
@@ -23,7 +24,7 @@ namespace PasswordManager.ViewModels.Dialogs
         [ObservableProperty]
         private bool databaseAddingMode;
         [ObservableProperty]
-        private string currentMode = "Change Database";
+        private string currentMode = "OK";
         private IDatabaseStorageService databaseStorageService;
         private IDatabaseInfoProviderService databaseInfoProviderService;
         private IModalDialogClosingService modalDialogClosingService;
@@ -35,7 +36,7 @@ namespace PasswordManager.ViewModels.Dialogs
             this.databaseStorageService = databaseStorageService;
             this.databaseInfoProviderService = databaseInfoProviderService;
             this.modalDialogClosingService = modalDialogClosingService;
-            Databases = databaseStorageService.Databases;
+            databaseStorageService.Databases.ForEach(db => Databases.Add(db));
             SelectedDatabase = databaseInfoProviderService.CurrentDatabase;
         }
 
@@ -66,9 +67,23 @@ namespace PasswordManager.ViewModels.Dialogs
         public void RemoveDb()
         {
             databaseStorageService.Remove(SelectedDatabase);
-            Databases = databaseStorageService.Databases;
+            Databases.Clear();
+            databaseStorageService.Databases.ForEach(db=>Databases.Add(db));
             SelectedDatabase = Databases[0];
             databaseInfoProviderService.CurrentDatabase = SelectedDatabase;
+        }
+
+        [RelayCommand]
+        public void Cancel()
+        {
+            if (DatabaseAddingMode)
+            {
+                DatabaseSelectionMode = true;
+                DatabaseAddingMode = false;
+                return;
+            }
+
+            modalDialogClosingService.Close();
         }
     }
 }
