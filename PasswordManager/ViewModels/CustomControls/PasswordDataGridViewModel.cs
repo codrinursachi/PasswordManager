@@ -61,7 +61,7 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         public void CopyPassword()
         {
-            clipboardService.TimedCopyToClipboard(new string(selectedPass.Password));
+            clipboardService.TimedCopyToClipboard(new string(passwordManagementService.GetPasswordById(SelectedPass.Id).Password));
         }
 
         [RelayCommand]

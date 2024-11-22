@@ -49,4 +49,14 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    <Style x:Key="ActionButtonStyles"
+           TargetType="Button">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <ContentPresenter Content="{TemplateBinding Content}" Margin="25,0,0,0" VerticalAlignment="Center"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>
