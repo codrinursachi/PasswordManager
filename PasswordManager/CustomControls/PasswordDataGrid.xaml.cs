@@ -43,7 +43,7 @@ namespace PasswordManager.CustomControls
             InitializeComponent();
             DataContext = dataContextProviderService.ProvideDataContext<PasswordDataGridViewModel>();
             var passwordModelEditor = userControlProviderService.ProvideUserControl<PasswordModelEditor>();
-            ((PasswordModelEditor)passwordModelEditor).EditButtonVisible = true;
+            ((PasswordModelEditor)passwordModelEditor).EditMode = true;
             pwdEditor.Content = passwordModelEditor;
             this.passwordManagementService = passwordManagementService;
         }

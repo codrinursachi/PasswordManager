@@ -24,6 +24,7 @@ namespace PasswordManager.Services
         public void StartPasswordImport()
         {
             OpenFileDialog openFileDialog = new();
+            openFileDialog.Filter = "Json files(*.json)|*.json";
             if (openFileDialog.ShowDialog() == true)
             {
                 string passwords = File.ReadAllText(openFileDialog.FileName);
@@ -33,7 +34,6 @@ namespace PasswordManager.Services
                 }
 
                 List<PasswordModel> passwordsToImport = JsonSerializer.Deserialize<List<PasswordModel>>(passwords);
-                //PasswordRepository passwordRepository = new(databaseInfoProviderService.CurrentDatabase, databaseInfoProviderService.DBPass);
                 foreach (var password in passwordsToImport)
                 {
                     passwordManagementService.Add(password);

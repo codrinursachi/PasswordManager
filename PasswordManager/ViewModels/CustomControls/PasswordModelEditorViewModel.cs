@@ -132,12 +132,8 @@ namespace PasswordManager.ViewModels.CustomControls
         }
 
         [RelayCommand]
-        public void EditPassword(object obj)
+        public void SavePassword(object obj)
         {
-            if (Id == default)
-            {
-                return;
-            }
             ValidateAllProperties();
             if (HasErrors)
             {

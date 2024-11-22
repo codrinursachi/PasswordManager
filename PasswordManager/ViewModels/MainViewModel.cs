@@ -129,7 +129,7 @@ namespace PasswordManager.ViewModels
         private void OpenDatabaseManager()
         {
             OverlayVisibility = true;
-            var databaseManagerView = modalDialogOpenerService.ProvideModal<DataBaseManagerView>();
+            var databaseManagerView = modalDialogOpenerService.ProvideModal<DatabaseManagerView>();
             modalDialogClosingService.ModalDialogs.Push(databaseManagerView);
             databaseManagerView.ShowDialog();
             OverlayVisibility = false;

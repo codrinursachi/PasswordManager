@@ -31,7 +31,7 @@ namespace PasswordManager
             services.AddSingleton<MainView>();
             services.AddTransient<PasswordCreationView>();
             services.AddTransient<PasswordGeneratorView>();
-            services.AddTransient<DataBaseManagerView>();
+            services.AddTransient<DatabaseManagerView>();
 
             services.AddSingleton<AllPasswordsView>();
             services.AddSingleton<FavoritesView>();

@@ -17,11 +17,11 @@ using System.Windows.Shapes;
 namespace PasswordManager.Views.Dialogs
 {
     /// <summary>
-    /// Interaction logic for DataBaseManagerView.xaml
+    /// Interaction logic for DatabaseManagerView.xaml
     /// </summary>
-    public partial class DataBaseManagerView : Window
+    public partial class DatabaseManagerView : Window
     {
-        public DataBaseManagerView(
+        public DatabaseManagerView(
             IDataContextProviderService dataContextProviderService)
         {
             InitializeComponent();

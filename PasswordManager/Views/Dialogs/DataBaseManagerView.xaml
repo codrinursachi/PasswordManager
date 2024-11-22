@@ -1,17 +1,17 @@
-﻿<Window x:Class="PasswordManager.Views.Dialogs.DataBaseManagerView"
+﻿<Window x:Class="PasswordManager.Views.Dialogs.DatabaseManagerView"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PasswordManager.Views.Dialogs"
         mc:Ignorable="d"
-        Title="DataBaseManagerView"
+        Title="Database Manager"
         SizeToContent="WidthAndHeight"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
     </Window.Resources>
-    <StackPanel>
+    <StackPanel Margin="20">
         <TextBlock Text="Database:" />
         <Separator Style="{StaticResource separatorHorizontalSpacing}" />
         <StackPanel Orientation="Horizontal">
