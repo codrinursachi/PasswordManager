@@ -52,6 +52,8 @@ namespace PasswordManager.ViewModels.CustomControls
         private bool isEditingEnabled=true;
         [ObservableProperty]
         private string currentAvailableAction;
+        [ObservableProperty]
+        private int id;
         private IModalDialogProviderService modalDialogProviderService;
         private IModalDialogClosingService modalDialogClosingService;
         private IPasswordManagementService passwordManagementService;
@@ -98,7 +100,6 @@ namespace PasswordManager.ViewModels.CustomControls
             CategoryPaths = passwordManagementService.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
 
-        public int Id { get; set; }
 
         public char[] PasswordAsCharArray { get; set; } = [];
 

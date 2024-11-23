@@ -4,36 +4,77 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PasswordManager.Views.Dialogs"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Database Manager"
-        SizeToContent="WidthAndHeight"
+        SizeToContent="Height"
+        Width="320"
+        MinWidth="320"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <Storyboard x:Key="DatabaseManagerStoryboard">
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0"
+                             To="0" />
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0.2"
+                             BeginTime="0:0:0.3" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="0,20,0,0"
+                                To="0,20,0,0" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="0,20,0,0"
+                                BeginTime="0:0:0.3" />
+            <Storyboard.TargetName>dtbManager</Storyboard.TargetName>
+        </Storyboard>
     </Window.Resources>
-    <StackPanel Margin="20">
-        <TextBlock Text="Select Database:" />
-        <Separator Style="{StaticResource separatorHorizontalSpacing}" />
-        <StackPanel Orientation="Horizontal">
-            <ComboBox Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}"
-                      ItemsSource="{Binding Databases}"
-                      SelectedItem="{Binding SelectedDatabase}"
-                      Width="150" />
-            <TextBox Visibility="{Binding DatabaseAddingMode,Converter={StaticResource BooleanToVisibilityConverter}}"
-                     Text="{Binding NewDbName}"
-                     Width="236" />
-            <Button VerticalAlignment="Stretch"
-                    Margin="10,0,10,0"
-                    Content="➕"
-                    Command="{Binding AddDbModeCommand}"
-                    Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}" />
-            <Button VerticalAlignment="Stretch"
-                    Content="➖"
-                    Command="{Binding RemoveDbCommand}"
-                    Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}" />
+    <Grid x:Name="dtbManager">
+        <behaviors:Interaction.Triggers>
+            <behaviors:EventTrigger EventName="Loaded"
+                                    SourceObject="{Binding ElementName=dtbManager}">
+                <behaviors:ControlStoryboardAction Storyboard="{StaticResource DatabaseManagerStoryboard}" />
+            </behaviors:EventTrigger>
+        </behaviors:Interaction.Triggers>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Margin="20">
+            <TextBlock Text="Select Database:" />
+            <Separator Style="{StaticResource separatorHorizontalSpacing}" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="auto" />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <ComboBox Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}"
+                          ItemsSource="{Binding Databases}"
+                          SelectedItem="{Binding SelectedDatabase}"
+                          MinWidth="150" />
+                <TextBox Visibility="{Binding DatabaseAddingMode,Converter={StaticResource BooleanToVisibilityConverter}}"
+                         Text="{Binding NewDbName}"
+                         Margin="0,0,0,5" />
+                <Button VerticalAlignment="Stretch"
+                        Grid.Column="1"
+                        Margin="10,0,10,0"
+                        Content="➕"
+                        Command="{Binding AddDbModeCommand}"
+                        Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <Button VerticalAlignment="Stretch"
+                        Grid.Column="2"
+                        Content="➖"
+                        Command="{Binding RemoveDbCommand}"
+                        Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}" />
+            </Grid>
+            <Separator Style="{StaticResource separatorHorizontalSpacing}" />
         </StackPanel>
-        <Separator Style="{StaticResource separatorHorizontalSpacing}" />
-        <Grid>
+        <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="10" />
@@ -41,11 +82,13 @@
             </Grid.ColumnDefinitions>
             <Button Content="{Binding CurrentMode}"
                     Command="{Binding ExecuteModeActionCommand}"
-                    HorizontalAlignment="Stretch"/>
+                    HorizontalAlignment="Stretch"
+                    Margin="20,0,0,20" />
             <Button Grid.Column="2"
                     Content="Cancel"
                     Command="{Binding CancelCommand}"
-                    HorizontalAlignment="Stretch"/>
+                    HorizontalAlignment="Stretch"
+                    Margin="0,0,20,20" />
         </Grid>
-    </StackPanel>
+    </Grid>
 </Window>

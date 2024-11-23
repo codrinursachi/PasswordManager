@@ -80,6 +80,7 @@ namespace PasswordManager.ViewModels.Dialogs
             {
                 DatabaseSelectionMode = true;
                 DatabaseAddingMode = false;
+                CurrentMode = "OK";
                 return;
             }
 

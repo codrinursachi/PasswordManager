@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:PasswordManager.Views"
         xmlns:viewModel="clr-namespace:PasswordManager.ViewModels"
         xmlns:customcontrols="clr-namespace:PasswordManager.CustomControls"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="Password Manager"
         Height="740"
@@ -13,6 +14,63 @@
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        <Storyboard x:Key="MenuSidebarStoryboard">
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0"
+                             To="0" />
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0.2"
+                             BeginTime="0:0:0.3" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="-20,0,0,0"
+                                To="-20,0,0,0" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="-20,0,0,0"
+                                BeginTime="0:0:0.3" />
+            <Storyboard.TargetName>menuSidebar</Storyboard.TargetName>
+        </Storyboard>
+        <Storyboard x:Key="ButtonPanelStoryboard">
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0"
+                             To="0" />
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0.2"
+                             BeginTime="0:0:0.3" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="0,20,0,0"
+                                To="0,20,0,0" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="0,20,0,0"
+                                BeginTime="0:0:0.3" />
+            <Storyboard.TargetName>buttonPanel</Storyboard.TargetName>
+        </Storyboard>
+        <Storyboard x:Key="DatagridStoryboard">
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0"
+                             To="0" />
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0.2"
+                             BeginTime="0:0:0.3" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="25,55,25,25"
+                                To="25,55,25,25" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="25,55,25,25"
+                                BeginTime="0:0:0.3" />
+            <Storyboard.TargetName>childView</Storyboard.TargetName>
+        </Storyboard>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -21,7 +79,13 @@
         </Grid.ColumnDefinitions>
         <Border CornerRadius="10,0,0,10"
                 Grid.Column="0">
-            <StackPanel>
+            <StackPanel x:Name="menuSidebar">
+                <behaviors:Interaction.Triggers>
+                    <behaviors:EventTrigger EventName="Loaded"
+                                            SourceObject="{Binding ElementName=menuSidebar}">
+                        <behaviors:ControlStoryboardAction Storyboard="{StaticResource MenuSidebarStoryboard}" />
+                    </behaviors:EventTrigger>
+                </behaviors:Interaction.Triggers>
                 <Border CornerRadius="60"
                         Height="120"
                         Width="120"
@@ -98,7 +162,14 @@
                 <StackPanel Grid.Row="1"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
-                            VerticalAlignment="Center">
+                            VerticalAlignment="Center"
+                            x:Name="buttonPanel">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:EventTrigger EventName="Loaded"
+                                                SourceObject="{Binding ElementName=buttonPanel}">
+                            <behaviors:ControlStoryboardAction Storyboard="{StaticResource ButtonPanelStoryboard}" />
+                        </behaviors:EventTrigger>
+                    </behaviors:Interaction.Triggers>
                     <Button Command="{Binding OpenDatabaseManagerCommand}"
                             Width="120"
                             HorizontalContentAlignment="Left"
@@ -126,7 +197,13 @@
                 </StackPanel>
                 <ContentControl x:Name="childView"
                                 Grid.Row="3"
-                                Margin="25" />
+                                Margin="25">
+                    <behaviors:Interaction.Triggers>
+                        <behaviors:PropertyChangedTrigger Binding="{Binding Content, ElementName=childView}">
+                            <behaviors:ControlStoryboardAction Storyboard="{StaticResource DatagridStoryboard}" />
+                        </behaviors:PropertyChangedTrigger>
+                    </behaviors:Interaction.Triggers>
+                </ContentControl>
             </Grid>
         </Border>
         <Border x:Name="Overlay"

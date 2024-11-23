@@ -48,13 +48,13 @@ namespace PasswordManager.ViewModels.CustomControls
                 return;
             }
             IsEditorVisible = true;
-            passwordModelMessenger.Send(selectedPass.ToPasswordModel());
+            passwordModelMessenger.Send(SelectedPass.ToPasswordModel());
         }
 
         [RelayCommand]
         public void CopyUsername()
         {
-            clipboardService.CopyToClipboard(selectedPass.Username);
+            clipboardService.CopyToClipboard(SelectedPass.Username);
         }
 
         [RelayCommand]

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:PasswordManager.Views"
         xmlns:viewModel="clr-namespace:PasswordManager.ViewModels"
         xmlns:customcontrols="clr-namespace:PasswordManager.CustomControls"
+        xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
         Title="{Binding ButtonText}"
         Height="400"
@@ -14,6 +15,25 @@
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+        <Storyboard x:Key="LoginStoryboard">
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0"
+                             To="0" />
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0.2"
+                             BeginTime="0:0:0.3" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="0,55,0,0"
+                                To="0,55,0,0" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="0,55,0,0"
+                                BeginTime="0:0:0.3" />
+            <Storyboard.TargetName>loginPanel</Storyboard.TargetName>
+        </Storyboard>
     </Window.Resources>
     <Window.Visibility>
         <Binding Path="IsViewVisible"
@@ -23,7 +43,14 @@
     <StackPanel Width="250"
                 Grid.Row="1"
                 Orientation="Vertical"
-                Margin="0,35,0,0">
+                Margin="0,35,0,0"
+                x:Name="loginPanel">
+        <behaviors:Interaction.Triggers>
+            <behaviors:EventTrigger EventName="Loaded"
+                                    SourceObject="{Binding ElementName=loginPanel}">
+                <behaviors:ControlStoryboardAction Storyboard="{StaticResource LoginStoryboard}" />
+            </behaviors:EventTrigger>
+        </behaviors:Interaction.Triggers>
         <Border CornerRadius="50"
                 Width="100"
                 Height="100">
