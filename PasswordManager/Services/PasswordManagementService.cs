@@ -1,8 +1,11 @@
-﻿using PasswordManager.Interfaces;
+﻿using PasswordManager.DTO;
+using PasswordManager.DTO.Extensions;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,9 +30,48 @@ namespace PasswordManager.Services
             passwordRepository.Edit(id, newPasswordModel);
         }
 
-        public List<PasswordModel> GetAllPasswords()
+        public List<PasswordToShowDTO> GetAllPasswords()
         {
-            return passwordRepository.GetAllPasswords();
+            return passwordRepository.GetAllPasswords().Select(p=>p.ToPasswordToShowDTO()).ToList();
+        }
+
+        public List<PasswordToShowDTO> GetFilteredPasswords(string filter)
+        {
+            if (string.IsNullOrEmpty(filter))
+            {
+                return GetAllPasswords();
+            }
+            List<PasswordToShowDTO> passwords = [];
+            foreach (var password in GetAllPasswords())
+            {
+                List<string> searchData = [];
+                if (password.Username != null)
+                {
+                    searchData.Add(password.Username);
+                }
+                if (password.CategoryPath != null)
+                {
+                    searchData.AddRange(password.CategoryPath.Split('/'));
+                }
+                if (password.Notes != null)
+                {
+                    searchData.AddRange(password.Notes.Split());
+                }
+                if (password.Tags != null)
+                {
+                    searchData.AddRange(password.Tags.Split());
+                }
+                if (password.Url != null)
+                {
+                    searchData.Add(password.Url);
+                }
+                if (searchData.ToHashSet().IsSupersetOf(filter.Split()))
+                {
+                    passwords.Add(password);
+                }
+            }
+
+            return passwords;
         }
 
         public PasswordModel GetPasswordById(int id)

@@ -46,11 +46,7 @@ namespace PasswordManager.ViewModels
             passwords.Clear();
             if (Filter == null || Filter.Parent == null)
             {
-                foreach (var password in passwordManagementService.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()))
-                {
-                    passwords.Add(password);
-                }
-
+                passwordManagementService.GetAllPasswords().ForEach(passwords.Add);
                 passwordListMessenger.Send(passwords);
                 return;
             }
@@ -71,7 +67,10 @@ namespace PasswordManager.ViewModels
                 filter += item;
             }
 
-            foreach (var password in passwordManagementService.GetAllPasswords().Where(p => p.CategoryPath != null && p.CategoryPath.StartsWith(filter) && (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')).Select(p => p.ToPasswordToShowDTO()))
+            foreach (var password in passwordManagementService.GetAllPasswords().Where(
+                p => p.CategoryPath != null && 
+                p.CategoryPath.StartsWith(filter) && 
+                (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')))
             {
                 passwords.Add(password);
             }
