@@ -63,10 +63,12 @@ namespace PasswordManager
             services.AddSingleton<IUserControlProviderService, UserControlProviderService>();
             services.AddSingleton<IPasswordImporterService, PasswordImporterService>();
             services.AddSingleton<IPasswordRepository, PasswordRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IPasswordManagementService, PasswordManagementService>();
             services.AddSingleton<IClipboardService, ClipboardService>();
             services.AddSingleton<IPathProviderService, PathProviderService>(); 
             services.AddSingleton<IBackupManagementService, BackupManagementService>();
+            services.AddSingleton<IProgramFoldersCreatorService, ProgramFoldersCreatorService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => dataContextType => (ObservableObject)serviceProvider.GetRequiredService(dataContextType));
@@ -78,6 +80,7 @@ namespace PasswordManager
         }
         protected void ApplicationStart(object sender, StartupEventArgs e)
         {
+            serviceProvider.GetRequiredService<IProgramFoldersCreatorService>().CreateFoldersIfNecessary();
             var loginView = serviceProvider.GetRequiredService<LoginView>();
             loginView.Show();
             if (e.Args.Length > 0 && e.Args[0] == "--start-minimized")

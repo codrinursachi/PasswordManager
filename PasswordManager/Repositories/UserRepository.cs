@@ -1,4 +1,5 @@
-﻿using PasswordManager.Models;
+﻿using PasswordManager.Interfaces;
+using PasswordManager.Models;
 using PasswordManager.Utilities;
 using System;
 using System.Collections.Generic;
@@ -11,25 +12,21 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.Repositories
 {
-    public class UserRepository
+    public class UserRepository:IUserRepository
     {
         readonly string fileName;
 
-        public UserRepository(string loginFileName)
+        public UserRepository(
+            IPathProviderService pathProviderService)
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager");
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            fileName = Path.Combine(path, loginFileName);
+            fileName = Path.Combine(pathProviderService.ProgramPath, "UserLogin");
             if (!File.Exists(fileName))
             {
                 File.Create(fileName).Close();
             }
         }
 
-        public void Add(char[] password)
+        private void Add(char[] password)
         {
             var passwordHash = SecretHasher.Hash(password, 50000);
             File.WriteAllText(fileName, passwordHash);

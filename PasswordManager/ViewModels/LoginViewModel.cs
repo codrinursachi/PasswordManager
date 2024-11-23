@@ -24,7 +24,6 @@ namespace PasswordManager.ViewModels
     {
         [ObservableProperty]
         private string errorMessage;
-        private UserRepository userRepository;
         [ObservableProperty]
         private bool isViewVisible = true;
         [ObservableProperty]
@@ -33,10 +32,14 @@ namespace PasswordManager.ViewModels
         [ObservableProperty]
         private string buttonText;
         private IDatabaseInfoProviderService databaseInfoProviderService;
-        public LoginViewModel(IDatabaseInfoProviderService databaseInfoProviderService)
+        private IUserRepository userRepository;
+        public LoginViewModel(
+            IDatabaseInfoProviderService databaseInfoProviderService,
+            IPathProviderService pathProviderService,
+            IUserRepository userRepository)
         {
             this.databaseInfoProviderService = databaseInfoProviderService;
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "UserLogin.json");
+            var path = Path.Combine(pathProviderService.ProgramPath, "UserLogin");
             if (!File.Exists(path))
             {
                 ButtonText = "Register";
@@ -45,7 +48,8 @@ namespace PasswordManager.ViewModels
             {
                 ButtonText = "Log in";
             }
-            userRepository = new UserRepository("UserLogin.json");
+
+            this.userRepository = userRepository;
         }
 
         public char[] PasswordAsCharArray { get; set; } = [];
