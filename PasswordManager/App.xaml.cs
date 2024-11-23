@@ -65,6 +65,8 @@ namespace PasswordManager
             services.AddSingleton<IPasswordRepository, PasswordRepository>();
             services.AddSingleton<IPasswordManagementService, PasswordManagementService>();
             services.AddSingleton<IClipboardService, ClipboardService>();
+            services.AddSingleton<IPathProviderService, PathProviderService>(); 
+            services.AddSingleton<IBackupManagementService, BackupManagementService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => dataContextType => (ObservableObject)serviceProvider.GetRequiredService(dataContextType));

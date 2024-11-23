@@ -18,20 +18,19 @@ namespace PasswordManager.Repositories
 {
     public class PasswordRepository:IPasswordRepository
     {
-        readonly string pathToDb = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases");
+        readonly string pathToDb;
         private IDatabaseInfoProviderService databaseInfoProviderService;
-        public PasswordRepository(IDatabaseInfoProviderService databaseInfoProviderService)
+        public PasswordRepository(
+            IDatabaseInfoProviderService databaseInfoProviderService,
+            IPathProviderService pathProviderService)
         {
             this.databaseInfoProviderService = databaseInfoProviderService;
+            pathToDb= Path.Combine(pathProviderService.ProgramPath, "Databases");
         }
 
         public void Add(PasswordModel passwordModel)
         {
             var dbPath = Path.Combine(pathToDb, databaseInfoProviderService.CurrentDatabase+".json");
-            if (!File.Exists(dbPath))
-            {
-                File.Create(dbPath).Close();
-            }
             List<PasswordModel> passwords = GetPasswordsFromFile();
             passwordModel.Id = passwords.Count == 0 ? 1 : passwords.Max(p => p.Id) + 1;
             var encryptedPass = Encrypt(passwordModel.Password);
@@ -89,10 +88,6 @@ namespace PasswordManager.Repositories
 
         private List<PasswordModel> GetPasswordsFromFile()
         {
-            if (string.IsNullOrEmpty(databaseInfoProviderService.CurrentDatabase))
-            {
-                return null;
-            }
             var fileName = Path.Combine(pathToDb, databaseInfoProviderService.CurrentDatabase+".json");
             List<PasswordModel> passwords = [];
 

@@ -11,48 +11,36 @@ namespace PasswordManager.Services
 {
     public partial class DatabaseStorageService : ObservableObject, IDatabaseStorageService
     {
-        [ObservableProperty]
-        private List<string> databases = [];
-        string testing;
-        public DatabaseStorageService(string testing="")
+        private string programDbPath;
+        public DatabaseStorageService(IPathProviderService pathProviderService)
         {
-            this.testing = testing;
+            programDbPath = Path.Combine(pathProviderService.ProgramPath, "Databases");
             Refresh();
         }
+        public List<string> Databases { get; set; } = [];
         public void Refresh()
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases",testing);
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
             Databases.Clear();
-            foreach (var db in Directory.GetFiles(path))
+            foreach (var db in Directory.GetFiles(programDbPath))
             {
-                Databases.Add(db[(path + "\\").Length..^".json".Length]);
+                Databases.Add(db[(programDbPath + "\\").Length..^".json".Length]);
             }
             if (Databases.Count == 0)
             {
-                File.Create(Path.Combine(path, "default.json")).Close();
+                File.Create(Path.Combine(programDbPath, "default.json")).Close();
                 Databases.Add("default");
             }
         }
 
         public void Add(string dbName)
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", testing);
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            File.Create(Path.Combine(path, dbName+".json")).Close();
+            File.Create(Path.Combine(programDbPath, dbName+".json")).Close();
             Refresh();
         }
 
         public void Remove(string dbName)
         {
-            var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", testing);
-            File.Delete(Path.Combine(path, dbName + ".json"));
+            File.Delete(Path.Combine(programDbPath, dbName + ".json"));
             Refresh();
         }
     }

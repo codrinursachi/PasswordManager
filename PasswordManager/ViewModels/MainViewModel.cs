@@ -51,7 +51,8 @@ namespace PasswordManager.ViewModels
             IModalDialogClosingService modalDialogClosingService,
             IDatabaseStorageService databaseStorageService,
             IPasswordImporterService passwordImporterService,
-            IPasswordManagementService passwordManagementService)
+            IPasswordManagementService passwordManagementService,
+            IBackupManagementService backupManagementService)
         {
             this.databaseStorageService = databaseStorageService;
             this.databaseInfoProviderService = databaseInfoProviderService;
@@ -63,8 +64,7 @@ namespace PasswordManager.ViewModels
             this.passwordImporterService=passwordImporterService;
             this.passwordManagementService=passwordManagementService;
             AutoLocker.SetupTimer();
-            BackupCreator backupCreator = new();
-            backupCreator.CreateBackupIfNecessary();
+            backupManagementService.CreateBackupIfNecessary();
             ShowAllPasswordsViewCommand.Execute(null);
         }
 

@@ -1,23 +1,25 @@
-﻿using System;
+﻿using PasswordManager.Interfaces;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PasswordManager.Utilities
+namespace PasswordManager.Services
 {
-    public class BackupCreator
+    public class BackupManagementService : IBackupManagementService
     {
-        private string appFolder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager");
+        private string programPath;
+        public BackupManagementService(
+            IPathProviderService pathProviderService)
+        {
+            programPath = pathProviderService.ProgramPath;
+        }
         public void CreateBackupIfNecessary()
         {
-            var pathToDb = Path.Combine(appFolder, "Databases");
-            var pathToBackups = Path.Combine(appFolder, "Backups");
-            if (!Directory.Exists(pathToBackups))
-            {
-                Directory.CreateDirectory(pathToBackups);
-            }
+            var pathToDb = Path.Combine(programPath, "Databases");
+            var pathToBackups = Path.Combine(programPath, "Backups");
             foreach (var db in (Directory.GetFiles(pathToDb)))
             {
                 var (backupNecessary, oldestBackup) = CheckBackup(db[(pathToDb + "\\").Length..]);
@@ -27,6 +29,7 @@ namespace PasswordManager.Utilities
                     {
                         File.Delete(oldestBackup);
                     }
+
                     CreateBackup(db);
                 }
             }
@@ -34,9 +37,9 @@ namespace PasswordManager.Utilities
 
         private void CreateBackup(string db)
         {
-            var pathToDb = Path.Combine(appFolder, "Databases");
-            var pathToBackups = Path.Combine(appFolder, "Backups");
-            File.Copy(db, pathToBackups + "\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToString("dd.mm.yyyy") + ".bak");
+            var pathToDb = Path.Combine(programPath, "Databases");
+            var pathToBackups = Path.Combine(programPath, "Backups");
+            File.Copy(db, pathToBackups + "\\" + db[(pathToDb + "\\").Length..] + "_" + DateTime.Now.ToString("dd.MM.yyyy") + ".bak");
         }
 
         private (bool backupNecessary, string oldestBackup) CheckBackup(string DbName)
@@ -46,7 +49,7 @@ namespace PasswordManager.Utilities
             DateTime oldestBackupTime = DateTime.Now;
             string oldestBackup = string.Empty;
 
-            var pathToBackups = Path.Combine(appFolder, "Backups");
+            var pathToBackups = Path.Combine(programPath, "Backups");
             foreach (var db in Directory.GetFiles(pathToBackups))
             {
                 if (db[(pathToBackups + "\\").Length..^"01.01.0001.bak".Length] == DbName + "_")
