@@ -7,6 +7,8 @@ using PasswordManager.Models;
 using PasswordManager.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace PasswordManager.ViewModels.CustomControls
 {
@@ -17,12 +19,12 @@ namespace PasswordManager.ViewModels.CustomControls
         [ObservableProperty]
         private ObservableCollection<string> completedTags = [];
         [ObservableProperty]
-        private string tags;
+        private string tag;
         [ObservableProperty]
         private bool overlayVisibility;
         [ObservableProperty]
-        [Required(ErrorMessage ="Field cannot be empty")]
-        [MinLength(4, ErrorMessage ="Username must be at least 4 characters")]
+        [Required(ErrorMessage = "Field cannot be empty")]
+        [MinLength(4, ErrorMessage = "Username must be at least 4 characters")]
         private string username;
         [ObservableProperty]
         [Required(ErrorMessage = "Field cannot be empty")]
@@ -35,7 +37,7 @@ namespace PasswordManager.ViewModels.CustomControls
         [ObservableProperty]
         private DateTime expirationDate = DateTime.Today;
         [ObservableProperty]
-        private string categoryPath;
+        private string categoryPath=string.Empty;
         [ObservableProperty]
         private bool favorite;
         [ObservableProperty]
@@ -53,7 +55,7 @@ namespace PasswordManager.ViewModels.CustomControls
         [ObservableProperty]
         private bool isReadOnly;
         [ObservableProperty]
-        private bool isEditingEnabled=true;
+        private bool isEditingEnabled = true;
         [ObservableProperty]
         private string currentAvailableAction;
         [ObservableProperty]
@@ -71,7 +73,7 @@ namespace PasswordManager.ViewModels.CustomControls
             this.passwordManagementService = passwordManagementService;
             this.modalDialogClosingService = modalDialogClosingService;
             this.modalDialogProviderService = modalDialogProviderService;
-            generatedPassMessenger.Register<PasswordModelEditorViewModel, char[]>(this, (r,m)=>
+            generatedPassMessenger.Register<PasswordModelEditorViewModel, char[]>(this, (r, m) =>
             {
                 r.Password = string.Concat(Enumerable.Repeat('*', m.Length));
                 r.PasswordAsCharArray = m;
@@ -108,6 +110,12 @@ namespace PasswordManager.ViewModels.CustomControls
 
 
         public char[] PasswordAsCharArray { get; set; } = [];
+        public Brush RandomBrush { get => new SolidColorBrush(Color.FromRgb((byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240))); }
+        public string CategoryPathEndingChar => CategoryPath.TrimEnd('\\') + "\\";
+        partial void OnCategoryPathChanged(string value)
+        {
+            OnPropertyChanged(nameof(CategoryPathEndingChar));
+        }
 
         [RelayCommand]
         public void AddPassword(object obj)
@@ -194,6 +202,23 @@ namespace PasswordManager.ViewModels.CustomControls
             OverlayVisibility = false;
         }
 
+        [RelayCommand]
+        private void AddTag()
+        {
+            if (string.IsNullOrWhiteSpace(Tag)||CompletedTags.Contains("#" + Tag.Trim().Trim('#')))
+            {
+                return;
+            }
+
+            CompletedTags.Add("#" + Tag.Trim().Trim('#'));
+            Tag = string.Empty;
+        }
+
+        [RelayCommand]
+        private void RemoveTag(string tagToRemove)
+        {
+            CompletedTags.Remove(tagToRemove);
+        }
         private void SetValidationErrorsStrings()
         {
             UsernameErrorMessage = string.Empty;

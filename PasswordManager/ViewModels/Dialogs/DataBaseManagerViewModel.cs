@@ -64,7 +64,11 @@ namespace PasswordManager.ViewModels.Dialogs
                     MessageToDisplay = true;
                     return;
                 }
-
+                ValidateAllProperties();
+                if (HasErrors)
+                {
+                    return;
+                }
                 MessageToDisplay = false;
                 databaseStorageService.Add(NewDbName);
                 databaseInfoProviderService.CurrentDatabase = NewDbName;

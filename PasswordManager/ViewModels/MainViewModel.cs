@@ -68,8 +68,6 @@ namespace PasswordManager.ViewModels
             ShowAllPasswordsViewCommand.Execute(null);
         }
 
-        public Brush RandomBrush { get => new SolidColorBrush(Color.FromRgb((byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240))); }
-
         public CategoryNodeModel Filter
         {
             get => ((CategoryViewModel)Navigation.CurrentView).Filter;

@@ -50,34 +50,5 @@ namespace PasswordManager.CustomControls
                 }
             }
         }
-
-        private void txtTagKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Space)
-            {
-                txtTagLostFocus(sender, null);
-            }
-        }
-
-        private void txtTagLostFocus(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(((TextBox)sender).Text))
-            {
-                return;
-            }
-
-            string tag = "#" + ((TextBox)sender).Text.Trim().Trim('#');
-            ((PasswordModelEditorViewModel)DataContext).CompletedTags.Add(tag);
-            ((TextBox)sender).Text = string.Empty;
-        }
-
-        private void TagsMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (Tags.SelectedItem == null)
-            {
-                return;
-            }
-            ((PasswordModelEditorViewModel)DataContext).CompletedTags.Remove(Tags.SelectedItem.ToString());
-        }
     }
 }
