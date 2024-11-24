@@ -40,5 +40,20 @@ namespace PasswordManager.DTO.Extensions
                 Notes = passwordToShowDTO.Notes
             };
         }
+
+        public static PasswordModel ToPasswordModel(this PasswordImportDTO passwordToImport)
+        {
+            return new PasswordModel
+            {
+                Favorite = passwordToImport.Favorite,
+                Url = passwordToImport.Url,
+                Username = passwordToImport.Username,
+                Password = passwordToImport.Password.ToCharArray(),
+                ExpirationDate = passwordToImport.ExpirationDate,
+                CategoryPath = passwordToImport.CategoryPath,
+                Tags = passwordToImport.Tags,
+                Notes = passwordToImport.Notes
+            };
+        }
     }
 }

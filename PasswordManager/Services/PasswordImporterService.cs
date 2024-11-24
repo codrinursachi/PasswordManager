@@ -1,4 +1,6 @@
 ﻿using Microsoft.Win32;
+using PasswordManager.DTO;
+using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Repositories;
@@ -33,10 +35,10 @@ namespace PasswordManager.Services
                     return;
                 }
 
-                List<PasswordModel> passwordsToImport = JsonSerializer.Deserialize<List<PasswordModel>>(passwords);
+                List<PasswordImportDTO> passwordsToImport = JsonSerializer.Deserialize<List<PasswordImportDTO>>(passwords);
                 foreach (var password in passwordsToImport)
                 {
-                    passwordManagementService.Add(password);
+                    passwordManagementService.Add(password.ToPasswordModel());
                 }
             }
 
