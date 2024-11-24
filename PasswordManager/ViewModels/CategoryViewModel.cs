@@ -26,22 +26,18 @@ namespace PasswordManager.ViewModels
         private IMessenger passwordListMessenger;
         public CategoryViewModel(
             IPasswordManagementService passwordManagementService,
-            [FromKeyedServices("PasswordList")]IMessenger passwordListMessenger)
+            [FromKeyedServices("PasswordList")] IMessenger passwordListMessenger)
         {
             this.passwordManagementService = passwordManagementService;
             this.passwordListMessenger = passwordListMessenger;
         }
 
-        
+
         partial void OnFilterChanged(CategoryNodeModel value)
         {
             Refresh();
         }
         public void Refresh()
-        {
-            FilterPass();
-        }
-        private void FilterPass()
         {
             passwords.Clear();
             if (Filter == null || Filter.Parent == null)
@@ -68,8 +64,8 @@ namespace PasswordManager.ViewModels
             }
 
             foreach (var password in passwordManagementService.GetAllPasswords().Where(
-                p => p.CategoryPath != null && 
-                p.CategoryPath.StartsWith(filter) && 
+                p => p.CategoryPath != null &&
+                p.CategoryPath.StartsWith(filter) &&
                 (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')))
             {
                 passwords.Add(password);

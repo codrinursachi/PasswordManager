@@ -24,7 +24,7 @@ namespace PasswordManager.Views
     {
         INavigationToChildViewService navigationToChildViewService;
         public MainView(
-            INavigationToChildViewService navigationToChildViewService, 
+            INavigationToChildViewService navigationToChildViewService,
             IDataContextProviderService dataContextProviderService)
         {
             InitializeComponent();
@@ -36,6 +36,20 @@ namespace PasswordManager.Views
                 Source = navigationToChildViewService
             };
             childView.SetBinding(ContentProperty, childBind);
+            importFormat.ToolTip = """
+                                      [
+                                        {
+                                            "Username": "import1",
+                                            "Password": "import1",
+                                            "Url": "import1",
+                                            "ExpirationDate": "2024-11-27T00:00:00+02:00",
+                                            "CategoryPath": "Category\\Subcategory",
+                                            "Tags": "tag1 tag2 tag3",
+                                            "Favorite": false,
+                                            "Notes": "My notes"
+                                        }
+                                      ]
+                                      """;
         }
 
         private void CategoriesSelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)

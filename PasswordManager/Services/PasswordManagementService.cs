@@ -81,7 +81,7 @@ namespace PasswordManager.Services
 
         public CategoryNodeModel GetPasswordsCategoryRoot()
         {
-            var paths = passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
+            var paths = passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => !string.IsNullOrEmpty(p)).ToList();
             var root = new CategoryNodeModel { Name = "Categories" };
             foreach (var path in paths)
             {

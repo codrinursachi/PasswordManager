@@ -13,6 +13,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using System.Windows;
+using PasswordManager.Views.Dialogs;
+using PasswordManager.Services;
 
 namespace PasswordManager.ViewModels.CustomControls
 {
@@ -27,15 +29,24 @@ namespace PasswordManager.ViewModels.CustomControls
         private IMessenger passwordModelMessenger;
         private IClipboardService clipboardService;
         private IPasswordManagementService passwordManagementService;
+        private IModalDialogProviderService modalDialogProviderService;
+        private IModalDialogResultProviderService modalDialogResultProviderService;
+        private IModalDialogClosingService modalDialogClosingService;
         public PasswordDataGridViewModel(
             [FromKeyedServices(key: "PasswordModel")] IMessenger passwordModelMessenger,
             [FromKeyedServices(key: "PasswordList")] IMessenger passwordListMessenger,
             IClipboardService clipboardService,
-            IPasswordManagementService passwordManagementService)
+            IPasswordManagementService passwordManagementService,
+            IModalDialogProviderService modalDialogProviderService,
+            IModalDialogResultProviderService modalDialogResultProviderService,
+            IModalDialogClosingService modalDialogClosingService)
         {
             this.clipboardService = clipboardService;
             this.passwordManagementService = passwordManagementService;
             this.passwordModelMessenger = passwordModelMessenger;
+            this.modalDialogProviderService = modalDialogProviderService;
+            this.modalDialogResultProviderService = modalDialogResultProviderService;
+            this.modalDialogClosingService = modalDialogClosingService;
             passwordListMessenger.Register<PasswordDataGridViewModel, ObservableCollection<PasswordToShowDTO>>(this, (r, m) =>
             {
                 r.PasswordList = m;
@@ -66,9 +77,16 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         public void DeletePassword()
         {
-            IsEditorVisible = false;
-            passwordManagementService.Remove(SelectedPass.Id);
-            PasswordList.Remove(SelectedPass);
+            var pwdDeletionDialog=modalDialogProviderService.ProvideModal<PasswordDeletionDialogView>();
+            modalDialogClosingService.ModalDialogs.Push(pwdDeletionDialog);
+            pwdDeletionDialog.ShowDialog();
+            if (modalDialogResultProviderService.Result)
+            {
+                modalDialogResultProviderService.Result = false;
+                IsEditorVisible = false;
+                passwordManagementService.Remove(SelectedPass.Id);
+                PasswordList.Remove(SelectedPass);
+            }
         }
     }
 }

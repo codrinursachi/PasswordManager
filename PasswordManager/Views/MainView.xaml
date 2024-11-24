@@ -60,6 +60,21 @@
                                 BeginTime="0:0:0.3" />
             <Storyboard.TargetName>childView</Storyboard.TargetName>
         </Storyboard>
+        <Storyboard x:Key="CaptionStoryboard">
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0"
+                             To="0" />
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0.2"
+                             BeginTime="0:0:0.3" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="0,0,0,0"
+                                BeginTime="0:0:0.3" />
+            <Storyboard.TargetName>caption</Storyboard.TargetName>
+        </Storyboard>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -141,13 +156,19 @@
                     <RowDefinition Height="40" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
-                <TextBlock Text="{Binding Caption}"
+                <TextBlock x:Name="caption"
+                           Text="{Binding Caption}"
                            Margin="25,0,0,0"
                            Grid.Row="1"
                            FontSize="24"
                            FontWeight="Medium"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Left" />
+                           HorizontalAlignment="Left">
+                    <behaviors:Interaction.Triggers>
+    <behaviors:PropertyChangedTrigger Binding="{Binding Text, ElementName=caption}">
+        <behaviors:ControlStoryboardAction Storyboard="{StaticResource CaptionStoryboard}" />
+    </behaviors:PropertyChangedTrigger>
+</behaviors:Interaction.Triggers></TextBlock>
                 <StackPanel Grid.Row="1"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
@@ -180,9 +201,16 @@
                             Command="{Binding ShowPasswordCreationViewCommand}"
                             Content="+ Add Password" />
                     <Button x:Name="btnImportPass"
-                            Margin="0,0,25,0"
                             Command="{Binding ShowPasswordFilePickerDialogueViewCommand}"
                             Content="Import passwords" />
+                    <Button Content="❔"
+                            x:Name="importFormat">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <ContentPresenter Margin="0,0,25,0" />
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
                 </StackPanel>
                 <ContentControl x:Name="childView"
                                 Grid.Row="3"

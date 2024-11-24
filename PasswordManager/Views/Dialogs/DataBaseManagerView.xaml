@@ -63,12 +63,13 @@
                          Margin="0,0,0,5" />
                 <Button VerticalAlignment="Stretch"
                         Grid.Column="1"
-                        Margin="10,0,10,0"
+                        Margin="0,0,5,0"
                         Content="➕"
                         Command="{Binding EnterDatabaseAddModeCommand}"
                         Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <Button VerticalAlignment="Stretch"
                         Grid.Column="2"
+                        Margin="5,0,0,0"
                         Content="➖"
                         Command="{Binding EnterDatabaseDeleteModeCommand}"
                         Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}" />

@@ -32,6 +32,7 @@ namespace PasswordManager
             services.AddTransient<PasswordCreationView>();
             services.AddTransient<PasswordGeneratorView>();
             services.AddTransient<DatabaseManagerView>();
+            services.AddTransient<PasswordDeletionDialogView>();
 
             services.AddSingleton<AllPasswordsView>();
             services.AddSingleton<FavoritesView>();
@@ -49,6 +50,7 @@ namespace PasswordManager
             services.AddTransient<PasswordGeneratorViewModel>();
             services.AddTransient<PasswordModelEditorViewModel>();
             services.AddTransient<DatabaseManagerViewModel>();
+            services.AddTransient<PasswordDeletionDialogViewModel>();
 
             services.AddSingleton<IDataContextProviderService, DataContextProviderService>();
             services.AddSingleton<INavigationService, NavigationService>();
@@ -69,6 +71,7 @@ namespace PasswordManager
             services.AddSingleton<IPathProviderService, PathProviderService>(); 
             services.AddSingleton<IBackupManagementService, BackupManagementService>();
             services.AddSingleton<IProgramFoldersCreatorService, ProgramFoldersCreatorService>();
+            services.AddSingleton<IModalDialogResultProviderService,ModalDialogResultProviderService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => dataContextType => (ObservableObject)serviceProvider.GetRequiredService(dataContextType));
