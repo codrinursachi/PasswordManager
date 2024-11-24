@@ -10,7 +10,8 @@
         SizeToContent="Height"
         Width="320"
         MinWidth="320"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Images/Icon.ico">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Storyboard x:Key="DatabaseManagerStoryboard">

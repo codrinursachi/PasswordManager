@@ -12,7 +12,8 @@
         Height="400"
         Width="600"
         ResizeMode="NoResize"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Images/Icon.ico">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <Storyboard x:Key="LoginStoryboard">

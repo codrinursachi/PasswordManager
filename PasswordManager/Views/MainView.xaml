@@ -11,7 +11,8 @@
         Title="Password Manager"
         Height="740"
         Width="1700"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        Icon="/Images/Icon.ico">
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <Storyboard x:Key="MenuSidebarStoryboard">
