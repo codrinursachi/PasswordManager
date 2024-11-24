@@ -48,7 +48,7 @@ namespace PasswordManager
             services.AddSingleton<PasswordDataGridViewModel>();
             services.AddTransient<PasswordGeneratorViewModel>();
             services.AddTransient<PasswordModelEditorViewModel>();
-            services.AddTransient<DataBaseManagerViewModel>();
+            services.AddTransient<DatabaseManagerViewModel>();
 
             services.AddSingleton<IDataContextProviderService, DataContextProviderService>();
             services.AddSingleton<INavigationService, NavigationService>();

@@ -47,6 +47,10 @@ namespace PasswordManager.ViewModels.CustomControls
         [ObservableProperty]
         private string passwordErrorMessage;
         [ObservableProperty]
+        private bool addButtonVisible = true;
+        [ObservableProperty]
+        private bool editButtonVisible = false;
+        [ObservableProperty]
         private bool isReadOnly;
         [ObservableProperty]
         private bool isEditingEnabled=true;
@@ -74,6 +78,8 @@ namespace PasswordManager.ViewModels.CustomControls
             });
             passwordModelMessenger.Register<PasswordModelEditorViewModel, PasswordModel>(this, (r, m) =>
             {
+                AddButtonVisible = false;
+                EditButtonVisible = true;
                 IsReadOnly = true;
                 IsEditingEnabled = false;
                 CurrentAvailableAction = "Edit";

@@ -4,6 +4,7 @@ using PasswordManager.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,13 +12,14 @@ using System.Windows;
 
 namespace PasswordManager.ViewModels.Dialogs
 {
-    public partial class DataBaseManagerViewModel : ObservableValidator
+    public partial class DatabaseManagerViewModel : ObservableValidator
     {
         [ObservableProperty]
         private ObservableCollection<string> databases = [];
         [ObservableProperty]
         private string selectedDatabase;
         [ObservableProperty]
+        [Required]
         private string newDbName;
         [ObservableProperty]
         private bool databaseSelectionMode = true;
@@ -25,10 +27,14 @@ namespace PasswordManager.ViewModels.Dialogs
         private bool databaseAddingMode;
         [ObservableProperty]
         private string currentMode = "OK";
+        [ObservableProperty]
+        private bool messageToDisplay;
+        [ObservableProperty]
+        private string message;
         private IDatabaseStorageService databaseStorageService;
         private IDatabaseInfoProviderService databaseInfoProviderService;
         private IModalDialogClosingService modalDialogClosingService;
-        public DataBaseManagerViewModel(
+        public DatabaseManagerViewModel(
             IDatabaseStorageService databaseStorageService,
             IDatabaseInfoProviderService databaseInfoProviderService,
             IModalDialogClosingService modalDialogClosingService)
@@ -36,27 +42,57 @@ namespace PasswordManager.ViewModels.Dialogs
             this.databaseStorageService = databaseStorageService;
             this.databaseInfoProviderService = databaseInfoProviderService;
             this.modalDialogClosingService = modalDialogClosingService;
-            databaseStorageService.Databases.ForEach(db => Databases.Add(db));
+            databaseStorageService.Databases.ForEach(Databases.Add);
             SelectedDatabase = databaseInfoProviderService.CurrentDatabase;
         }
 
-        [RelayCommand]
-        public void ExecuteModeAction()
+        partial void OnSelectedDatabaseChanged(string value)
         {
+            MessageToDisplay = false;
+            DatabaseSelectionMode = true;
+            CurrentMode = "Ok";
+        }
+
+        [RelayCommand]
+        public void CurrentModeAction()
+        {
+            if (DatabaseAddingMode)
+            {
+                if (Databases.Contains(NewDbName))
+                {
+                    Message = "Database already exists.";
+                    MessageToDisplay = true;
+                    return;
+                }
+
+                MessageToDisplay = false;
+                databaseStorageService.Add(NewDbName);
+                databaseInfoProviderService.CurrentDatabase = NewDbName;
+                Databases.Add(NewDbName);
+                SelectedDatabase = NewDbName;
+                DatabaseSelectionMode = true;
+                DatabaseAddingMode = false;
+                return;
+            }
+
+            if (MessageToDisplay)
+            {
+                databaseStorageService.Remove(SelectedDatabase);
+                Databases.Remove(SelectedDatabase);
+                SelectedDatabase = Databases[0];
+                databaseInfoProviderService.CurrentDatabase = SelectedDatabase;
+                return;
+            }
             if (DatabaseSelectionMode)
             {
                 databaseInfoProviderService.CurrentDatabase = SelectedDatabase;
                 modalDialogClosingService.Close();
                 return;
             }
-
-            databaseStorageService.Add(NewDbName);
-            databaseInfoProviderService.CurrentDatabase = NewDbName;
-            modalDialogClosingService.Close();
         }
 
         [RelayCommand]
-        public void AddDbMode()
+        public void EnterDatabaseAddMode()
         {
             DatabaseSelectionMode = false;
             DatabaseAddingMode = true;
@@ -64,13 +100,11 @@ namespace PasswordManager.ViewModels.Dialogs
         }
 
         [RelayCommand]
-        public void RemoveDb()
+        public void EnterDatabaseDeleteMode()
         {
-            databaseStorageService.Remove(SelectedDatabase);
-            Databases.Clear();
-            databaseStorageService.Databases.ForEach(db=>Databases.Add(db));
-            SelectedDatabase = Databases[0];
-            databaseInfoProviderService.CurrentDatabase = SelectedDatabase;
+            Message = "This will remove the selected database. Are you sure?";
+            MessageToDisplay = true;
+            CurrentMode = "Delete database";
         }
 
         [RelayCommand]
@@ -81,6 +115,15 @@ namespace PasswordManager.ViewModels.Dialogs
                 DatabaseSelectionMode = true;
                 DatabaseAddingMode = false;
                 CurrentMode = "OK";
+                MessageToDisplay = false;
+                return;
+            }
+
+            if (MessageToDisplay)
+            {
+                DatabaseAddingMode = true;
+                MessageToDisplay = false;
+                CurrentMode = "Ok";
                 return;
             }
 

@@ -25,10 +25,6 @@
             <ThicknessAnimation Duration="0:0:0.3"
                                 Storyboard.TargetProperty="Margin"
                                 From="0,20,0,0"
-                                To="0,20,0,0" />
-            <ThicknessAnimation Duration="0:0:0.3"
-                                Storyboard.TargetProperty="Margin"
-                                From="0,20,0,0"
                                 BeginTime="0:0:0.3" />
             <Storyboard.TargetName>dtbManager</Storyboard.TargetName>
         </Storyboard>
@@ -48,6 +44,10 @@
             <TextBlock Text="Select Database:" />
             <Separator Style="{StaticResource separatorHorizontalSpacing}" />
             <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="auto" />
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="auto" />
@@ -64,15 +64,19 @@
                         Grid.Column="1"
                         Margin="10,0,10,0"
                         Content="➕"
-                        Command="{Binding AddDbModeCommand}"
+                        Command="{Binding EnterDatabaseAddModeCommand}"
                         Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}" />
                 <Button VerticalAlignment="Stretch"
                         Grid.Column="2"
                         Content="➖"
-                        Command="{Binding RemoveDbCommand}"
+                        Command="{Binding EnterDatabaseDeleteModeCommand}"
                         Visibility="{Binding DatabaseSelectionMode,Converter={StaticResource BooleanToVisibilityConverter}}" />
+                <TextBlock Grid.Row="1"
+                           Grid.ColumnSpan="3"
+                           Visibility="{Binding MessageToDisplay,Converter={StaticResource BooleanToVisibilityConverter}}"
+                           Text="{Binding Message}"
+                           TextWrapping="Wrap"/>
             </Grid>
-            <Separator Style="{StaticResource separatorHorizontalSpacing}" />
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -81,7 +85,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Button Content="{Binding CurrentMode}"
-                    Command="{Binding ExecuteModeActionCommand}"
+                    Command="{Binding CurrentModeActionCommand}"
                     HorizontalAlignment="Stretch"
                     Margin="20,0,0,20" />
             <Button Grid.Column="2"

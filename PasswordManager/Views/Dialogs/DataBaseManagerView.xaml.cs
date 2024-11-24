@@ -25,7 +25,7 @@ namespace PasswordManager.Views.Dialogs
             IDataContextProviderService dataContextProviderService)
         {
             InitializeComponent();
-            DataContext = dataContextProviderService.ProvideDataContext<DataBaseManagerViewModel>();
+            DataContext = dataContextProviderService.ProvideDataContext<DatabaseManagerViewModel>();
         }
     }
 }

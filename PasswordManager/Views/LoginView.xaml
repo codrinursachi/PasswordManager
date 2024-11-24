@@ -27,10 +27,6 @@
             <ThicknessAnimation Duration="0:0:0.3"
                                 Storyboard.TargetProperty="Margin"
                                 From="0,55,0,0"
-                                To="0,55,0,0" />
-            <ThicknessAnimation Duration="0:0:0.3"
-                                Storyboard.TargetProperty="Margin"
-                                From="0,55,0,0"
                                 BeginTime="0:0:0.3" />
             <Storyboard.TargetName>loginPanel</Storyboard.TargetName>
         </Storyboard>
