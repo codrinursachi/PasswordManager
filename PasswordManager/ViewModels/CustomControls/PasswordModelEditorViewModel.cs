@@ -35,7 +35,7 @@ namespace PasswordManager.ViewModels.CustomControls
         [MinLength(4, ErrorMessage = "URL must be at least 4 characters")]
         private string url;
         [ObservableProperty]
-        private DateTime expirationDate = DateTime.Today;
+        private DateTime? expirationDate = null;
         [ObservableProperty]
         private string categoryPath=string.Empty;
         [ObservableProperty]
@@ -132,7 +132,7 @@ namespace PasswordManager.ViewModels.CustomControls
                 Username = Username,
                 Password = PasswordAsCharArray,
                 Url = Url,
-                ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate,
+                ExpirationDate = ExpirationDate ?? default,
                 CategoryPath = CategoryPath,
                 Tags = tags,
                 Favorite = Favorite,
@@ -164,7 +164,7 @@ namespace PasswordManager.ViewModels.CustomControls
                 Username = Username,
                 Password = PasswordAsCharArray,
                 Url = Url,
-                ExpirationDate = ExpirationDate == DateTime.Today ? default : ExpirationDate,
+                ExpirationDate = ExpirationDate ?? default,
                 CategoryPath = CategoryPath,
                 Tags = tags,
                 Favorite = Favorite,
@@ -218,6 +218,12 @@ namespace PasswordManager.ViewModels.CustomControls
         private void RemoveTag(string tagToRemove)
         {
             CompletedTags.Remove(tagToRemove);
+        }
+
+        [RelayCommand]
+        private void ClearDate()
+        {
+            ExpirationDate = null;
         }
         private void SetValidationErrorsStrings()
         {

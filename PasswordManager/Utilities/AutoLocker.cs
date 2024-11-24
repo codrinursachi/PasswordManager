@@ -22,7 +22,7 @@ namespace PasswordManager.Utilities
         public static void SetupTimer()
         {
             timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(60);
+            timer.Interval = TimeSpan.FromSeconds(240);
             timer.Tick += TimerTick;
             timer.Start();
         }

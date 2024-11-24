@@ -32,23 +32,5 @@ namespace PasswordManager.CustomControls
             InitializeComponent();
             DataContext=dataContextProviderService.ProvideDataContext<PasswordModelEditorViewModel>();
         }
-
-        private void datePickerGotMouseCapture(object sender, MouseEventArgs e)
-        {
-            datePicker.SelectedDate = DateTime.Today;
-            datePicker.Foreground = Brushes.Black;
-        }
-
-        private void datePickerKeyUp(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Back || e.Key == Key.Delete)
-            {
-                if (string.IsNullOrEmpty(datePicker.Text))
-                {
-                    datePicker.SelectedDate = DateTime.Today;
-                    datePicker.Foreground = Brushes.Transparent;
-                }
-            }
-        }
     }
 }

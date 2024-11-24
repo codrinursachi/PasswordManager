@@ -1,4 +1,5 @@
 ﻿using PasswordManager.Interfaces;
+using PasswordManager.Utilities;
 using PasswordManager.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -25,6 +26,8 @@ namespace PasswordManager.Views.Dialogs
             IDataContextProviderService dataContextProviderService)
         {
             InitializeComponent();
+            MouseMove += AutoLocker.OnActivity;
+            KeyDown += AutoLocker.OnActivity;
             DataContext = dataContextProviderService.ProvideDataContext<DatabaseManagerViewModel>();
         }
     }
