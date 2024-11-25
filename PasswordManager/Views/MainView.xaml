@@ -7,6 +7,7 @@
         xmlns:viewModel="clr-namespace:PasswordManager.ViewModels"
         xmlns:customcontrols="clr-namespace:PasswordManager.CustomControls"
         xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:converters="clr-namespace:PasswordManager.Converters"
         mc:Ignorable="d"
         Title="Password Manager"
         Height="740"
@@ -14,6 +15,7 @@
         WindowStartupLocation="CenterScreen"
         Icon="/Images/Icon.ico">
     <Window.Resources>
+        <converters:MultiValueConverter x:Key="MultiValueConverter" />
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
         <Storyboard x:Key="MenuSidebarStoryboard">
             <DoubleAnimation Duration="0:0:0.3"
@@ -139,9 +141,21 @@
                               Margin="-15,0,0,0">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                <TextBlock x:Name="categoryItem"
-                                           Margin="0"
-                                           Text="{Binding Name}" />
+                                <CheckBox HorizontalAlignment="Stretch">
+                                    <CheckBox.IsChecked>
+                                        <MultiBinding Converter="{StaticResource MultiValueConverter}">
+                                            <Binding RelativeSource="{RelativeSource AncestorType={x:Type TreeViewItem}}"
+                                                     Path="IsSelected" />
+                                            <Binding RelativeSource="{RelativeSource AncestorType={x:Type TreeViewItem}}"
+                                                     Path="IsExpanded" />
+                                        </MultiBinding>
+                                    </CheckBox.IsChecked>
+                                    <CheckBox.Template>
+                                        <ControlTemplate>
+                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                        </ControlTemplate>
+                                    </CheckBox.Template>
+                                </CheckBox>
                             </HierarchicalDataTemplate>
                         </TreeView.ItemTemplate>
                     </TreeView>

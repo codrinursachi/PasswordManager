@@ -46,7 +46,7 @@ namespace PasswordManager
             services.AddSingleton<AllPasswordsViewModel>();
             services.AddSingleton<CategoryViewModel>();
             services.AddSingleton<FavoritesViewModel>();
-            services.AddSingleton<PasswordDataGridViewModel>();
+            services.AddTransient<PasswordDataGridViewModel>();
             services.AddTransient<PasswordGeneratorViewModel>();
             services.AddTransient<PasswordModelEditorViewModel>();
             services.AddTransient<DatabaseManagerViewModel>();
@@ -68,10 +68,10 @@ namespace PasswordManager
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IPasswordManagementService, PasswordManagementService>();
             services.AddSingleton<IClipboardService, ClipboardService>();
-            services.AddSingleton<IPathProviderService, PathProviderService>(); 
+            services.AddSingleton<IPathProviderService, PathProviderService>();
             services.AddSingleton<IBackupManagementService, BackupManagementService>();
             services.AddSingleton<IProgramFoldersCreatorService, ProgramFoldersCreatorService>();
-            services.AddSingleton<IModalDialogResultProviderService,ModalDialogResultProviderService>();
+            services.AddSingleton<IModalDialogResultProviderService, ModalDialogResultProviderService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => dataContextType => (ObservableObject)serviceProvider.GetRequiredService(dataContextType));
@@ -92,7 +92,7 @@ namespace PasswordManager
             }
             loginView.IsVisibleChanged += (s, ev) =>
             {
-                if (loginView.IsVisible == false && loginView.IsLoaded)
+                if (loginView.IsVisible == false && loginView.IsLoaded && serviceProvider.GetRequiredService<IDatabaseInfoProviderService>().DBPass != null)
                 {
                     var mainView = serviceProvider.GetRequiredService<MainView>();
                     mainView.Show();
