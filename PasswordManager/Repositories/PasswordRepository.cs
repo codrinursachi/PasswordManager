@@ -1,22 +1,13 @@
 ﻿using PasswordManager.Interfaces;
 using PasswordManager.Models;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Security.Policy;
 using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
 
 namespace PasswordManager.Repositories
 {
-    public class PasswordRepository:IPasswordRepository
+    public class PasswordRepository : IPasswordRepository
     {
         readonly string pathToDb;
         private IDatabaseInfoProviderService databaseInfoProviderService;
@@ -25,12 +16,12 @@ namespace PasswordManager.Repositories
             IPathProviderService pathProviderService)
         {
             this.databaseInfoProviderService = databaseInfoProviderService;
-            pathToDb= Path.Combine(pathProviderService.ProgramPath, "Databases");
+            pathToDb = Path.Combine(pathProviderService.ProgramPath, "Databases");
         }
 
         public void Add(PasswordModel passwordModel)
         {
-            var dbPath = Path.Combine(pathToDb, databaseInfoProviderService.CurrentDatabase+".json");
+            var dbPath = Path.Combine(pathToDb, databaseInfoProviderService.CurrentDatabase + ".json");
             List<PasswordModel> passwords = GetPasswordsFromFile();
             passwordModel.Id = passwords.Count == 0 ? 1 : passwords.Max(p => p.Id) + 1;
             var encryptedPass = Encrypt(passwordModel.Password);
@@ -88,7 +79,7 @@ namespace PasswordManager.Repositories
 
         private List<PasswordModel> GetPasswordsFromFile()
         {
-            var fileName = Path.Combine(pathToDb, databaseInfoProviderService.CurrentDatabase+".json");
+            var fileName = Path.Combine(pathToDb, databaseInfoProviderService.CurrentDatabase + ".json");
             List<PasswordModel> passwords = [];
 
             string data = File.ReadAllText(fileName);

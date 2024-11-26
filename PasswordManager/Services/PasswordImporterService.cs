@@ -2,15 +2,8 @@
 using PasswordManager.DTO;
 using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
-using PasswordManager.Models;
-using PasswordManager.Repositories;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace PasswordManager.Services
 {

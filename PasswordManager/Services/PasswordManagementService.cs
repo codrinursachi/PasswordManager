@@ -2,13 +2,6 @@
 using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
-using PasswordManager.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PasswordManager.Services
 {
@@ -32,7 +25,7 @@ namespace PasswordManager.Services
 
         public List<PasswordToShowDTO> GetAllPasswords()
         {
-            return passwordRepository.GetAllPasswords().Select(p=>p.ToPasswordToShowDTO()).ToList();
+            return passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()).ToList();
         }
 
         public List<PasswordToShowDTO> GetFilteredPasswords(string filter)

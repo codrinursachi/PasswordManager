@@ -1,17 +1,9 @@
 ﻿using PasswordManager.Models;
 using PasswordManager.Repositories;
-using PasswordManager.ViewModels;
-using PasswordManager;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using PasswordManager.Views;
-using static System.Net.Mime.MediaTypeNames;
-using System.Security.Cryptography;
 using PasswordManager.Services;
+using PasswordManager.ViewModels;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace PasswordManagerTests.ViewModels
 {
@@ -39,7 +31,7 @@ namespace PasswordManagerTests.ViewModels
             passwordRepository.Add(password);
             passwordRepository.Add(password2);
             passwordRepository.Add(password3);
-            FavoritesViewModel allPasswordsViewModel = new(databaseInfoProviderService,passwordManagementService);
+            FavoritesViewModel allPasswordsViewModel = new(databaseInfoProviderService, passwordManagementService);
             allPasswordsViewModel.Refresh();
             Assert.Equal(2, allPasswordsViewModel.Passwords.Count);
             File.Delete(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", file + ".json"));

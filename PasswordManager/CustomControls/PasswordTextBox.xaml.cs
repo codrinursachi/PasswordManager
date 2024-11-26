@@ -1,20 +1,7 @@
 ﻿using PasswordManager.Interfaces;
-using PasswordManager.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PasswordManager.CustomControls
 {
@@ -23,6 +10,7 @@ namespace PasswordManager.CustomControls
     /// </summary>
     public partial class PasswordTextBox : UserControl
     {
+        private bool unedited = true;
         public PasswordTextBox()
         {
             InitializeComponent();
@@ -43,7 +31,7 @@ namespace PasswordManager.CustomControls
         {
             if (string.IsNullOrEmpty(((TextBox)sender).Text))
             {
-                Array.Fill(((IPasswordPair)DataContext).PasswordAsCharArray,'0');
+                Array.Fill(((IPasswordPair)DataContext).PasswordAsCharArray, '0');
                 ((IPasswordPair)DataContext).PasswordAsCharArray = [];
             }
             if (e.IsRepeat)
@@ -61,11 +49,22 @@ namespace PasswordManager.CustomControls
             {
                 return;
             }
+
             ((IPasswordPair)DataContext).PasswordAsCharArray = [.. password[..position], passwordChar, .. password[position..]];
             var length = ((IPasswordPair)DataContext).PasswordAsCharArray.Length;
             ((IPasswordPair)DataContext).Password = string.Concat(Enumerable.Repeat('*', length));
             ((TextBox)sender).CaretIndex = position + 1;
             e.Handled = true;
+        }
+
+        private void pass_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (unedited)
+            {
+                ((IPasswordPair)DataContext).Password = string.Empty;
+                ((IPasswordPair)DataContext).PasswordAsCharArray = [];
+                unedited = false;
+            }
         }
     }
 }

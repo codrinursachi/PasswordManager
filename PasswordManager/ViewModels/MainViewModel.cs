@@ -1,30 +1,15 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
-using PasswordManager.Repositories;
 using PasswordManager.Utilities;
-using PasswordManager.ViewModels.CustomControls;
 using PasswordManager.Views;
 using PasswordManager.Views.Dialogs;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
-    partial class MainViewModel : ObservableObject,IRefreshable
+    partial class MainViewModel : ObservableObject, IRefreshable
     {
         [ObservableProperty]
         private string caption;
@@ -45,9 +30,9 @@ namespace PasswordManager.ViewModels
         private IPasswordImporterService passwordImporterService;
         private IPasswordManagementService passwordManagementService;
         public MainViewModel(
-            IDatabaseInfoProviderService databaseInfoProviderService, 
+            IDatabaseInfoProviderService databaseInfoProviderService,
             INavigationService navService,
-            IModalDialogProviderService modalDialogOpenerService, 
+            IModalDialogProviderService modalDialogOpenerService,
             IModalDialogClosingService modalDialogClosingService,
             IDatabaseStorageService databaseStorageService,
             IPasswordImporterService passwordImporterService,
@@ -59,10 +44,10 @@ namespace PasswordManager.ViewModels
             selectedDb = databaseStorageService.Databases[0];
             this.databaseInfoProviderService.CurrentDatabase = selectedDb;
             Navigation = navService;
-            this.modalDialogOpenerService=modalDialogOpenerService;
-            this.modalDialogClosingService=modalDialogClosingService;
-            this.passwordImporterService=passwordImporterService;
-            this.passwordManagementService=passwordManagementService;
+            this.modalDialogOpenerService = modalDialogOpenerService;
+            this.modalDialogClosingService = modalDialogClosingService;
+            this.passwordImporterService = passwordImporterService;
+            this.passwordManagementService = passwordManagementService;
             AutoLocker.SetupTimer();
             backupManagementService.CreateBackupIfNecessary();
             ShowAllPasswordsViewCommand.Execute(null);
@@ -84,12 +69,12 @@ namespace PasswordManager.ViewModels
         {
             databaseStorageService.Refresh();
             Databases.Clear();
-            foreach(var db in databaseStorageService.Databases)
+            foreach (var db in databaseStorageService.Databases)
             {
                 Databases.Add(db);
             }
             SelectedDb = databaseInfoProviderService.CurrentDatabase;
-            var rootNode=passwordManagementService.GetPasswordsCategoryRoot();
+            var rootNode = passwordManagementService.GetPasswordsCategoryRoot();
             Categories = [rootNode];
             ((IRefreshable)Navigation.CurrentView).Refresh();
         }
@@ -119,7 +104,7 @@ namespace PasswordManager.ViewModels
         {
             Navigation.NavigateTo<AllPasswordsViewModel>();
             Caption = "All Passwords";
-         
+
             Refresh();
         }
 

@@ -1,9 +1,4 @@
 ﻿using PasswordManager.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PasswordManagerTests.Services
 {
@@ -17,7 +12,7 @@ namespace PasswordManagerTests.Services
             File.Create(Path.Combine(path, "db1.json"));
             File.Create(Path.Combine(path, "db2.json"));
             databaseStorageService.Refresh();
-            Assert.Equal(["db1", "db2","default"], databaseStorageService.Databases);
+            Assert.Equal(["db1", "db2", "default"], databaseStorageService.Databases);
         }
     }
 }

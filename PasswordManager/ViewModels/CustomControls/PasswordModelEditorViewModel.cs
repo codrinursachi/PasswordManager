@@ -7,7 +7,6 @@ using PasswordManager.Models;
 using PasswordManager.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
-using System.Windows.Controls;
 using System.Windows.Media;
 
 namespace PasswordManager.ViewModels.CustomControls
@@ -37,7 +36,7 @@ namespace PasswordManager.ViewModels.CustomControls
         [ObservableProperty]
         private DateTime? expirationDate = null;
         [ObservableProperty]
-        private string categoryPath=string.Empty;
+        private string categoryPath = string.Empty;
         [ObservableProperty]
         private bool favorite;
         [ObservableProperty]
@@ -132,7 +131,7 @@ namespace PasswordManager.ViewModels.CustomControls
                 Username = Username,
                 Password = PasswordAsCharArray,
                 Url = Url,
-                ExpirationDate = ExpirationDate ?? default,
+                ExpirationDate = ExpirationDate,
                 CategoryPath = CategoryPath,
                 Tags = tags,
                 Favorite = Favorite,
@@ -164,7 +163,7 @@ namespace PasswordManager.ViewModels.CustomControls
                 Username = Username,
                 Password = PasswordAsCharArray,
                 Url = Url,
-                ExpirationDate = ExpirationDate ?? default,
+                ExpirationDate = ExpirationDate,
                 CategoryPath = CategoryPath,
                 Tags = tags,
                 Favorite = Favorite,
@@ -205,7 +204,7 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         private void AddTag()
         {
-            if (string.IsNullOrWhiteSpace(Tag)||CompletedTags.Contains("#" + Tag.Trim().Trim('#')))
+            if (string.IsNullOrWhiteSpace(Tag) || CompletedTags.Contains("#" + Tag.Trim().Trim('#')))
             {
                 return;
             }
@@ -225,6 +224,7 @@ namespace PasswordManager.ViewModels.CustomControls
         {
             ExpirationDate = null;
         }
+
         private void SetValidationErrorsStrings()
         {
             UsernameErrorMessage = string.Empty;

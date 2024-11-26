@@ -1,11 +1,6 @@
 ﻿using PasswordManager.DTO;
 using PasswordManager.DTO.Extensions;
 using PasswordManager.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PasswordManagerTests.DTOs
 {
@@ -128,7 +123,7 @@ namespace PasswordManagerTests.DTOs
                 Username = "admin",
                 Password = "admin".ToCharArray(),
                 Url = "admin.com",
-                ExpirationDate = (DateTime.Today+TimeSpan.FromDays(7)).ToShortDateString(),
+                ExpirationDate = (DateTime.Today + TimeSpan.FromDays(7)).ToShortDateString(),
                 CategoryPath = "admin/admin",
                 Tags = "#tag1 #tag2 #tag3",
                 Favorite = true,

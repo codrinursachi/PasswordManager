@@ -3,18 +3,9 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.DTO;
-using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Threading;
-using System.Windows;
 using PasswordManager.Views.Dialogs;
-using PasswordManager.Services;
+using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels.CustomControls
 {
@@ -59,7 +50,7 @@ namespace PasswordManager.ViewModels.CustomControls
                 return;
             }
             IsEditorVisible = true;
-            passwordModelMessenger.Send(SelectedPass.ToPasswordModel());
+            passwordModelMessenger.Send(passwordManagementService.GetPasswordById(SelectedPass.Id));
         }
 
         [RelayCommand]
@@ -77,7 +68,7 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         public void DeletePassword()
         {
-            var pwdDeletionDialog=modalDialogProviderService.ProvideModal<PasswordDeletionDialogView>();
+            var pwdDeletionDialog = modalDialogProviderService.ProvideModal<PasswordDeletionDialogView>();
             modalDialogClosingService.ModalDialogs.Push(pwdDeletionDialog);
             pwdDeletionDialog.ShowDialog();
             if (modalDialogResultProviderService.Result)

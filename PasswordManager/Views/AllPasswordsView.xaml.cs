@@ -1,21 +1,8 @@
 ﻿using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
-using PasswordManager.Models;
 using PasswordManager.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace PasswordManager.Views
 {
@@ -28,7 +15,7 @@ namespace PasswordManager.Views
         {
             InitializeComponent();
             DataContext = dataContextProviderService.ProvideDataContext<AllPasswordsViewModel>();
-            var search= userControlProviderService.ProvideUserControl<PasswordSearch>();
+            var search = userControlProviderService.ProvideUserControl<PasswordSearch>();
             pwdSearch.Content = search;
             Binding searchBind = new("SearchFilter")
             {
@@ -36,7 +23,7 @@ namespace PasswordManager.Views
                 Mode = BindingMode.TwoWay
             };
             search.SetBinding(PasswordSearch.searchCriteriaProperty, searchBind);
-            var dataGrid= userControlProviderService.ProvideUserControl<PasswordDataGrid>();
+            var dataGrid = userControlProviderService.ProvideUserControl<PasswordDataGrid>();
             pwdDataGrid.Content = dataGrid;
         }
     }

@@ -1,9 +1,4 @@
 ﻿using PasswordManager.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Threading;
 
@@ -38,7 +33,7 @@ namespace PasswordManager.Services
 
         private void TimerTick(object sender, EventArgs e)
         {
-            if (string.Equals(Clipboard.GetText(),tempObject))
+            if (string.Equals(Clipboard.GetText(), tempObject))
             {
                 Clipboard.Clear();
             }

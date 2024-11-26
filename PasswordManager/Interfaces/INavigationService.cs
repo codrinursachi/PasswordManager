@@ -1,16 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using PasswordManager.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using PasswordManager.ViewModels;
 
 namespace PasswordManager.Interfaces
 {
     public interface INavigationService
     {
         ViewModel CurrentView { get; set; }
-        void NavigateTo<TViewModel>() where TViewModel:ViewModel;
+        void NavigateTo<TViewModel>() where TViewModel : ViewModel;
     }
 }

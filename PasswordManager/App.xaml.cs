@@ -10,8 +10,6 @@ using PasswordManager.ViewModels.CustomControls;
 using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views;
 using PasswordManager.Views.Dialogs;
-using System.Configuration;
-using System.Data;
 using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;

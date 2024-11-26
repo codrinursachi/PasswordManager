@@ -3,11 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.Interfaces;
-using PasswordManager.Models;
-using PasswordManager.Views;
 using System.ComponentModel.DataAnnotations;
-using System.Security.Policy;
-using System.Windows;
 using System.Windows.Controls;
 
 namespace PasswordManager.ViewModels
@@ -17,10 +13,10 @@ namespace PasswordManager.ViewModels
         private string alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         private string symbols = "!\\\";#$%&'()*+,-./:;<=>?@[]^`{|}~";
         [ObservableProperty]
-        [Range(0, int.MaxValue,ErrorMessage ="Value cannot be negative")]
+        [Range(0, int.MaxValue, ErrorMessage = "Value cannot be negative")]
         private int alphaNumCount = 5;
         [ObservableProperty]
-        [Range(0, int.MaxValue,ErrorMessage ="Value cannot be negative")]
+        [Range(0, int.MaxValue, ErrorMessage = "Value cannot be negative")]
         private int symbolsCount = 5;
         [ObservableProperty]
         private string alphaNumCountErrorMessage;
@@ -33,7 +29,7 @@ namespace PasswordManager.ViewModels
 
         public PasswordGeneratorViewModel(
             IModalDialogClosingService modalDialogClosingService,
-            [FromKeyedServices("GeneratedPassword")]IMessenger generatedPassMessenger)
+            [FromKeyedServices("GeneratedPassword")] IMessenger generatedPassMessenger)
         {
             this.modalDialogClosingService = modalDialogClosingService;
             this.generatedPassMessenger = generatedPassMessenger;

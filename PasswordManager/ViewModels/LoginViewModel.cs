@@ -1,22 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using Microsoft.Win32;
-using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
-using PasswordManager.Models;
-using PasswordManager.Repositories;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Security;
 using System.Security.Cryptography;
-using System.Security.Principal;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace PasswordManager.ViewModels
 {
@@ -53,7 +40,7 @@ namespace PasswordManager.ViewModels
         }
 
         public char[] PasswordAsCharArray { get; set; } = [];
-       
+
         private bool CanLogin()
         {
             bool validData;

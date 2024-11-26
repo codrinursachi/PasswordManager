@@ -1,18 +1,10 @@
 ﻿using PasswordManager.Interfaces;
-using PasswordManager.Models;
 using PasswordManager.Utilities;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 
 namespace PasswordManager.Repositories
 {
-    public class UserRepository:IUserRepository
+    public class UserRepository : IUserRepository
     {
         readonly string fileName;
 

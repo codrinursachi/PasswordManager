@@ -1,13 +1,8 @@
 ﻿using PasswordManager.Models;
 using PasswordManager.Repositories;
 using PasswordManager.Services;
-using PasswordManager.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace PasswordManagerTests.Repositories
 {
@@ -17,7 +12,7 @@ namespace PasswordManagerTests.Repositories
         public void ShouldAddAndRetrievePasswordsCorrectly()
         {
             string file = Path.Combine("Temporary", Path.GetRandomFileName());
-            string pathToTemp= Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", "Temporary");
+            string pathToTemp = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManager", "Databases", "Temporary");
             if (!Directory.Exists(pathToTemp))
             {
                 Directory.CreateDirectory(pathToTemp);

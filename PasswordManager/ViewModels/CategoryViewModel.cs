@@ -2,18 +2,9 @@
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.DTO;
-using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
-using PasswordManager.Repositories;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using System.Windows.Threading;
 
 namespace PasswordManager.ViewModels
 {
