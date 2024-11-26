@@ -11,7 +11,9 @@
         mc:Ignorable="d"
         Title="Password Manager"
         Height="740"
+        MinHeight="400"
         Width="1700"
+        MinWidth="800"
         WindowStartupLocation="CenterScreen"
         Icon="/Images/Icon.ico">
     <Window.Resources>
@@ -80,8 +82,8 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="250" />
-            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="0.15*" />
+            <ColumnDefinition Width="0.85*" />
         </Grid.ColumnDefinitions>
         <Border CornerRadius="10,0,0,10"
                 Grid.Column="0">
@@ -135,8 +137,6 @@
                              PreviewMouseLeftButtonDown="Categories_PreviewMouseLeftButtonDown">
                     <TreeView x:Name="Categories"
                               ItemsSource="{Binding Categories}"
-                              Height="auto"
-                              Width="auto"
                               SelectedItemChanged="CategoriesSelectedItemChanged"
                               Margin="-15,0,0,0">
                         <TreeView.ItemTemplate>

@@ -14,7 +14,6 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class MainView : Window
     {
-        INavigationToChildViewService navigationToChildViewService;
         public MainView(
             INavigationToChildViewService navigationToChildViewService,
             IDataContextProviderService dataContextProviderService)
