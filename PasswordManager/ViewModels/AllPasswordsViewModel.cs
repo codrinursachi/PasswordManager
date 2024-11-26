@@ -11,7 +11,6 @@ namespace PasswordManager.ViewModels
     {
         [ObservableProperty]
         string searchFilter;
-        private ObservableCollection<PasswordToShowDTO> passwords { get; set; } = [];
         private IPasswordManagementService passwordManagementService;
         private IMessenger passwordListMessenger;
         public AllPasswordsViewModel(
@@ -22,6 +21,8 @@ namespace PasswordManager.ViewModels
             this.passwordListMessenger = passwordListMessenger;
         }
 
+        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = [];
+
         partial void OnSearchFilterChanged(string value)
         {
             Refresh();
@@ -29,9 +30,9 @@ namespace PasswordManager.ViewModels
 
         public void Refresh()
         {
-            passwords.Clear();
-            passwordManagementService.GetFilteredPasswords(SearchFilter).ForEach(passwords.Add);
-            passwordListMessenger.Send(passwords);
+            Passwords.Clear();
+            passwordManagementService.GetFilteredPasswords(SearchFilter).ForEach(Passwords.Add);
+            passwordListMessenger.Send(Passwords);
         }
     }
 }

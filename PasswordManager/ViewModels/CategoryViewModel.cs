@@ -12,7 +12,6 @@ namespace PasswordManager.ViewModels
     {
         [ObservableProperty]
         private CategoryNodeModel filter;
-        public ObservableCollection<PasswordToShowDTO> passwords = [];
         private IPasswordManagementService passwordManagementService;
         private IMessenger passwordListMessenger;
         public CategoryViewModel(
@@ -23,6 +22,7 @@ namespace PasswordManager.ViewModels
             this.passwordListMessenger = passwordListMessenger;
         }
 
+        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = [];
 
         partial void OnFilterChanged(CategoryNodeModel value)
         {
@@ -30,11 +30,11 @@ namespace PasswordManager.ViewModels
         }
         public void Refresh()
         {
-            passwords.Clear();
+            Passwords.Clear();
             if (Filter == null || Filter.Parent == null)
             {
-                passwordManagementService.GetAllPasswords().ForEach(passwords.Add);
-                passwordListMessenger.Send(passwords);
+                passwordManagementService.GetAllPasswords().ForEach(Passwords.Add);
+                passwordListMessenger.Send(Passwords);
                 return;
             }
 
@@ -59,10 +59,10 @@ namespace PasswordManager.ViewModels
                 p.CategoryPath.StartsWith(filter) &&
                 (string.IsNullOrEmpty(p.CategoryPath[filter.Length..]) || p.CategoryPath[filter.Length] == '\\')))
             {
-                passwords.Add(password);
+                Passwords.Add(password);
             }
 
-            passwordListMessenger.Send(passwords);
+            passwordListMessenger.Send(Passwords);
         }
     }
 }
