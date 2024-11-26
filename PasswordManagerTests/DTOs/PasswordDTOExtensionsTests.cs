@@ -86,5 +86,30 @@ namespace PasswordManagerTests.DTOs
             Assert.True(passwordDTO.Favorite);
             Assert.Equal("admin notes", passwordDTO.Notes);
         }
+
+        [Fact]
+        public void ShouldConvertPasswordImportDTOToPasswordModel()
+        {
+            PasswordImportDTO PasswordImportDTO = new()
+            {
+                Username = "admin",
+                Password = "admin",
+                Url = "admin.com",
+                ExpirationDate = null,
+                CategoryPath = "admin/admin",
+                Tags = "#tag1 #tag2 #tag3",
+                Favorite = true,
+                Notes = "admin notes"
+            };
+            PasswordModel passwordModel = PasswordImportDTO.ToPasswordModel();
+            Assert.Equal("admin", passwordModel.Username);
+            Assert.Equal("admin".ToCharArray(), passwordModel.Password);
+            Assert.Equal("admin.com", passwordModel.Url);
+            Assert.Equal(null, passwordModel.ExpirationDate);
+            Assert.Equal("admin/admin", passwordModel.CategoryPath);
+            Assert.Equal("#tag1 #tag2 #tag3", passwordModel.Tags);
+            Assert.True(passwordModel.Favorite);
+            Assert.Equal("admin notes", passwordModel.Notes);
+        }
     }
 }
