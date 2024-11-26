@@ -85,6 +85,7 @@ namespace PasswordManager.ViewModels.CustomControls
                 IsEditingEnabled = false;
                 CurrentAvailableAction = "Edit";
                 Array.Clear(r.PasswordAsCharArray);
+                UneditedPass = true;
                 r.Id = m.Id;
                 r.Url = m.Url;
                 r.Username = m.Username;
@@ -107,7 +108,7 @@ namespace PasswordManager.ViewModels.CustomControls
             CategoryPaths = passwordManagementService.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
 
-
+        public bool UneditedPass { get; set; } = true;
         public char[] PasswordAsCharArray { get; set; } = [];
         public Brush RandomBrush { get => new SolidColorBrush(Color.FromRgb((byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240))); }
         public string CategoryPathEndingChar => CategoryPath.TrimEnd('\\') + "\\";
