@@ -192,7 +192,7 @@ namespace PasswordManager.ViewModels.CustomControls
             CurrentAvailableAction = "Edit";
             Array.Clear(PasswordAsCharArray);
             UneditedPass = true;
-            var pass=passwordManagementService.GetPasswordById(Id);
+            var pass = passwordManagementService.GetPasswordById(Id);
             Url = pass.Url;
             Username = pass.Username;
             PasswordAsCharArray = pass.Password;

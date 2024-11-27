@@ -75,7 +75,7 @@ namespace PasswordManager.Services
         public CategoryNodeModel GetPasswordsCategoryRoot()
         {
             var paths = passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => !string.IsNullOrEmpty(p)).ToList();
-            var root = new CategoryNodeModel { Name = "Categories",Level=0 };
+            var root = new CategoryNodeModel { Name = "Categories", Level = 0 };
             foreach (var path in paths)
             {
                 var parts = path.Split('\\');
@@ -85,7 +85,7 @@ namespace PasswordManager.Services
                     var child = current.Children.FirstOrDefault(p => p.Name == part);
                     if (child == null)
                     {
-                        child = new CategoryNodeModel { Name = part, Parent = current,Level=current.Level+1 };
+                        child = new CategoryNodeModel { Name = part, Parent = current, Level = current.Level + 1 };
                         current.Children.Add(child);
                     }
 

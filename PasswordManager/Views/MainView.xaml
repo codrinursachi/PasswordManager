@@ -96,12 +96,6 @@
                                         Property="Visibility"
                                         Value="Collapsed" />
                             </Trigger>
-                            <Trigger Property="HasItems"
-                                     Value="False">
-                                <Setter TargetName="headerHost"
-                                        Property="Margin"
-                                        Value="0" />
-                            </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>

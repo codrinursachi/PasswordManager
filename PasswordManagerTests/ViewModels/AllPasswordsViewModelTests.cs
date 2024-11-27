@@ -4,12 +4,7 @@ using PasswordManager.DTO;
 using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
-using PasswordManager.Repositories;
-using PasswordManager.Services;
 using PasswordManager.ViewModels;
-using System.Collections.ObjectModel;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace PasswordManagerTests.ViewModels
 {

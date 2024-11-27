@@ -10,7 +10,7 @@ namespace PasswordManagerTests.Services
         public void ShouldScanAndStoreDatabaseNames()
         {
             var path = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "PasswordManagerTests", "DatabaseStorageService");
-            Directory.CreateDirectory(Path.Combine(path,"Databases"));
+            Directory.CreateDirectory(Path.Combine(path, "Databases"));
             var pathProviderService = new Mock<IPathProviderService>();
             pathProviderService.Setup(m => m.ProgramPath)
                                .Returns(path);

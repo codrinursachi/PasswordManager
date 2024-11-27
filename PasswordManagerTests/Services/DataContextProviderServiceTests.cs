@@ -2,7 +2,6 @@
 using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 using PasswordManager.Interfaces;
-using PasswordManager.Repositories;
 using PasswordManager.Services;
 using PasswordManager.ViewModels;
 
