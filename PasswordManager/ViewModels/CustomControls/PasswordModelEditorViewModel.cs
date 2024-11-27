@@ -190,6 +190,27 @@ namespace PasswordManager.ViewModels.CustomControls
             IsReadOnly = true;
             IsEditingEnabled = false;
             CurrentAvailableAction = "Edit";
+            Array.Clear(PasswordAsCharArray);
+            UneditedPass = true;
+            var pass=passwordManagementService.GetPasswordById(Id);
+            Url = pass.Url;
+            Username = pass.Username;
+            PasswordAsCharArray = pass.Password;
+            Password = "******";
+            ExpirationDate = pass.ExpirationDate;
+            CategoryPath = pass.CategoryPath;
+            Favorite = pass.Favorite;
+            Notes = pass.Notes;
+            CompletedTags.Clear();
+            if (string.IsNullOrEmpty(pass.Tags))
+            {
+                return;
+            }
+            foreach (var tag in pass.Tags.Split())
+            {
+                CompletedTags.Add(tag);
+            }
+
         }
 
         [RelayCommand]
