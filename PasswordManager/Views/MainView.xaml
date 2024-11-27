@@ -162,8 +162,7 @@
                               Margin="20,0,0,0">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                <CheckBox HorizontalAlignment="Stretch"
-                                          Margin="{Binding Level, Converter={StaticResource LevelToMarginConverter}}">
+                                <CheckBox Margin="{Binding Level, Converter={StaticResource LevelToMarginConverter}}" HorizontalAlignment="Stretch">
                                     <CheckBox.IsChecked>
                                         <MultiBinding Converter="{StaticResource MultiValueConverter}">
                                             <Binding RelativeSource="{RelativeSource AncestorType={x:Type TreeViewItem}}"
@@ -174,8 +173,30 @@
                                     </CheckBox.IsChecked>
                                     <CheckBox.Template>
                                         <ControlTemplate>
-                                            <TextBlock Text="{Binding Name}"
-                                                       VerticalAlignment="Center" />
+                                            <Border>
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding Path=IsChecked, RelativeSource={RelativeSource AncestorType=CheckBox}}"
+                                                                         Value="True">
+                                                                <Setter Property="BorderThickness"
+                                                                        Value="4,0,0,0" />
+                                                                <Setter Property="BorderBrush"
+                                                                        Value="{DynamicResource {x:Static SystemColors.AccentColorBrushKey}}" />
+                                                                <Setter Property="Background">
+                                                                    <Setter.Value>
+                                                                        <SolidColorBrush Color="Gray"
+                                                                                         Opacity="0.2" />
+                                                                    </Setter.Value>
+                                                                </Setter>
+                                                                        
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <TextBlock Text="{Binding Name}"
+                                                           VerticalAlignment="Center" />
+                                            </Border>
                                         </ControlTemplate>
                                     </CheckBox.Template>
                                 </CheckBox>
