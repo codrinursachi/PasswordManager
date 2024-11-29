@@ -1,5 +1,5 @@
 ﻿using PasswordManager.Interfaces;
-using PasswordManager.Utilities;
+using PasswordManager.Services;
 using PasswordManager.ViewModels.Dialogs;
 using System.Windows;
 
@@ -11,11 +11,12 @@ namespace PasswordManager.Views.Dialogs
     public partial class DatabaseManagerView : Window
     {
         public DatabaseManagerView(
-            DatabaseManagerViewModel databaseManagerViewModel)
+            DatabaseManagerViewModel databaseManagerViewModel, 
+            IAutoLockerService autoLockerService)
         {
             InitializeComponent();
-            MouseMove += AutoLocker.OnActivity;
-            KeyDown += AutoLocker.OnActivity;
+            MouseMove += autoLockerService.OnActivity;
+            KeyDown += autoLockerService.OnActivity;
             DataContext = databaseManagerViewModel;
         }
     }

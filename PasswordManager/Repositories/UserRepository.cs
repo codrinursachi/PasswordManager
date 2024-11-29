@@ -1,5 +1,5 @@
 ﻿using PasswordManager.Interfaces;
-using PasswordManager.Utilities;
+using PasswordManager.Services;
 using System.IO;
 
 namespace PasswordManager.Repositories
@@ -7,20 +7,24 @@ namespace PasswordManager.Repositories
     public class UserRepository : IUserRepository
     {
         readonly string fileName;
+        private ISecretHasherService secretHasherService;
 
         public UserRepository(
-            IPathProviderService pathProviderService)
+            IPathProviderService pathProviderService,
+            ISecretHasherService secretHasherService)
         {
             fileName = Path.Combine(pathProviderService.ProgramPath, "UserLogin");
             if (!File.Exists(fileName))
             {
                 File.Create(fileName).Close();
             }
+
+            this.secretHasherService = secretHasherService;
         }
 
         private void Add(char[] password)
         {
-            var passwordHash = SecretHasher.Hash(password, 50000);
+            var passwordHash = secretHasherService.Hash(password, 50000);
             File.WriteAllText(fileName, passwordHash);
         }
 
@@ -33,7 +37,7 @@ namespace PasswordManager.Repositories
                 return true;
             }
 
-            return SecretHasher.Verify(password, passwordHash);
+            return secretHasherService.Verify(password, passwordHash);
         }
     }
 }

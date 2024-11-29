@@ -1,17 +1,18 @@
-﻿using System.Security.Cryptography;
+﻿using PasswordManager.Interfaces;
+using System.Security.Cryptography;
 using System.Text;
 
-namespace PasswordManager.Utilities
+namespace PasswordManager.Services
 {
-    public static class SecretHasher
+    public class SecretHasherService:ISecretHasherService
     {
         private const int saltSize = 16; // 128 bits
         private const int keySize = 32; // 256 bits
-        private static readonly HashAlgorithmName algorithm = HashAlgorithmName.SHA256;
+        private readonly HashAlgorithmName algorithm = HashAlgorithmName.SHA256;
 
         private const char segmentDelimiter = ':';
 
-        public static string Hash(char[] input, int iterations)
+        public string Hash(char[] input, int iterations)
         {
             byte[] salt = RandomNumberGenerator.GetBytes(saltSize);
             byte[] pass = Encoding.UTF8.GetBytes(input);
@@ -31,7 +32,7 @@ namespace PasswordManager.Utilities
             );
         }
 
-        public static bool Verify(char[] input, string hashString)
+        public bool Verify(char[] input, string hashString)
         {
             string[] segments = hashString.Split(segmentDelimiter);
             byte[] hash = Convert.FromHexString(segments[0]);

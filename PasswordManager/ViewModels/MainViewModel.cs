@@ -2,7 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
-using PasswordManager.Utilities;
+using PasswordManager.Services;
 using PasswordManager.Views;
 using PasswordManager.Views.Dialogs;
 using System.Collections.ObjectModel;
@@ -37,7 +37,8 @@ namespace PasswordManager.ViewModels
             IDatabaseStorageService databaseStorageService,
             IPasswordImporterService passwordImporterService,
             IPasswordManagementService passwordManagementService,
-            IBackupManagementService backupManagementService)
+            IBackupManagementService backupManagementService,
+            IAutoLockerService autoLockerService)
         {
             this.databaseStorageService = databaseStorageService;
             this.databaseInfoProviderService = databaseInfoProviderService;
@@ -48,7 +49,7 @@ namespace PasswordManager.ViewModels
             this.modalDialogClosingService = modalDialogClosingService;
             this.passwordImporterService = passwordImporterService;
             this.passwordManagementService = passwordManagementService;
-            AutoLocker.SetupTimer();
+            autoLockerService.SetupTimer();
             backupManagementService.CreateBackupIfNecessary();
             ShowAllPasswordsViewCommand.Execute(null);
         }

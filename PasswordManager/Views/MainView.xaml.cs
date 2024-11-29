@@ -1,6 +1,6 @@
 ﻿using PasswordManager.Interfaces;
 using PasswordManager.Models;
-using PasswordManager.Utilities;
+using PasswordManager.Services;
 using PasswordManager.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,11 +16,12 @@ namespace PasswordManager.Views
     {
         public MainView(
             INavigationToChildViewService navigationToChildViewService,
-            MainViewModel mainViewModel)
+            MainViewModel mainViewModel,
+            IAutoLockerService autoLockerService)
         {
             InitializeComponent();
-            MouseMove += AutoLocker.OnActivity;
-            KeyDown += AutoLocker.OnActivity;
+            MouseMove += autoLockerService.OnActivity;
+            KeyDown += autoLockerService.OnActivity;
             DataContext = mainViewModel;
             Binding childBind = new("ChildView")
             {

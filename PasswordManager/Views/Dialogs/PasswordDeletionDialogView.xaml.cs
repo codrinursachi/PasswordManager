@@ -10,9 +10,12 @@ namespace PasswordManager.Views.Dialogs
     public partial class PasswordDeletionDialogView : Window
     {
         public PasswordDeletionDialogView(
-            PasswordDeletionDialogViewModel passwordDeletionDialogViewModel)
+            PasswordDeletionDialogViewModel passwordDeletionDialogViewModel,
+            IAutoLockerService autoLockerService)
         {
             InitializeComponent();
+            MouseMove += autoLockerService.OnActivity;
+            KeyDown += autoLockerService.OnActivity;
             DataContext = passwordDeletionDialogViewModel;
         }
     }

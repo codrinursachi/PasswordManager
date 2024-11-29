@@ -1,5 +1,5 @@
 ﻿using PasswordManager.Interfaces;
-using PasswordManager.Utilities;
+using PasswordManager.Services;
 using PasswordManager.ViewModels;
 using System.Windows;
 
@@ -11,11 +11,12 @@ namespace PasswordManager.Views
     public partial class PasswordGeneratorView : Window
     {
         public PasswordGeneratorView(
-            PasswordGeneratorViewModel passwordGeneratorViewModel)
+            PasswordGeneratorViewModel passwordGeneratorViewModel,
+            IAutoLockerService autoLockerService)
         {
             InitializeComponent();
-            MouseMove += AutoLocker.OnActivity;
-            KeyDown += AutoLocker.OnActivity;
+            MouseMove += autoLockerService.OnActivity;
+            KeyDown += autoLockerService.OnActivity;
             DataContext = passwordGeneratorViewModel;
         }
     }

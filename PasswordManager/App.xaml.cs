@@ -71,11 +71,12 @@ namespace PasswordManager
             services.AddSingleton<IBackupManagementService, BackupManagementService>();
             services.AddSingleton<IProgramFoldersCreatorService, ProgramFoldersCreatorService>();
             services.AddSingleton<IModalDialogResultProviderService, ModalDialogResultProviderService>();
+            services.AddSingleton<IAutoLockerService,AutoLockerService>();
+            services.AddSingleton<ISecretHasherService, SecretHasherService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, Window>>(serviceProvider => dialogType => (Window)serviceProvider.GetRequiredService(dialogType));
             services.AddSingleton<Func<Type, UserControl>>(serviceProvider => userControlType => (UserControl)serviceProvider.GetRequiredService(userControlType));
-
 
             serviceProvider = services.BuildServiceProvider();
         }
