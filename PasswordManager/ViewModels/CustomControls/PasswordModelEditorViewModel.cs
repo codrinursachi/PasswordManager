@@ -59,11 +59,11 @@ namespace PasswordManager.ViewModels.CustomControls
         private string currentAvailableAction;
         [ObservableProperty]
         private int id;
-        private IModalDialogProviderService modalDialogProviderService;
+        private IWindowProviderService modalDialogProviderService;
         private IModalDialogClosingService modalDialogClosingService;
         private IPasswordManagementService passwordManagementService;
         public PasswordModelEditorViewModel(
-            IModalDialogProviderService modalDialogProviderService,
+            IWindowProviderService modalDialogProviderService,
             IModalDialogClosingService modalDialogClosingService,
             [FromKeyedServices("GeneratedPassword")] IMessenger generatedPassMessenger,
             [FromKeyedServices("PasswordModel")] IMessenger passwordModelMessenger,
@@ -216,7 +216,7 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         private void ShowPasswordGenerator()
         {
-            var passwordGen = modalDialogProviderService.ProvideModal<PasswordGeneratorView>();
+            var passwordGen = modalDialogProviderService.ProvideWindow<PasswordGeneratorView>();
             modalDialogClosingService.ModalDialogs.Push(passwordGen);
             OverlayVisibility = true;
             passwordGen.ShowDialog();

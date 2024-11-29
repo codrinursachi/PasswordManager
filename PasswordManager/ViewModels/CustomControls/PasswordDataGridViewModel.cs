@@ -20,7 +20,7 @@ namespace PasswordManager.ViewModels.CustomControls
         private IMessenger passwordModelMessenger;
         private IClipboardService clipboardService;
         private IPasswordManagementService passwordManagementService;
-        private IModalDialogProviderService modalDialogProviderService;
+        private IWindowProviderService modalDialogProviderService;
         private IModalDialogResultProviderService modalDialogResultProviderService;
         private IModalDialogClosingService modalDialogClosingService;
         public PasswordDataGridViewModel(
@@ -28,7 +28,7 @@ namespace PasswordManager.ViewModels.CustomControls
             [FromKeyedServices(key: "PasswordList")] IMessenger passwordListMessenger,
             IClipboardService clipboardService,
             IPasswordManagementService passwordManagementService,
-            IModalDialogProviderService modalDialogProviderService,
+            IWindowProviderService modalDialogProviderService,
             IModalDialogResultProviderService modalDialogResultProviderService,
             IModalDialogClosingService modalDialogClosingService)
         {
@@ -68,7 +68,7 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         public void DeletePassword()
         {
-            var pwdDeletionDialog = modalDialogProviderService.ProvideModal<PasswordDeletionDialogView>();
+            var pwdDeletionDialog = modalDialogProviderService.ProvideWindow<PasswordDeletionDialogView>();
             modalDialogClosingService.ModalDialogs.Push(pwdDeletionDialog);
             pwdDeletionDialog.ShowDialog();
             if (modalDialogResultProviderService.Result)

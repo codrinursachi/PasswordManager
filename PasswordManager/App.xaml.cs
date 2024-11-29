@@ -50,10 +50,12 @@ namespace PasswordManager
             services.AddTransient<DatabaseManagerViewModel>();
             services.AddTransient<PasswordDeletionDialogViewModel>();
 
+            services.AddSingleton<IAppStartupService, AppStartupService>();
+            services.AddSingleton<IAppShutdownService, AppShutdownService>();
             services.AddSingleton<IDataContextProviderService, DataContextProviderService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<INavigationToChildViewService, NavigationToChildViewService>();
-            services.AddSingleton<IModalDialogProviderService, ModalDialogProviderService>();
+            services.AddSingleton<IWindowProviderService, WindowProviderService>();
             services.AddSingleton<IModalDialogClosingService, ModalDialogClosingService>();
             services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("GeneratedPassword");
             services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("PasswordModel");
@@ -81,34 +83,13 @@ namespace PasswordManager
         }
         protected void ApplicationStart(object sender, StartupEventArgs e)
         {
-            serviceProvider.GetRequiredService<IProgramFoldersCreatorService>().CreateFoldersIfNecessary();
-            var loginView = serviceProvider.GetRequiredService<LoginView>();
-            loginView.Show();
-            if (e.Args.Length > 0 && e.Args[0] == "--start-minimized")
-            {
-                loginView.WindowState = WindowState.Minimized;
-            }
-            loginView.IsVisibleChanged += (s, ev) =>
-            {
-                if (loginView.IsVisible == false && loginView.IsLoaded && serviceProvider.GetRequiredService<IDatabaseInfoProviderService>().DBPass != null)
-                {
-                    var mainView = serviceProvider.GetRequiredService<MainView>();
-                    mainView.Show();
-                    loginView.Close();
-                }
-            };
-
-            App.Current.Properties["timeout"] = false;
+            serviceProvider.GetRequiredService<IAppStartupService>().Start(e.Args.Length > 0 && e.Args[0] == "--start-minimized");
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
-
-            if ((bool)App.Current.Properties["timeout"])
-            {
-                Process.Start(Process.GetCurrentProcess().MainModule.FileName, "--start-minimized");
-            }
+            serviceProvider.GetRequiredService<IAppShutdownService>().Shutdown((bool)App.Current.Properties["timeout"]);
         }
     }
 

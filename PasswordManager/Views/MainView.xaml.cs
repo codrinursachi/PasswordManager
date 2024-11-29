@@ -56,6 +56,7 @@ namespace PasswordManager.Views
                 categoryRadio.IsChecked = true;
                 ((MainViewModel)DataContext).ShowCategoryViewCommand.Execute(null);
                 ((TreeViewItem)Categories.ItemContainerGenerator.ContainerFromIndex(0)).IsExpanded = true;
+                ((TreeViewItem)Categories.ItemContainerGenerator.ContainerFromIndex(0)).IsSelected = true;
             }
         }
     }

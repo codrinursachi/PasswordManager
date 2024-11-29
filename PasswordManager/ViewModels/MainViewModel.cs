@@ -24,7 +24,7 @@ namespace PasswordManager.ViewModels
         [ObservableProperty]
         private ObservableCollection<string> databases = [];
         private IDatabaseStorageService databaseStorageService;
-        private IModalDialogProviderService modalDialogOpenerService;
+        private IWindowProviderService modalDialogOpenerService;
         private IModalDialogClosingService modalDialogClosingService;
         private IDatabaseInfoProviderService databaseInfoProviderService;
         private IPasswordImporterService passwordImporterService;
@@ -32,7 +32,7 @@ namespace PasswordManager.ViewModels
         public MainViewModel(
             IDatabaseInfoProviderService databaseInfoProviderService,
             INavigationService navService,
-            IModalDialogProviderService modalDialogOpenerService,
+            IWindowProviderService modalDialogOpenerService,
             IModalDialogClosingService modalDialogClosingService,
             IDatabaseStorageService databaseStorageService,
             IPasswordImporterService passwordImporterService,
@@ -112,7 +112,7 @@ namespace PasswordManager.ViewModels
         private void OpenDatabaseManager()
         {
             OverlayVisibility = true;
-            var databaseManagerView = modalDialogOpenerService.ProvideModal<DatabaseManagerView>();
+            var databaseManagerView = modalDialogOpenerService.ProvideWindow<DatabaseManagerView>();
             modalDialogClosingService.ModalDialogs.Push(databaseManagerView);
             databaseManagerView.ShowDialog();
             OverlayVisibility = false;
@@ -123,7 +123,7 @@ namespace PasswordManager.ViewModels
         private void ShowPasswordCreationView()
         {
             OverlayVisibility = true;
-            var passwordCreationView = modalDialogOpenerService.ProvideModal<PasswordCreationView>();
+            var passwordCreationView = modalDialogOpenerService.ProvideWindow<PasswordCreationView>();
             modalDialogClosingService.ModalDialogs.Push(passwordCreationView);
             passwordCreationView.ShowDialog();
             OverlayVisibility = false;
