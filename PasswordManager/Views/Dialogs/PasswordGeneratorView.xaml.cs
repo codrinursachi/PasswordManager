@@ -10,12 +10,13 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class PasswordGeneratorView : Window
     {
-        public PasswordGeneratorView(IDataContextProviderService dataContextProviderService)
+        public PasswordGeneratorView(
+            PasswordGeneratorViewModel passwordGeneratorViewModel)
         {
             InitializeComponent();
             MouseMove += AutoLocker.OnActivity;
             KeyDown += AutoLocker.OnActivity;
-            DataContext = dataContextProviderService.ProvideDataContext<PasswordGeneratorViewModel>();
+            DataContext = passwordGeneratorViewModel;
         }
     }
 }

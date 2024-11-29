@@ -11,10 +11,12 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class AllPasswordsView : UserControl
     {
-        public AllPasswordsView(IUserControlProviderService userControlProviderService, IDataContextProviderService dataContextProviderService)
+        public AllPasswordsView(
+            IUserControlProviderService userControlProviderService, 
+            AllPasswordsViewModel allPasswordsViewModel)
         {
             InitializeComponent();
-            DataContext = dataContextProviderService.ProvideDataContext<AllPasswordsViewModel>();
+            DataContext = allPasswordsViewModel;
             var search = userControlProviderService.ProvideUserControl<PasswordSearch>();
             pwdSearch.Content = search;
             Binding searchBind = new("SearchFilter")

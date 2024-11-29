@@ -10,20 +10,15 @@ namespace PasswordManager.CustomControls
     /// </summary>
     public partial class PasswordDataGrid : UserControl
     {
-        private char[] storedPass;
-        private DispatcherTimer timer;
-
-        private IPasswordManagementService passwordManagementService;
         public PasswordDataGrid(
             IUserControlProviderService userControlProviderService,
-            IDataContextProviderService dataContextProviderService,
+            PasswordDataGridViewModel passwordDataGridViewModel,
             IPasswordManagementService passwordManagementService)
         {
             InitializeComponent();
-            DataContext = dataContextProviderService.ProvideDataContext<PasswordDataGridViewModel>();
+            DataContext = passwordDataGridViewModel;
             var passwordModelEditor = userControlProviderService.ProvideUserControl<PasswordModelEditor>();
             pwdEditor.Content = passwordModelEditor;
-            this.passwordManagementService = passwordManagementService;
         }
 
         private void pwdList_ContextMenuOpening(object sender, ContextMenuEventArgs e)

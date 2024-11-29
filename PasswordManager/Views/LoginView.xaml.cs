@@ -9,20 +9,11 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class LoginView : Window
     {
-        public LoginView(IDataContextProviderService dataContextProviderService)
+        public LoginView(
+            LoginViewModel loginViewModel)
         {
             InitializeComponent();
-            DataContext = dataContextProviderService.ProvideDataContext<LoginViewModel>();
-        }
-
-        private void btnMinimizeClick(object sender, RoutedEventArgs e)
-        {
-            WindowState = WindowState.Minimized;
-        }
-
-        private void btnCloseClick(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
+            DataContext = loginViewModel;
         }
     }
 }

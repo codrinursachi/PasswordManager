@@ -9,10 +9,11 @@ namespace PasswordManager.Views.Dialogs
     /// </summary>
     public partial class PasswordDeletionDialogView : Window
     {
-        public PasswordDeletionDialogView(IDataContextProviderService dataContextProviderService)
+        public PasswordDeletionDialogView(
+            PasswordDeletionDialogViewModel passwordDeletionDialogViewModel)
         {
             InitializeComponent();
-            DataContext = dataContextProviderService.ProvideDataContext<PasswordDeletionDialogViewModel>();
+            DataContext = passwordDeletionDialogViewModel;
         }
     }
 }

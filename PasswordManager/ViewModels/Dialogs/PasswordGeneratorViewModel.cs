@@ -8,7 +8,7 @@ using System.Windows.Controls;
 
 namespace PasswordManager.ViewModels
 {
-    partial class PasswordGeneratorViewModel : ObservableValidator
+    public partial class PasswordGeneratorViewModel : ObservableValidator
     {
         private string alphaNum = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
         private string symbols = "!\\\";#$%&'()*+,-./:;<=>?@[]^`{|}~";

@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
 {
-    partial class MainViewModel : ObservableObject, IRefreshable
+    public partial class MainViewModel : ObservableObject, IRefreshable
     {
         [ObservableProperty]
         private string caption;

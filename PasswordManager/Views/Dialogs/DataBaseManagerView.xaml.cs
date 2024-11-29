@@ -11,12 +11,12 @@ namespace PasswordManager.Views.Dialogs
     public partial class DatabaseManagerView : Window
     {
         public DatabaseManagerView(
-            IDataContextProviderService dataContextProviderService)
+            DatabaseManagerViewModel databaseManagerViewModel)
         {
             InitializeComponent();
             MouseMove += AutoLocker.OnActivity;
             KeyDown += AutoLocker.OnActivity;
-            DataContext = dataContextProviderService.ProvideDataContext<DatabaseManagerViewModel>();
+            DataContext = databaseManagerViewModel;
         }
     }
 }

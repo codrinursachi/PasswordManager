@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels.CustomControls
 {
-    partial class PasswordDataGridViewModel : ObservableObject
+    public partial class PasswordDataGridViewModel : ObservableObject
     {
         [ObservableProperty]
         private bool isEditorVisible;

@@ -52,7 +52,6 @@ namespace PasswordManager
 
             services.AddSingleton<IAppStartupService, AppStartupService>();
             services.AddSingleton<IAppShutdownService, AppShutdownService>();
-            services.AddSingleton<IDataContextProviderService, DataContextProviderService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<INavigationToChildViewService, NavigationToChildViewService>();
             services.AddSingleton<IWindowProviderService, WindowProviderService>();
@@ -74,7 +73,6 @@ namespace PasswordManager
             services.AddSingleton<IModalDialogResultProviderService, ModalDialogResultProviderService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
-            services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => dataContextType => (ObservableObject)serviceProvider.GetRequiredService(dataContextType));
             services.AddSingleton<Func<Type, Window>>(serviceProvider => dialogType => (Window)serviceProvider.GetRequiredService(dialogType));
             services.AddSingleton<Func<Type, UserControl>>(serviceProvider => userControlType => (UserControl)serviceProvider.GetRequiredService(userControlType));
 

@@ -10,7 +10,8 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class PasswordCreationView : Window
     {
-        public PasswordCreationView(IUserControlProviderService userControlProviderService)
+        public PasswordCreationView(
+            IUserControlProviderService userControlProviderService)
         {
             InitializeComponent();
             MouseMove += AutoLocker.OnActivity;

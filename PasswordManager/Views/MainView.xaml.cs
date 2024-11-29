@@ -16,12 +16,12 @@ namespace PasswordManager.Views
     {
         public MainView(
             INavigationToChildViewService navigationToChildViewService,
-            IDataContextProviderService dataContextProviderService)
+            MainViewModel mainViewModel)
         {
             InitializeComponent();
             MouseMove += AutoLocker.OnActivity;
             KeyDown += AutoLocker.OnActivity;
-            DataContext = dataContextProviderService.ProvideDataContext<MainViewModel>();
+            DataContext = mainViewModel;
             Binding childBind = new("ChildView")
             {
                 Source = navigationToChildViewService

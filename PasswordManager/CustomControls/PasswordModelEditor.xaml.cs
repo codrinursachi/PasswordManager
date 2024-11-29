@@ -12,10 +12,10 @@ namespace PasswordManager.CustomControls
     public partial class PasswordModelEditor : UserControl
     {
         public PasswordModelEditor(
-            IDataContextProviderService dataContextProviderService)
+            PasswordModelEditorViewModel passwordModelEditorViewModel)
         {
             InitializeComponent();
-            DataContext = dataContextProviderService.ProvideDataContext<PasswordModelEditorViewModel>();
+            DataContext = passwordModelEditorViewModel;
         }
 
         private void TextBox_KeyUp(object sender, KeyEventArgs e)

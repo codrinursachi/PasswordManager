@@ -7,7 +7,7 @@ using System.Text;
 
 namespace PasswordManager.ViewModels
 {
-    partial class LoginViewModel : ObservableValidator, IPasswordPair
+    public partial class LoginViewModel : ObservableValidator, IPasswordPair
     {
         [ObservableProperty]
         private string errorMessage;
