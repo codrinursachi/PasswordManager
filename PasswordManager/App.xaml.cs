@@ -53,7 +53,6 @@ namespace PasswordManager
             services.AddSingleton<IAppStartupService, AppStartupService>();
             services.AddSingleton<IAppShutdownService, AppShutdownService>();
             services.AddSingleton<INavigationService, NavigationService>();
-            services.AddSingleton<INavigationToChildViewService, NavigationToChildViewService>();
             services.AddSingleton<IWindowProviderService, WindowProviderService>();
             services.AddSingleton<IModalDialogClosingService, ModalDialogClosingService>();
             services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("GeneratedPassword");
