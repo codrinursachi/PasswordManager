@@ -1,6 +1,6 @@
 ﻿namespace PasswordManager.Interfaces
 {
-    interface IRefreshable
+    public interface IRefreshable
     {
         public void Refresh();
     }

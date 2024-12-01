@@ -6,7 +6,7 @@ using PasswordManager.Interfaces;
 using PasswordManager.Repositories;
 using PasswordManager.Services;
 using PasswordManager.ViewModels;
-using PasswordManager.ViewModels.CustomControls;
+using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views;
 using PasswordManager.Views.Dialogs;
@@ -27,7 +27,6 @@ namespace PasswordManager
             IServiceCollection services = new ServiceCollection();
             services.AddSingleton<LoginView>();
             services.AddSingleton<MainView>();
-            services.AddTransient<PasswordCreationView>();
             services.AddTransient<PasswordGeneratorView>();
             services.AddTransient<DatabaseManagerView>();
             services.AddTransient<PasswordDeletionDialogView>();
@@ -38,6 +37,7 @@ namespace PasswordManager
             services.AddTransient<PasswordSearch>();
             services.AddTransient<PasswordDataGrid>();
             services.AddTransient<PasswordModelEditor>();
+            services.AddTransient<DialogOverlay>();
 
             services.AddSingleton<LoginViewModel>();
             services.AddSingleton<MainViewModel>();
@@ -71,10 +71,14 @@ namespace PasswordManager
             services.AddSingleton<IBackupManagementService, BackupManagementService>();
             services.AddSingleton<IProgramFoldersCreatorService, ProgramFoldersCreatorService>();
             services.AddSingleton<IModalDialogResultProviderService, ModalDialogResultProviderService>();
-            services.AddSingleton<IAutoLockerService,AutoLockerService>();
+            services.AddSingleton<IAutoLockerService, AutoLockerService>();
             services.AddSingleton<ISecretHasherService, SecretHasherService>();
+            services.AddSingleton<IDialogOverlayService, DialogOverlayService>();
+            services.AddSingleton<IPasswordDeletionService, PasswordDeletionService>();
+            services.AddSingleton<IRefreshService, RefreshService>();
 
             services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
+            services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => viewModelType => (ObservableObject)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, Window>>(serviceProvider => dialogType => (Window)serviceProvider.GetRequiredService(dialogType));
             services.AddSingleton<Func<Type, UserControl>>(serviceProvider => userControlType => (UserControl)serviceProvider.GetRequiredService(userControlType));
 

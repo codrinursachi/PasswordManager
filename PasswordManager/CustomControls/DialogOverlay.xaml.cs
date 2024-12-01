@@ -1,5 +1,4 @@
-﻿using PasswordManager.ViewModels.Dialogs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,18 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace PasswordManager.Views.Dialogs
+namespace PasswordManager.CustomControls
 {
     /// <summary>
-    /// Interaction logic for DatabaseManagerView.xaml
+    /// Interaction logic for DialogOverlay.xaml
     /// </summary>
-    public partial class DatabaseManagerView : UserControl
+    public partial class DialogOverlay : UserControl
     {
-        public DatabaseManagerView(
-            DatabaseManagerViewModel databaseManagerViewModel)
+        public DialogOverlay()
         {
             InitializeComponent();
-            DataContext = databaseManagerViewModel;
         }
     }
 }

@@ -24,14 +24,14 @@ namespace PasswordManager.ViewModels
         private string symbolsCountErrorMessage;
         [ObservableProperty]
         private char[] generatedPassword = [];
-        private IModalDialogClosingService modalDialogClosingService;
+        private IDialogOverlayService dialogOverlayService;
         private IMessenger generatedPassMessenger;
 
         public PasswordGeneratorViewModel(
-            IModalDialogClosingService modalDialogClosingService,
+            IDialogOverlayService dialogOverlayService,
             [FromKeyedServices("GeneratedPassword")] IMessenger generatedPassMessenger)
         {
-            this.modalDialogClosingService = modalDialogClosingService;
+            this.dialogOverlayService = dialogOverlayService;
             this.generatedPassMessenger = generatedPassMessenger;
         }
 
@@ -51,7 +51,7 @@ namespace PasswordManager.ViewModels
         private void AcceptPassword(object obj)
         {
             generatedPassMessenger.Send(GeneratedPassword);
-            modalDialogClosingService.Close();
+            dialogOverlayService.Close();
         }
 
         [RelayCommand]
@@ -82,6 +82,12 @@ namespace PasswordManager.ViewModels
             {
                 textbox.Text += c;
             }
+        }
+
+        [RelayCommand]
+        private void Close()
+        {
+            dialogOverlayService.Close();
         }
 
         private void SetValidationErrorsStrings()

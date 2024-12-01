@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Services;
+using PasswordManager.ViewModels.Dialogs;
+using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views;
 using PasswordManager.Views.Dialogs;
 using System.Collections.ObjectModel;
@@ -19,47 +22,47 @@ namespace PasswordManager.ViewModels
         private bool overlayVisibility;
         [ObservableProperty]
         private List<CategoryNodeModel> categories;
-        [ObservableProperty]
-        private INavigationService navigation;
+        public INavigationService navigationService;
         [ObservableProperty]
         private ObservableCollection<string> databases = [];
         private IDatabaseStorageService databaseStorageService;
-        private IWindowProviderService modalDialogOpenerService;
-        private IModalDialogClosingService modalDialogClosingService;
+        private IDialogOverlayService dialogOverlayService;
         private IDatabaseInfoProviderService databaseInfoProviderService;
         private IPasswordImporterService passwordImporterService;
         private IPasswordManagementService passwordManagementService;
+        private IRefreshService refreshService;
         public MainViewModel(
             IDatabaseInfoProviderService databaseInfoProviderService,
-            INavigationService navService,
-            IWindowProviderService modalDialogOpenerService,
-            IModalDialogClosingService modalDialogClosingService,
+            INavigationService navigationService,
+            IDialogOverlayService dialogOverlayService,
             IDatabaseStorageService databaseStorageService,
             IPasswordImporterService passwordImporterService,
             IPasswordManagementService passwordManagementService,
             IBackupManagementService backupManagementService,
-            IAutoLockerService autoLockerService)
+            IAutoLockerService autoLockerService,
+            IRefreshService refreshService)
         {
             this.databaseStorageService = databaseStorageService;
             this.databaseInfoProviderService = databaseInfoProviderService;
             selectedDb = databaseStorageService.Databases[0];
             this.databaseInfoProviderService.CurrentDatabase = selectedDb;
-            Navigation = navService;
-            this.modalDialogOpenerService = modalDialogOpenerService;
-            this.modalDialogClosingService = modalDialogClosingService;
+            this.navigationService = navigationService;
+            this.dialogOverlayService = dialogOverlayService;
             this.passwordImporterService = passwordImporterService;
             this.passwordManagementService = passwordManagementService;
             autoLockerService.SetupTimer();
             backupManagementService.CreateBackupIfNecessary();
+            this.refreshService = refreshService;
+            refreshService.Main = this;
             ShowAllPasswordsViewCommand.Execute(null);
         }
 
         public CategoryNodeModel Filter
         {
-            get => ((CategoryViewModel)Navigation.CurrentView).Filter;
+            get => ((CategoryViewModel)navigationService.CurrentView).Filter;
             set
             {
-                if (Navigation.CurrentView is CategoryViewModel child)
+                if (navigationService.CurrentView is CategoryViewModel child)
                 {
                     child.Filter = value;
                 }
@@ -77,17 +80,18 @@ namespace PasswordManager.ViewModels
             SelectedDb = databaseInfoProviderService.CurrentDatabase;
             var rootNode = passwordManagementService.GetPasswordsCategoryRoot();
             Categories = [rootNode];
-            ((IRefreshable)Navigation.CurrentView).Refresh();
+            ((IRefreshable)navigationService.CurrentView).Refresh();
         }
 
         [RelayCommand]
         private void ShowCategoryView()
         {
-            if (Navigation.CurrentView is CategoryViewModel)
+            if (navigationService.CurrentView is CategoryViewModel)
             {
                 return;
             }
-            Navigation.NavigateTo<CategoryViewModel>();
+
+            navigationService.NavigateTo<CategoryViewModel>();
             Caption = "Categories";
             Refresh();
         }
@@ -95,7 +99,7 @@ namespace PasswordManager.ViewModels
         [RelayCommand]
         private void ShowFavoritesView()
         {
-            Navigation.NavigateTo<FavoritesViewModel>();
+            navigationService.NavigateTo<FavoritesViewModel>();
             Caption = "Favorites";
             Refresh();
         }
@@ -103,7 +107,7 @@ namespace PasswordManager.ViewModels
         [RelayCommand]
         private void ShowAllPasswordsView()
         {
-            Navigation.NavigateTo<AllPasswordsViewModel>();
+            navigationService.NavigateTo<AllPasswordsViewModel>();
             Caption = "All Passwords";
 
             Refresh();
@@ -112,31 +116,19 @@ namespace PasswordManager.ViewModels
         [RelayCommand]
         private void OpenDatabaseManager()
         {
-            OverlayVisibility = true;
-            var databaseManagerView = modalDialogOpenerService.ProvideWindow<DatabaseManagerView>();
-            modalDialogClosingService.ModalDialogs.Push(databaseManagerView);
-            databaseManagerView.ShowDialog();
-            OverlayVisibility = false;
-            Refresh();
+            dialogOverlayService.Show<DatabaseManagerViewModel>();
         }
 
         [RelayCommand]
         private void ShowPasswordCreationView()
         {
-            OverlayVisibility = true;
-            var passwordCreationView = modalDialogOpenerService.ProvideWindow<PasswordCreationView>();
-            modalDialogClosingService.ModalDialogs.Push(passwordCreationView);
-            passwordCreationView.ShowDialog();
-            OverlayVisibility = false;
-            Refresh();
+            dialogOverlayService.Show<PasswordModelEditorViewModel>();
         }
 
         [RelayCommand]
-        private void ShowPasswordFilePickerDialogueView()
+        private void ShowPasswordFilePickerDialogView()
         {
-            OverlayVisibility = true;
             passwordImporterService.StartPasswordImport();
-            OverlayVisibility = false;
             Refresh();
         }
     }

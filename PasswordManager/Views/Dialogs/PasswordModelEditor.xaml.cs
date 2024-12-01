@@ -1,10 +1,11 @@
-﻿using PasswordManager.Interfaces;
-using PasswordManager.ViewModels.CustomControls;
+﻿using PasswordManager.CustomControls;
+using PasswordManager.Interfaces;
+using PasswordManager.ViewModels.Dialogs;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace PasswordManager.CustomControls
+namespace PasswordManager.Views.Dialogs
 {
     /// <summary>
     /// Interaction logic for PasswordModelEditor.xaml
@@ -12,10 +13,13 @@ namespace PasswordManager.CustomControls
     public partial class PasswordModelEditor : UserControl
     {
         public PasswordModelEditor(
-            PasswordModelEditorViewModel passwordModelEditorViewModel)
+            PasswordModelEditorViewModel passwordModelEditorViewModel,
+            IUserControlProviderService userControlProviderService,
+            IDialogOverlayService dialogOverlayService)
         {
             InitializeComponent();
             DataContext = passwordModelEditorViewModel;
+            passGenOverlay.Content = userControlProviderService.ProvideUserControl<DialogOverlay>();
         }
 
         private void TextBox_KeyUp(object sender, KeyEventArgs e)

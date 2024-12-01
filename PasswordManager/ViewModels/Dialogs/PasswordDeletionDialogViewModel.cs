@@ -6,28 +6,32 @@ namespace PasswordManager.ViewModels.Dialogs
 {
     public partial class PasswordDeletionDialogViewModel : ObservableObject
     {
-        private IModalDialogClosingService modalDialogClosingService;
-        private IModalDialogResultProviderService modalDialogResultProviderService;
+        private IDialogOverlayService dialogOverlayService;
+        private IPasswordDeletionService passwordDeletionService;
+        private IRefreshService refreshService;
+
         public PasswordDeletionDialogViewModel(
-            IModalDialogClosingService modalDialogClosingService,
-            IModalDialogResultProviderService modalDialogResultProviderService)
+            IDialogOverlayService dialogOverlayService,
+            IPasswordDeletionService passwordDeletionService,
+            IRefreshService refreshService)
         {
-            this.modalDialogClosingService = modalDialogClosingService;
-            this.modalDialogResultProviderService = modalDialogResultProviderService;
+            this.dialogOverlayService = dialogOverlayService;
+            this.passwordDeletionService = passwordDeletionService;
+            this.refreshService = refreshService;
         }
 
         [RelayCommand]
         private void Yes()
         {
-            modalDialogResultProviderService.Result = true;
-            modalDialogClosingService.Close();
+            passwordDeletionService.Delete();
+            refreshService.RefreshMain();
+            dialogOverlayService.Close();
         }
 
         [RelayCommand]
         private void No()
         {
-            modalDialogResultProviderService.Result = false;
-            modalDialogClosingService.Close();
+            dialogOverlayService.Close();
         }
     }
 }

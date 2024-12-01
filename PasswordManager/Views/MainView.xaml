@@ -10,7 +10,7 @@
         xmlns:converters="clr-namespace:PasswordManager.Converters"
         mc:Ignorable="d"
         Title="Password Manager"
-        Height="740"
+        Height="850"
         MinHeight="400"
         Width="1700"
         MinWidth="800"
@@ -162,7 +162,8 @@
                               Margin="20,0,0,0">
                         <TreeView.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                <CheckBox Margin="{Binding Level, Converter={StaticResource LevelToMarginConverter}}" HorizontalAlignment="Stretch">
+                                <CheckBox Margin="{Binding Level, Converter={StaticResource LevelToMarginConverter}}"
+                                          HorizontalAlignment="Stretch">
                                     <CheckBox.IsChecked>
                                         <MultiBinding Converter="{StaticResource MultiValueConverter}">
                                             <Binding RelativeSource="{RelativeSource AncestorType={x:Type TreeViewItem}}"
@@ -189,7 +190,6 @@
                                                                                          Opacity="0.2" />
                                                                     </Setter.Value>
                                                                 </Setter>
-                                                                        
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
@@ -221,12 +221,12 @@
                            FontSize="24"
                            FontWeight="Medium"
                            VerticalAlignment="Center"
-                           HorizontalAlignment="Left">
-                    <behaviors:Interaction.Triggers>
-    <behaviors:PropertyChangedTrigger Binding="{Binding Text, ElementName=caption}">
-        <behaviors:ControlStoryboardAction Storyboard="{StaticResource CaptionStoryboard}" />
-    </behaviors:PropertyChangedTrigger>
-</behaviors:Interaction.Triggers></TextBlock>
+                           HorizontalAlignment="Left">                    
+                        <behaviors:Interaction.Triggers>
+                            <behaviors:PropertyChangedTrigger Binding="{Binding Text, ElementName=caption}">
+                                <behaviors:ControlStoryboardAction Storyboard="{StaticResource CaptionStoryboard}" />
+                            </behaviors:PropertyChangedTrigger>
+                        </behaviors:Interaction.Triggers></TextBlock>
                 <StackPanel Grid.Row="1"
                             Orientation="Horizontal"
                             HorizontalAlignment="Right"
@@ -259,7 +259,7 @@
                             Command="{Binding ShowPasswordCreationViewCommand}"
                             Content="+ Add Password" />
                     <Button x:Name="btnImportPass"
-                            Command="{Binding ShowPasswordFilePickerDialogueViewCommand}"
+                            Command="{Binding ShowPasswordFilePickerDialogViewCommand}"
                             Content="Import passwords" />
                     <Button Content="❔"
                             x:Name="importFormat">
@@ -281,11 +281,9 @@
                 </ContentControl>
             </Grid>
         </Border>
-        <Border x:Name="Overlay"
-                Background="Black"
-                Opacity="0.5"
-                Grid.ColumnSpan="2"
-                Visibility="{Binding OverlayVisibility, Converter={StaticResource BooleanToVisibility}}"
-                CornerRadius="10" />
+        <ContentControl x:Name="dialogOverlay"
+                        Grid.ColumnSpan="2"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center" />
     </Grid>
 </Window>

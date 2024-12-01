@@ -10,7 +10,7 @@ namespace PasswordManager.Services
     {
         [ObservableProperty]
         public UserControl childView;
-        Func<Type, UserControl> childViewFactory;
+        private Func<Type, UserControl> childViewFactory;
         public NavigationToChildViewService(Func<Type, UserControl> childViewFactory)
         {
             this.childViewFactory = childViewFactory;

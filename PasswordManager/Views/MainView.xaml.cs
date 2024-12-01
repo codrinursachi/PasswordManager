@@ -1,7 +1,9 @@
-﻿using PasswordManager.Interfaces;
+﻿using PasswordManager.CustomControls;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Services;
 using PasswordManager.ViewModels;
+using PasswordManager.Views.Dialogs;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -17,12 +19,17 @@ namespace PasswordManager.Views
         public MainView(
             INavigationToChildViewService navigationToChildViewService,
             MainViewModel mainViewModel,
-            IAutoLockerService autoLockerService)
+            IAutoLockerService autoLockerService,
+            IUserControlProviderService userControlProviderService,
+            IDialogOverlayService dialogOverlayService)
         {
             InitializeComponent();
             MouseMove += autoLockerService.OnActivity;
             KeyDown += autoLockerService.OnActivity;
             DataContext = mainViewModel;
+            var dialog = userControlProviderService.ProvideUserControl<DialogOverlay>();
+            dialogOverlay.Content = dialog;
+            dialogOverlayService.MainViewOverlay=(DialogOverlay)dialog;
             Binding childBind = new("ChildView")
             {
                 Source = navigationToChildViewService
@@ -52,7 +59,7 @@ namespace PasswordManager.Views
 
         private void Categories_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (((MainViewModel)DataContext).Navigation.CurrentView is not CategoryViewModel)
+            if (((MainViewModel)DataContext).navigationService.CurrentView is not CategoryViewModel)
             {
                 categoryRadio.IsChecked = true;
                 ((MainViewModel)DataContext).ShowCategoryViewCommand.Execute(null);

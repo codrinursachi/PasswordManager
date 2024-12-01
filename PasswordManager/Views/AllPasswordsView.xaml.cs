@@ -22,7 +22,7 @@ namespace PasswordManager.Views
             Binding searchBind = new("SearchFilter")
             {
                 Source = DataContext,
-                Mode = BindingMode.TwoWay
+                Mode = BindingMode.OneWayToSource
             };
             search.SetBinding(PasswordSearch.searchCriteriaProperty, searchBind);
             var dataGrid = userControlProviderService.ProvideUserControl<PasswordDataGrid>();

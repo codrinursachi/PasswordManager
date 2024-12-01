@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Media;
 
-namespace PasswordManager.ViewModels.CustomControls
+namespace PasswordManager.ViewModels.Dialogs
 {
     public partial class PasswordModelEditorViewModel : ObservableValidator, IPasswordPair
     {
@@ -59,24 +59,26 @@ namespace PasswordManager.ViewModels.CustomControls
         private string currentAvailableAction;
         [ObservableProperty]
         private int id;
-        private IWindowProviderService modalDialogProviderService;
-        private IModalDialogClosingService modalDialogClosingService;
+        private IDialogOverlayService dialogOverlayService;
         private IPasswordManagementService passwordManagementService;
+        private IRefreshService refreshService;
         public PasswordModelEditorViewModel(
-            IWindowProviderService modalDialogProviderService,
-            IModalDialogClosingService modalDialogClosingService,
+            IDialogOverlayService dialogOverlayService,
             [FromKeyedServices("GeneratedPassword")] IMessenger generatedPassMessenger,
             [FromKeyedServices("PasswordModel")] IMessenger passwordModelMessenger,
-            IPasswordManagementService passwordManagementService)
+            IPasswordManagementService passwordManagementService,
+            IRefreshService refreshService)
         {
             this.passwordManagementService = passwordManagementService;
-            this.modalDialogClosingService = modalDialogClosingService;
-            this.modalDialogProviderService = modalDialogProviderService;
+            this.dialogOverlayService = dialogOverlayService;
+            this.refreshService=refreshService;
+
             generatedPassMessenger.Register<PasswordModelEditorViewModel, char[]>(this, (r, m) =>
             {
                 r.Password = string.Concat(Enumerable.Repeat('*', m.Length));
                 r.PasswordAsCharArray = m;
             });
+
             passwordModelMessenger.Register<PasswordModelEditorViewModel, PasswordModel>(this, (r, m) =>
             {
                 AddButtonVisible = false;
@@ -105,6 +107,7 @@ namespace PasswordManager.ViewModels.CustomControls
                     r.CompletedTags.Add(tag);
                 }
             });
+
             CategoryPaths = passwordManagementService.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
 
@@ -140,11 +143,13 @@ namespace PasswordManager.ViewModels.CustomControls
             };
             passwordManagementService.Add(newPassword);
             Array.Fill(PasswordAsCharArray, '0');
-            modalDialogClosingService.Close();
+            dialogOverlayService.PasswordEditorOverlay=null;
+            dialogOverlayService.Close();
+            refreshService.RefreshMain();
         }
 
         [RelayCommand]
-        public void AvailableAction(object obj)
+        public void AvailableAction()
         {
             if (CurrentAvailableAction == "Edit")
             {
@@ -173,7 +178,7 @@ namespace PasswordManager.ViewModels.CustomControls
             passwordManagementService.Edit(Id, newPassword);
             Password = "******";
             Array.Fill(PasswordAsCharArray, '0');
-            ((IRefreshable)obj).Refresh();
+            refreshService.RefreshMain();
             DisableEditing();
         }
 
@@ -210,17 +215,12 @@ namespace PasswordManager.ViewModels.CustomControls
             {
                 CompletedTags.Add(tag);
             }
-
         }
 
         [RelayCommand]
         private void ShowPasswordGenerator()
         {
-            var passwordGen = modalDialogProviderService.ProvideWindow<PasswordGeneratorView>();
-            modalDialogClosingService.ModalDialogs.Push(passwordGen);
-            OverlayVisibility = true;
-            passwordGen.ShowDialog();
-            OverlayVisibility = false;
+            dialogOverlayService.Show<PasswordGeneratorViewModel>();
         }
 
         [RelayCommand]
@@ -245,6 +245,13 @@ namespace PasswordManager.ViewModels.CustomControls
         private void ClearDate()
         {
             ExpirationDate = null;
+        }
+
+        [RelayCommand]
+        private void Close()
+        {
+            dialogOverlayService.PasswordEditorOverlay=null;
+            dialogOverlayService.Close();
         }
 
         private void SetValidationErrorsStrings()

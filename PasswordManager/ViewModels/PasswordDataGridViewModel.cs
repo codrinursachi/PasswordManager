@@ -4,10 +4,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.DTO;
 using PasswordManager.Interfaces;
+using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views.Dialogs;
 using System.Collections.ObjectModel;
 
-namespace PasswordManager.ViewModels.CustomControls
+namespace PasswordManager.ViewModels
 {
     public partial class PasswordDataGridViewModel : ObservableObject
     {
@@ -20,27 +21,26 @@ namespace PasswordManager.ViewModels.CustomControls
         private IMessenger passwordModelMessenger;
         private IClipboardService clipboardService;
         private IPasswordManagementService passwordManagementService;
-        private IWindowProviderService modalDialogProviderService;
-        private IModalDialogResultProviderService modalDialogResultProviderService;
-        private IModalDialogClosingService modalDialogClosingService;
+        private IDialogOverlayService dialogOverlayService;
+        private IPasswordDeletionService passwordDeletionService;
         public PasswordDataGridViewModel(
             [FromKeyedServices(key: "PasswordModel")] IMessenger passwordModelMessenger,
             [FromKeyedServices(key: "PasswordList")] IMessenger passwordListMessenger,
             IClipboardService clipboardService,
             IPasswordManagementService passwordManagementService,
-            IWindowProviderService modalDialogProviderService,
-            IModalDialogResultProviderService modalDialogResultProviderService,
-            IModalDialogClosingService modalDialogClosingService)
+            IDialogOverlayService dialogOverlayService,
+            IPasswordDeletionService passwordDeletionService)
         {
             this.clipboardService = clipboardService;
+            this.passwordDeletionService = passwordDeletionService;
             this.passwordManagementService = passwordManagementService;
             this.passwordModelMessenger = passwordModelMessenger;
-            this.modalDialogProviderService = modalDialogProviderService;
-            this.modalDialogResultProviderService = modalDialogResultProviderService;
-            this.modalDialogClosingService = modalDialogClosingService;
+            this.dialogOverlayService = dialogOverlayService;
+
             passwordListMessenger.Register<PasswordDataGridViewModel, ObservableCollection<PasswordToShowDTO>>(this, (r, m) =>
             {
                 r.PasswordList = m;
+                IsEditorVisible = false;
             });
         }
         partial void OnSelectedPassChanged(PasswordToShowDTO value)
@@ -49,6 +49,7 @@ namespace PasswordManager.ViewModels.CustomControls
             {
                 return;
             }
+
             IsEditorVisible = true;
             passwordModelMessenger.Send(passwordManagementService.GetPasswordById(SelectedPass.Id));
         }
@@ -68,16 +69,8 @@ namespace PasswordManager.ViewModels.CustomControls
         [RelayCommand]
         public void DeletePassword()
         {
-            var pwdDeletionDialog = modalDialogProviderService.ProvideWindow<PasswordDeletionDialogView>();
-            modalDialogClosingService.ModalDialogs.Push(pwdDeletionDialog);
-            pwdDeletionDialog.ShowDialog();
-            if (modalDialogResultProviderService.Result)
-            {
-                modalDialogResultProviderService.Result = false;
-                IsEditorVisible = false;
-                passwordManagementService.Remove(SelectedPass.Id);
-                PasswordList.Remove(SelectedPass);
-            }
+            passwordDeletionService.Id = SelectedPass.Id;
+            dialogOverlayService.Show<PasswordDeletionDialogViewModel>();
         }
     }
 }

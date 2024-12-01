@@ -9,7 +9,9 @@ namespace PasswordManager.Services
         private Func<Type, ViewModel> viewModelFactory;
         private INavigationToChildViewService navigationToChildViewService;
 
-        public NavigationService(INavigationToChildViewService navigationToChildViewService, Func<Type, ViewModel> viewModelFactory)
+        public NavigationService(
+            INavigationToChildViewService navigationToChildViewService, 
+            Func<Type, ViewModel> viewModelFactory)
         {
             this.viewModelFactory = viewModelFactory;
             this.navigationToChildViewService = navigationToChildViewService;

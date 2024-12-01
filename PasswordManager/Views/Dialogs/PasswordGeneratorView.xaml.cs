@@ -1,22 +1,30 @@
-﻿using PasswordManager.Interfaces;
-using PasswordManager.Services;
-using PasswordManager.ViewModels;
+﻿using PasswordManager.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
-namespace PasswordManager.Views
+namespace PasswordManager.Views.Dialogs
 {
     /// <summary>
     /// Interaction logic for PasswordGeneratorView.xaml
     /// </summary>
-    public partial class PasswordGeneratorView : Window
+    public partial class PasswordGeneratorView : UserControl
     {
         public PasswordGeneratorView(
-            PasswordGeneratorViewModel passwordGeneratorViewModel,
-            IAutoLockerService autoLockerService)
+            PasswordGeneratorViewModel passwordGeneratorViewModel)
         {
             InitializeComponent();
-            MouseMove += autoLockerService.OnActivity;
-            KeyDown += autoLockerService.OnActivity;
             DataContext = passwordGeneratorViewModel;
         }
     }

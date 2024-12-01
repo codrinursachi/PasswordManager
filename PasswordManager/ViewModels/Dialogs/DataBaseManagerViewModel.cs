@@ -27,15 +27,18 @@ namespace PasswordManager.ViewModels.Dialogs
         private string message;
         private IDatabaseStorageService databaseStorageService;
         private IDatabaseInfoProviderService databaseInfoProviderService;
-        private IModalDialogClosingService modalDialogClosingService;
+        private IDialogOverlayService dialogOverlayService;
+        private IRefreshService refreshService;
         public DatabaseManagerViewModel(
             IDatabaseStorageService databaseStorageService,
             IDatabaseInfoProviderService databaseInfoProviderService,
-            IModalDialogClosingService modalDialogClosingService)
+            IDialogOverlayService dialogOverlayService,
+            IRefreshService refreshService)
         {
             this.databaseStorageService = databaseStorageService;
             this.databaseInfoProviderService = databaseInfoProviderService;
-            this.modalDialogClosingService = modalDialogClosingService;
+            this.dialogOverlayService = dialogOverlayService;
+            this.refreshService = refreshService;
             databaseStorageService.Databases.ForEach(Databases.Add);
             SelectedDatabase = databaseInfoProviderService.CurrentDatabase;
         }
@@ -58,11 +61,13 @@ namespace PasswordManager.ViewModels.Dialogs
                     MessageToDisplay = true;
                     return;
                 }
+
                 ValidateAllProperties();
                 if (HasErrors)
                 {
                     return;
                 }
+
                 MessageToDisplay = false;
                 databaseStorageService.Add(NewDbName);
                 databaseInfoProviderService.CurrentDatabase = NewDbName;
@@ -84,7 +89,8 @@ namespace PasswordManager.ViewModels.Dialogs
             if (DatabaseSelectionMode)
             {
                 databaseInfoProviderService.CurrentDatabase = SelectedDatabase;
-                modalDialogClosingService.Close();
+                refreshService.RefreshMain();
+                dialogOverlayService.Close();
                 return;
             }
         }
@@ -110,6 +116,7 @@ namespace PasswordManager.ViewModels.Dialogs
         {
             if (DatabaseAddingMode)
             {
+                NewDbName = string.Empty;
                 DatabaseSelectionMode = true;
                 DatabaseAddingMode = false;
                 CurrentMode = "OK";
@@ -125,7 +132,7 @@ namespace PasswordManager.ViewModels.Dialogs
                 return;
             }
 
-            modalDialogClosingService.Close();
+            dialogOverlayService.Close();
         }
     }
 }
