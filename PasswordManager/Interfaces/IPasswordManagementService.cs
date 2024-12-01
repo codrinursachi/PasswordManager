@@ -1,5 +1,4 @@
-﻿using PasswordManager.DTO;
-using PasswordManager.Models;
+﻿using PasswordManager.Models;
 
 namespace PasswordManager.Interfaces
 {
@@ -8,9 +7,9 @@ namespace PasswordManager.Interfaces
         CategoryNodeModel GetPasswordsCategoryRoot();
         void Add(PasswordModel passwordModel);
         void Edit(int id, PasswordModel newPasswordModel);
-        List<PasswordToShowDTO> GetAllPasswords();
+        List<PasswordToShowModel> GetAllPasswords();
         PasswordModel GetPasswordById(int id);
         void Remove(int id);
-        List<PasswordToShowDTO> GetFilteredPasswords(string filter);
+        List<PasswordToShowModel> GetFilteredPasswords(string filter);
     }
 }

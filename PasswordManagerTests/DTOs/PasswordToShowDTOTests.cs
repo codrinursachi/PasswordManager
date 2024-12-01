@@ -1,4 +1,4 @@
-﻿using PasswordManager.DTO;
+﻿using PasswordManager.Models;
 
 namespace PasswordManagerTests.DTOs
 {
@@ -8,7 +8,7 @@ namespace PasswordManagerTests.DTOs
         [Fact]
         public void ShouldStorePasswordDTOData()
         {
-            PasswordToShowDTO password = new()
+            PasswordToShowModel password = new()
             {
                 Id = 1,
                 Username = "admin",

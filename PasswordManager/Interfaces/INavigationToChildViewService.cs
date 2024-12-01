@@ -5,7 +5,7 @@ namespace PasswordManager.Interfaces
 {
     public interface INavigationToChildViewService
     {
-        UserControl ChildView { get; set; }
+        ContentControl ChildView { get; set; }
         void SetChildView(ObservableObject childView);
     }
 }

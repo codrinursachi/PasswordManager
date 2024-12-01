@@ -2,8 +2,8 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using PasswordManager.DTO;
 using PasswordManager.Interfaces;
+using PasswordManager.Models;
 using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views.Dialogs;
 using System.Collections.ObjectModel;
@@ -15,9 +15,9 @@ namespace PasswordManager.ViewModels
         [ObservableProperty]
         private bool isEditorVisible;
         [ObservableProperty]
-        private PasswordToShowDTO selectedPass;
+        private PasswordToShowModel selectedPass;
         [ObservableProperty]
-        private ObservableCollection<PasswordToShowDTO> passwordList;
+        private ObservableCollection<PasswordToShowModel> passwordList;
         private IMessenger passwordModelMessenger;
         private IClipboardService clipboardService;
         private IPasswordManagementService passwordManagementService;
@@ -37,13 +37,13 @@ namespace PasswordManager.ViewModels
             this.passwordModelMessenger = passwordModelMessenger;
             this.dialogOverlayService = dialogOverlayService;
 
-            passwordListMessenger.Register<PasswordDataGridViewModel, ObservableCollection<PasswordToShowDTO>>(this, (r, m) =>
+            passwordListMessenger.Register<PasswordDataGridViewModel, ObservableCollection<PasswordToShowModel>>(this, (r, m) =>
             {
                 r.PasswordList = m;
                 IsEditorVisible = false;
             });
         }
-        partial void OnSelectedPassChanged(PasswordToShowDTO value)
+        partial void OnSelectedPassChanged(PasswordToShowModel value)
         {
             if (value == null)
             {

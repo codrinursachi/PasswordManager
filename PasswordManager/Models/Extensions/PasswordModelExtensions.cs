@@ -1,12 +1,12 @@
 ﻿using PasswordManager.Models;
 
-namespace PasswordManager.DTO.Extensions
+namespace PasswordManager.Models.Extensions
 {
-    public static class PasswordDTOExtensions
+    public static class PasswordModelExtensions
     {
-        public static PasswordToShowDTO ToPasswordToShowDTO(this PasswordModel passwordModel)
+        public static PasswordToShowModel ToPasswordToShowModel(this PasswordModel passwordModel)
         {
-            return new PasswordToShowDTO
+            return new PasswordToShowModel
             {
                 Id = passwordModel.Id,
                 Favorite = passwordModel.Favorite,
@@ -20,7 +20,7 @@ namespace PasswordManager.DTO.Extensions
             };
         }
 
-        public static PasswordModel ToPasswordModel(this PasswordImportDTO passwordToImport)
+        public static PasswordModel ToPasswordModel(this PasswordImportModel passwordToImport)
         {
             return new PasswordModel
             {

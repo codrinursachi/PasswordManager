@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
-using PasswordManager.DTO;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using System.Collections.ObjectModel;
@@ -22,7 +21,7 @@ namespace PasswordManager.ViewModels
             this.passwordListMessenger = passwordListMessenger;
         }
 
-        public ObservableCollection<PasswordToShowDTO> Passwords { get; set; } = [];
+        public ObservableCollection<PasswordToShowModel> Passwords { get; set; } = [];
 
         partial void OnFilterChanged(CategoryNodeModel value)
         {

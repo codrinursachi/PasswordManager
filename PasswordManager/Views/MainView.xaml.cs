@@ -17,11 +17,12 @@ namespace PasswordManager.Views
     public partial class MainView : Window
     {
         public MainView(
-            INavigationToChildViewService navigationToChildViewService,
             MainViewModel mainViewModel,
             IAutoLockerService autoLockerService,
             IUserControlProviderService userControlProviderService,
-            IDialogOverlayService dialogOverlayService)
+            IDialogOverlayService dialogOverlayService,
+            INavigationService navigationService,
+            IRefreshService refreshService)
         {
             InitializeComponent();
             MouseMove += autoLockerService.OnActivity;
@@ -30,11 +31,9 @@ namespace PasswordManager.Views
             var dialog = userControlProviderService.ProvideUserControl<DialogOverlay>();
             dialogOverlay.Content = dialog;
             dialogOverlayService.MainViewOverlay=(DialogOverlay)dialog;
-            Binding childBind = new("ChildView")
-            {
-                Source = navigationToChildViewService
-            };
-            childView.SetBinding(ContentProperty, childBind);
+            navigationService.CurrentView = childView;
+            navigationService.NavigateTo<AllPasswordsViewModel>();
+
             importFormat.ToolTip = """
                                       [
                                         {
@@ -59,7 +58,7 @@ namespace PasswordManager.Views
 
         private void Categories_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (((MainViewModel)DataContext).navigationService.CurrentView is not CategoryViewModel)
+            if (((MainViewModel)DataContext).navigationService.CurrentViewModel is not CategoryViewModel)
             {
                 categoryRadio.IsChecked = true;
                 ((MainViewModel)DataContext).ShowCategoryViewCommand.Execute(null);

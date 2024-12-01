@@ -1,4 +1,4 @@
-﻿using PasswordManager.DTO;
+﻿using PasswordManager.Models;
 
 namespace PasswordManagerTests.DTOs
 {
@@ -7,7 +7,7 @@ namespace PasswordManagerTests.DTOs
         [Fact]
         public void ShouldStorePasswordImportDTOData()
         {
-            PasswordImportDTO password = new()
+            PasswordImportModel password = new()
             {
                 Username = "admin",
                 Password = "admin",

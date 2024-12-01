@@ -1,9 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Messaging;
 using Moq;
-using PasswordManager.DTO;
-using PasswordManager.DTO.Extensions;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
+using PasswordManager.Models.Extensions;
 using PasswordManager.ViewModels;
 
 namespace PasswordManagerTests.ViewModels
@@ -19,7 +18,7 @@ namespace PasswordManagerTests.ViewModels
             var passwordListMessenger = new Mock<IMessenger>();
             var passwordManagementService = new Mock<IPasswordManagementService>();
             passwordManagementService.Setup(m => m.GetFilteredPasswords(null))
-                                     .Returns(new List<PasswordToShowDTO>([password.ToPasswordToShowDTO(), password2.ToPasswordToShowDTO(), password3.ToPasswordToShowDTO()]));
+                                     .Returns(new List<PasswordToShowModel>([password.ToPasswordToShowModel(), password2.ToPasswordToShowModel(), password3.ToPasswordToShowModel()]));
 
             FavoritesViewModel FavoritesViewModel = new(passwordManagementService.Object, passwordListMessenger.Object);
             FavoritesViewModel.Refresh();
@@ -35,7 +34,7 @@ namespace PasswordManagerTests.ViewModels
             var passwordListMessenger = new Mock<IMessenger>();
             var passwordManagementService = new Mock<IPasswordManagementService>();
             passwordManagementService.Setup(m => m.GetFilteredPasswords("admin2"))
-                                     .Returns(new List<PasswordToShowDTO>([password2.ToPasswordToShowDTO()]));
+                                     .Returns(new List<PasswordToShowModel>([password2.ToPasswordToShowModel()]));
 
             FavoritesViewModel FavoritesViewModel = new(passwordManagementService.Object, passwordListMessenger.Object)
             {

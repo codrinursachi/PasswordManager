@@ -1,7 +1,6 @@
-﻿using PasswordManager.DTO;
-using PasswordManager.DTO.Extensions;
-using PasswordManager.Interfaces;
+﻿using PasswordManager.Interfaces;
 using PasswordManager.Models;
+using PasswordManager.Models.Extensions;
 
 namespace PasswordManager.Services
 {
@@ -23,18 +22,18 @@ namespace PasswordManager.Services
             passwordRepository.Edit(id, newPasswordModel);
         }
 
-        public List<PasswordToShowDTO> GetAllPasswords()
+        public List<PasswordToShowModel> GetAllPasswords()
         {
-            return passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowDTO()).ToList();
+            return passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowModel()).ToList();
         }
 
-        public List<PasswordToShowDTO> GetFilteredPasswords(string filter)
+        public List<PasswordToShowModel> GetFilteredPasswords(string filter)
         {
             if (string.IsNullOrEmpty(filter))
             {
                 return GetAllPasswords();
             }
-            List<PasswordToShowDTO> passwords = [];
+            List<PasswordToShowModel> passwords = [];
             foreach (var password in GetAllPasswords())
             {
                 List<string> searchData = [];

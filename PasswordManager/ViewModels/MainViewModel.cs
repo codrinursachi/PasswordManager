@@ -54,15 +54,14 @@ namespace PasswordManager.ViewModels
             backupManagementService.CreateBackupIfNecessary();
             this.refreshService = refreshService;
             refreshService.Main = this;
-            ShowAllPasswordsViewCommand.Execute(null);
         }
 
         public CategoryNodeModel Filter
         {
-            get => ((CategoryViewModel)navigationService.CurrentView).Filter;
+            get => ((CategoryViewModel)navigationService.CurrentViewModel).Filter;
             set
             {
-                if (navigationService.CurrentView is CategoryViewModel child)
+                if (navigationService.CurrentViewModel is CategoryViewModel child)
                 {
                     child.Filter = value;
                 }
@@ -80,20 +79,19 @@ namespace PasswordManager.ViewModels
             SelectedDb = databaseInfoProviderService.CurrentDatabase;
             var rootNode = passwordManagementService.GetPasswordsCategoryRoot();
             Categories = [rootNode];
-            ((IRefreshable)navigationService.CurrentView).Refresh();
+            refreshService.RefreshPasswords();
         }
 
         [RelayCommand]
         private void ShowCategoryView()
         {
-            if (navigationService.CurrentView is CategoryViewModel)
+            if (navigationService.CurrentViewModel is CategoryViewModel)
             {
                 return;
             }
 
             navigationService.NavigateTo<CategoryViewModel>();
             Caption = "Categories";
-            Refresh();
         }
 
         [RelayCommand]
@@ -101,7 +99,6 @@ namespace PasswordManager.ViewModels
         {
             navigationService.NavigateTo<FavoritesViewModel>();
             Caption = "Favorites";
-            Refresh();
         }
 
         [RelayCommand]
@@ -109,8 +106,6 @@ namespace PasswordManager.ViewModels
         {
             navigationService.NavigateTo<AllPasswordsViewModel>();
             Caption = "All Passwords";
-
-            Refresh();
         }
 
         [RelayCommand]

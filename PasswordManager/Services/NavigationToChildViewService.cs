@@ -6,28 +6,32 @@ using System.Windows.Controls;
 
 namespace PasswordManager.Services
 {
-    public partial class NavigationToChildViewService : ObservableObject, INavigationToChildViewService
+    public partial class NavigationToChildViewService : INavigationToChildViewService
     {
-        [ObservableProperty]
-        public UserControl childView;
-        private Func<Type, UserControl> childViewFactory;
-        public NavigationToChildViewService(Func<Type, UserControl> childViewFactory)
+        private IUserControlProviderService userControlProviderService;
+
+        public NavigationToChildViewService(
+            IUserControlProviderService userControlProviderService
+            )
         {
-            this.childViewFactory = childViewFactory;
+            this.userControlProviderService = userControlProviderService;
         }
+
+        public ContentControl ChildView { get; set; }
+
         public void SetChildView(ObservableObject childViewModel)
         {
             if (childViewModel is AllPasswordsViewModel)
             {
-                ChildView = childViewFactory.Invoke(typeof(AllPasswordsView));
+                ChildView.Content = userControlProviderService.ProvideUserControl<AllPasswordsView>();
             }
             if (childViewModel is FavoritesViewModel)
             {
-                ChildView = childViewFactory.Invoke(typeof(FavoritesView));
+                ChildView.Content = userControlProviderService.ProvideUserControl<FavoritesView>();
             }
             if (childViewModel is CategoryViewModel)
             {
-                ChildView = childViewFactory.Invoke(typeof(CategoryView));
+                ChildView.Content = userControlProviderService.ProvideUserControl<CategoryView>();
             }
         }
     }

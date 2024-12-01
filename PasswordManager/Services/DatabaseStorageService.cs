@@ -4,7 +4,7 @@ using System.IO;
 
 namespace PasswordManager.Services
 {
-    public partial class DatabaseStorageService : ObservableObject, IDatabaseStorageService
+    public partial class DatabaseStorageService : IDatabaseStorageService
     {
         private string programDbPath;
         public DatabaseStorageService(IPathProviderService pathProviderService)

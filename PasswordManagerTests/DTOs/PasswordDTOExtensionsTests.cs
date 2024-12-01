@@ -1,6 +1,5 @@
-﻿using PasswordManager.DTO;
-using PasswordManager.DTO.Extensions;
-using PasswordManager.Models;
+﻿using PasswordManager.Models;
+using PasswordManager.Models.Extensions;
 
 namespace PasswordManagerTests.DTOs
 {
@@ -21,7 +20,7 @@ namespace PasswordManagerTests.DTOs
                 Favorite = true,
                 Notes = "admin notes"
             };
-            PasswordToShowDTO passwordDTO = passwordModel.ToPasswordToShowDTO();
+            PasswordToShowModel passwordDTO = passwordModel.ToPasswordToShowModel();
             Assert.Equal(1, passwordDTO.Id);
             Assert.Equal("admin", passwordDTO.Username);
             Assert.Equal("admin".ToCharArray(), passwordDTO.Password);
@@ -48,7 +47,7 @@ namespace PasswordManagerTests.DTOs
                 Favorite = true,
                 Notes = "admin notes"
             };
-            PasswordToShowDTO passwordDTO = passwordModel.ToPasswordToShowDTO();
+            PasswordToShowModel passwordDTO = passwordModel.ToPasswordToShowModel();
             Assert.Equal(1, passwordDTO.Id);
             Assert.Equal("admin", passwordDTO.Username);
             Assert.Equal("admin".ToCharArray(), passwordDTO.Password);
@@ -75,7 +74,7 @@ namespace PasswordManagerTests.DTOs
                 Favorite = true,
                 Notes = "admin notes"
             };
-            PasswordToShowDTO passwordDTO = passwordModel.ToPasswordToShowDTO();
+            PasswordToShowModel passwordDTO = passwordModel.ToPasswordToShowModel();
             Assert.Equal(1, passwordDTO.Id);
             Assert.Equal("admin", passwordDTO.Username);
             Assert.Equal("admin".ToCharArray(), passwordDTO.Password);
@@ -90,7 +89,7 @@ namespace PasswordManagerTests.DTOs
         [Fact]
         public void ShouldConvertPasswordImportDTOToPasswordModel()
         {
-            PasswordImportDTO PasswordImportDTO = new()
+            PasswordImportModel PasswordImportDTO = new()
             {
                 Username = "admin",
                 Password = "admin",
