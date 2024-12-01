@@ -28,9 +28,9 @@
     </UserControl.Resources>
     <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
             Width="320"
-            Height="180">
-        <Grid x:Name="dtbManager"
-              HorizontalAlignment="Center"
+            Height="180"
+            x:Name="dtbManager">
+        <Grid HorizontalAlignment="Center"
               VerticalAlignment="Center">
             <behaviors:Interaction.Triggers>
                 <behaviors:EventTrigger EventName="Loaded"
@@ -61,8 +61,8 @@
                               MinWidth="150" />
                     <TextBox Visibility="{Binding DatabaseAddingMode,Converter={StaticResource BooleanToVisibilityConverter}}"
                              Text="{Binding NewDbName}"
-                             Margin="0,0,0,5" 
-                             Grid.ColumnSpan="3"/>
+                             Margin="0,0,0,5"
+                             Grid.ColumnSpan="3" />
                     <Button VerticalAlignment="Stretch"
                             Grid.Column="1"
                             Margin="10,0,5,0"

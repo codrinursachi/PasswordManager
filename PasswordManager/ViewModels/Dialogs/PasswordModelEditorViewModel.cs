@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
-using PasswordManager.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Media;
@@ -71,7 +70,7 @@ namespace PasswordManager.ViewModels.Dialogs
         {
             this.passwordManagementService = passwordManagementService;
             this.dialogOverlayService = dialogOverlayService;
-            this.refreshService=refreshService;
+            this.refreshService = refreshService;
 
             generatedPassMessenger.Register<PasswordModelEditorViewModel, char[]>(this, (r, m) =>
             {
@@ -143,7 +142,7 @@ namespace PasswordManager.ViewModels.Dialogs
             };
             passwordManagementService.Add(newPassword);
             Array.Fill(PasswordAsCharArray, '0');
-            dialogOverlayService.PasswordEditorOverlay=null;
+            dialogOverlayService.PasswordEditorOverlay = null;
             dialogOverlayService.Close();
             refreshService.RefreshMain();
         }
@@ -250,7 +249,7 @@ namespace PasswordManager.ViewModels.Dialogs
         [RelayCommand]
         private void Close()
         {
-            dialogOverlayService.PasswordEditorOverlay=null;
+            dialogOverlayService.PasswordEditorOverlay = null;
             dialogOverlayService.Close();
         }
 

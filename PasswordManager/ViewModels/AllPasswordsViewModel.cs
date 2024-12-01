@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
 {
-    public partial class AllPasswordsViewModel : ViewModel, IRefreshable
+    public partial class AllPasswordsViewModel : ObservableObject, IRefreshable
     {
         [ObservableProperty]
         string searchFilter;

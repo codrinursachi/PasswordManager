@@ -8,7 +8,7 @@ using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
 {
-    public partial class CategoryViewModel : ViewModel, IRefreshable
+    public partial class CategoryViewModel : ObservableObject, IRefreshable
     {
         [ObservableProperty]
         private CategoryNodeModel filter;

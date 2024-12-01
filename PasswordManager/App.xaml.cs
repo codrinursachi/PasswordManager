@@ -7,10 +7,8 @@ using PasswordManager.Repositories;
 using PasswordManager.Services;
 using PasswordManager.ViewModels;
 using PasswordManager.ViewModels.Dialogs;
-using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views;
 using PasswordManager.Views.Dialogs;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -77,7 +75,6 @@ namespace PasswordManager
             services.AddSingleton<IPasswordDeletionService, PasswordDeletionService>();
             services.AddSingleton<IRefreshService, RefreshService>();
 
-            services.AddSingleton<Func<Type, ViewModel>>(serviceProvider => viewModelType => (ViewModel)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => viewModelType => (ObservableObject)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, Window>>(serviceProvider => dialogType => (Window)serviceProvider.GetRequiredService(dialogType));
             services.AddSingleton<Func<Type, UserControl>>(serviceProvider => userControlType => (UserControl)serviceProvider.GetRequiredService(userControlType));

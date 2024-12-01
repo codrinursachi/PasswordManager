@@ -1,25 +1,25 @@
-﻿using PasswordManager.Interfaces;
-using PasswordManager.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using PasswordManager.Interfaces;
 
 namespace PasswordManager.Services
 {
     public partial class NavigationService : INavigationService
     {
-        public ViewModel CurrentView { get; set; }
-        private Func<Type, ViewModel> viewModelFactory;
+        public ObservableObject CurrentView { get; set; }
+        private Func<Type, ObservableObject> viewModelFactory;
         private INavigationToChildViewService navigationToChildViewService;
 
         public NavigationService(
-            INavigationToChildViewService navigationToChildViewService, 
-            Func<Type, ViewModel> viewModelFactory)
+            INavigationToChildViewService navigationToChildViewService,
+            Func<Type, ObservableObject> viewModelFactory)
         {
             this.viewModelFactory = viewModelFactory;
             this.navigationToChildViewService = navigationToChildViewService;
         }
 
-        public void NavigateTo<TViewModel>() where TViewModel : ViewModel
+        public void NavigateTo<TViewModel>() where TViewModel : ObservableObject
         {
-            ViewModel viewModel = viewModelFactory.Invoke(typeof(TViewModel));
+            ObservableObject viewModel = viewModelFactory.Invoke(typeof(TViewModel));
             CurrentView = viewModel;
             navigationToChildViewService.SetChildView(viewModel);
         }

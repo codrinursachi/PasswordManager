@@ -1,10 +1,10 @@
-﻿using PasswordManager.ViewModels;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace PasswordManager.Interfaces
 {
     public interface INavigationService
     {
-        ViewModel CurrentView { get; set; }
-        void NavigateTo<TViewModel>() where TViewModel : ViewModel;
+        ObservableObject CurrentView { get; set; }
+        void NavigateTo<TViewModel>() where TViewModel : ObservableObject;
     }
 }

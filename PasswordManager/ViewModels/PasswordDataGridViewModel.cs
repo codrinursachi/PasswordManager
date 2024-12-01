@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.DTO;
 using PasswordManager.Interfaces;
 using PasswordManager.ViewModels.Dialogs;
-using PasswordManager.Views.Dialogs;
 using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
