@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 using PasswordManager.Interfaces;
+using PasswordManager.Services;
 using PasswordManager.ViewModels;
 
 namespace PasswordManagerTests.Services

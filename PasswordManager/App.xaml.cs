@@ -7,8 +7,10 @@ using PasswordManager.Repositories;
 using PasswordManager.Services;
 using PasswordManager.ViewModels;
 using PasswordManager.ViewModels.Dialogs;
+using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views;
 using PasswordManager.Views.Dialogs;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 

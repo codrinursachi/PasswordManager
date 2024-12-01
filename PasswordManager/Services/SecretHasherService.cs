@@ -4,7 +4,7 @@ using System.Text;
 
 namespace PasswordManager.Services
 {
-    public class SecretHasherService : ISecretHasherService
+    public class SecretHasherService:ISecretHasherService
     {
         private const int saltSize = 16; // 128 bits
         private const int keySize = 32; // 256 bits

@@ -1,8 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
+using PasswordManager.Services;
 using PasswordManager.ViewModels.Dialogs;
+using PasswordManager.ViewModels.Dialogs;
+using PasswordManager.Views;
+using PasswordManager.Views.Dialogs;
 using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels

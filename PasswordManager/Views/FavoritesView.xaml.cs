@@ -12,7 +12,7 @@ namespace PasswordManager.Views
     public partial class FavoritesView : UserControl
     {
         public FavoritesView(
-            IUserControlProviderService userControlProviderService,
+            IUserControlProviderService userControlProviderService, 
             FavoritesViewModel favoritesViewModel)
         {
             InitializeComponent();

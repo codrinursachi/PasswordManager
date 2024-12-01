@@ -1,7 +1,9 @@
 ﻿using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
+using PasswordManager.Services;
 using PasswordManager.ViewModels;
+using PasswordManager.Views.Dialogs;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -27,7 +29,7 @@ namespace PasswordManager.Views
             DataContext = mainViewModel;
             var dialog = userControlProviderService.ProvideUserControl<DialogOverlay>();
             dialogOverlay.Content = dialog;
-            dialogOverlayService.MainViewOverlay = (DialogOverlay)dialog;
+            dialogOverlayService.MainViewOverlay=(DialogOverlay)dialog;
             Binding childBind = new("ChildView")
             {
                 Source = navigationToChildViewService

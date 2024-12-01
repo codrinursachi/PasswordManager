@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using PasswordManager.Interfaces;
+using PasswordManager.ViewModels;
 
 namespace PasswordManager.Services
 {
@@ -10,7 +11,7 @@ namespace PasswordManager.Services
         private INavigationToChildViewService navigationToChildViewService;
 
         public NavigationService(
-            INavigationToChildViewService navigationToChildViewService,
+            INavigationToChildViewService navigationToChildViewService, 
             Func<Type, ObservableObject> viewModelFactory)
         {
             this.viewModelFactory = viewModelFactory;

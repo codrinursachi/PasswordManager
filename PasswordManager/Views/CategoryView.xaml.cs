@@ -1,4 +1,5 @@
-﻿using PasswordManager.Interfaces;
+﻿using PasswordManager.CustomControls;
+using PasswordManager.Interfaces;
 using PasswordManager.ViewModels;
 using System.Windows.Controls;
 

@@ -3,8 +3,16 @@ using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
 using PasswordManager.ViewModels;
 using PasswordManager.ViewModels.Dialogs;
+using PasswordManager.ViewModels.Dialogs;
+using PasswordManager.Views;
 using PasswordManager.Views.Dialogs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace PasswordManager.Services
 {

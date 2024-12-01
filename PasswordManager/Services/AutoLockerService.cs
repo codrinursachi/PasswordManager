@@ -4,7 +4,7 @@ using System.Windows.Threading;
 
 namespace PasswordManager.Services
 {
-    public class AutoLockerService : IAutoLockerService
+    public class AutoLockerService:IAutoLockerService
     {
         private DispatcherTimer timer;
         public void OnActivity(object? sender, EventArgs e)
