@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.CustomControls;
+using PasswordManager.Data;
 using PasswordManager.Interfaces;
 using PasswordManager.Repositories;
 using PasswordManager.Services;
@@ -27,10 +28,10 @@ namespace PasswordManager
             IServiceCollection services = new ServiceCollection();
             services.AddSingleton<LoginView>();
             services.AddSingleton<MainView>();
+
             services.AddTransient<PasswordGeneratorView>();
             services.AddTransient<DatabaseManagerView>();
             services.AddTransient<PasswordDeletionDialogView>();
-
             services.AddSingleton<AllPasswordsView>();
             services.AddSingleton<FavoritesView>();
             services.AddSingleton<CategoryView>();
@@ -75,10 +76,15 @@ namespace PasswordManager
             services.AddSingleton<IDialogOverlayService, DialogOverlayService>();
             services.AddSingleton<IPasswordDeletionService, PasswordDeletionService>();
             services.AddSingleton<IRefreshService, RefreshService>();
+            services.AddSingleton<IPasswordEncryptionService, PasswordEncryptionService>();
+            services.AddSingleton<IDbContextPoolService, DbContextPoolService>();
+
+            services.AddSingleton<PasswordManagerDbContext>();
 
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => viewModelType => (ObservableObject)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, Window>>(serviceProvider => dialogType => (Window)serviceProvider.GetRequiredService(dialogType));
             services.AddSingleton<Func<Type, UserControl>>(serviceProvider => userControlType => (UserControl)serviceProvider.GetRequiredService(userControlType));
+            services.AddSingleton<Func<PasswordManagerDbContext>>(serviceProvider => () => serviceProvider.GetRequiredService<PasswordManagerDbContext>());
 
             serviceProvider = services.BuildServiceProvider();
         }

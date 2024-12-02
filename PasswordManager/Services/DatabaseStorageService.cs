@@ -18,24 +18,24 @@ namespace PasswordManager.Services
             Databases.Clear();
             foreach (var db in Directory.GetFiles(programDbPath))
             {
-                Databases.Add(db[(programDbPath + "\\").Length..^".json".Length]);
+                Databases.Add(db[(programDbPath + "\\").Length..^".db".Length]);
             }
             if (Databases.Count == 0)
             {
-                File.Create(Path.Combine(programDbPath, "default.json")).Close();
+                File.Create(Path.Combine(programDbPath, "default.db")).Close();
                 Databases.Add("default");
             }
         }
 
         public void Add(string dbName)
         {
-            File.Create(Path.Combine(programDbPath, dbName + ".json")).Close();
+            File.Create(Path.Combine(programDbPath, dbName + ".db")).Close();
             Refresh();
         }
 
         public void Remove(string dbName)
         {
-            File.Delete(Path.Combine(programDbPath, dbName + ".json"));
+            File.Delete(Path.Combine(programDbPath, dbName + ".db"));
             Refresh();
         }
     }

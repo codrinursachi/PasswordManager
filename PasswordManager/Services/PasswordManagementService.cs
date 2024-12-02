@@ -1,4 +1,6 @@
-﻿using PasswordManager.Interfaces;
+﻿using Microsoft.EntityFrameworkCore;
+using PasswordManager.Data;
+using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Models.Extensions;
 
@@ -6,35 +8,67 @@ namespace PasswordManager.Services
 {
     public class PasswordManagementService : IPasswordManagementService
     {
-        IPasswordRepository passwordRepository;
-        public PasswordManagementService(IPasswordRepository passwordRepository)
+        private IDatabaseInfoProviderService databaseInfoProviderService;
+        private IPathProviderService pathProviderService;
+        private IPasswordEncryptionService passwordEncryptionService;
+        private IDbContextPoolService dbContextPoolService;
+        public PasswordManagementService(
+            IDatabaseInfoProviderService databaseInfoProviderService,
+            IPathProviderService pathProviderService,
+            IPasswordEncryptionService passwordEncryptionService,
+            IDbContextPoolService dbContextPoolService)
         {
-            this.passwordRepository = passwordRepository;
+            this.databaseInfoProviderService = databaseInfoProviderService;
+            this.pathProviderService = pathProviderService;
+            this.passwordEncryptionService = passwordEncryptionService;
+            this.dbContextPoolService = dbContextPoolService;
         }
 
         public void Add(PasswordModel passwordModel)
         {
-            passwordRepository.Add(passwordModel);
+            var dbContext = dbContextPoolService.Acquire(databaseInfoProviderService.CurrentDatabase);
+            passwordModel.Password = passwordEncryptionService.Encrypt(passwordModel.Password);
+            dbContext.Passwords.Add(passwordModel);
+            dbContext.SaveChanges();
+            dbContextPoolService.Release(databaseInfoProviderService.CurrentDatabase, dbContext);
         }
 
         public void Edit(int id, PasswordModel newPasswordModel)
         {
-            passwordRepository.Edit(id, newPasswordModel);
+            var dbContext = dbContextPoolService.Acquire(databaseInfoProviderService.CurrentDatabase);
+            var oldPass = dbContext.Passwords.FirstOrDefault(p => p.Id == id);
+            oldPass.Url = newPasswordModel.Url;
+            oldPass.Password = passwordEncryptionService.Encrypt(newPasswordModel.Password);
+            oldPass.Username = newPasswordModel.Username;
+            oldPass.ExpirationDate = newPasswordModel.ExpirationDate;
+            oldPass.CategoryPath = newPasswordModel.CategoryPath;
+            oldPass.Favorite = newPasswordModel.Favorite;
+            oldPass.Notes = newPasswordModel.Notes;
+            oldPass.Tags = newPasswordModel.Tags;
+            dbContext.SaveChanges();
+            dbContextPoolService.Release(databaseInfoProviderService.CurrentDatabase, dbContext);
+
         }
 
         public List<PasswordToShowModel> GetAllPasswords()
         {
-            return passwordRepository.GetAllPasswords().Select(p => p.ToPasswordToShowModel()).ToList();
+            List<PasswordToShowModel> result;
+            var dbContext = dbContextPoolService.Acquire(databaseInfoProviderService.CurrentDatabase);
+            result = dbContext.Passwords.Select(p => p.ToPasswordToShowModel()).ToList();
+            dbContextPoolService.Release(databaseInfoProviderService.CurrentDatabase, dbContext);
+
+            return result;
         }
 
         public List<PasswordToShowModel> GetFilteredPasswords(string filter)
         {
+            var allPasswords = GetAllPasswords();
             if (string.IsNullOrEmpty(filter))
             {
-                return GetAllPasswords();
+                return allPasswords;
             }
             List<PasswordToShowModel> passwords = [];
-            foreach (var password in GetAllPasswords())
+            foreach (var password in allPasswords)
             {
                 List<string> searchData = [];
                 if (password.Username != null)
@@ -68,12 +102,30 @@ namespace PasswordManager.Services
 
         public PasswordModel GetPasswordById(int id)
         {
-            return passwordRepository.GetPasswordById(id);
+            var dbContext = dbContextPoolService.Acquire(databaseInfoProviderService.CurrentDatabase);
+            var pass = dbContext.Passwords.FirstOrDefault(p => p.Id == id);
+            dbContextPoolService.Release(databaseInfoProviderService.CurrentDatabase, dbContext);
+            return new PasswordModel
+            {
+                Id = pass.Id,
+                Url = pass.Url,
+                Password = passwordEncryptionService.Decrypt(pass.Password),
+                Username = pass.Username,
+                ExpirationDate = pass.ExpirationDate,
+                CategoryPath = pass.CategoryPath,
+                Favorite = pass.Favorite,
+                Notes = pass.Notes,
+                Tags = pass.Tags
+            };
         }
 
         public CategoryNodeModel GetPasswordsCategoryRoot()
         {
-            var paths = passwordRepository.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => !string.IsNullOrEmpty(p)).ToList();
+            List<string> paths;
+            var dbContext = dbContextPoolService.Acquire(databaseInfoProviderService.CurrentDatabase);
+            paths = dbContext.Passwords.AsParallel().Select(p => p.CategoryPath).Distinct().Where(p => !string.IsNullOrEmpty(p)).ToList();
+            dbContextPoolService.Release(databaseInfoProviderService.CurrentDatabase, dbContext);
+
             var root = new CategoryNodeModel { Name = "Categories", Level = 0 };
             foreach (var path in paths)
             {
@@ -97,7 +149,10 @@ namespace PasswordManager.Services
 
         public void Remove(int id)
         {
-            passwordRepository.Remove(id);
+            var dbContext = dbContextPoolService.Acquire(databaseInfoProviderService.CurrentDatabase);
+            dbContext.Passwords.Remove(dbContext.Passwords.FirstOrDefault(p => p.Id == id));
+            dbContext.SaveChanges();
+            dbContextPoolService.Release(databaseInfoProviderService.CurrentDatabase, dbContext);
         }
     }
 }

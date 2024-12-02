@@ -107,8 +107,6 @@ namespace PasswordManager.ViewModels.Dialogs
                     r.CompletedTags.Add(tag);
                 }
             });
-
-            CategoryPaths = passwordManagementService.GetAllPasswords().Select(p => p.CategoryPath).Distinct().Where(p => p != null).ToList();
         }
 
         public bool UneditedPass { get; set; } = true;

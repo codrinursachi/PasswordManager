@@ -14,11 +14,6 @@ namespace PasswordManager.Repositories
             ISecretHasherService secretHasherService)
         {
             fileName = Path.Combine(pathProviderService.ProgramPath, "UserLogin");
-            if (!File.Exists(fileName))
-            {
-                File.Create(fileName).Close();
-            }
-
             this.secretHasherService = secretHasherService;
         }
 
@@ -30,6 +25,10 @@ namespace PasswordManager.Repositories
 
         public bool AuthenticateUser(char[] password)
         {
+            if (!File.Exists(fileName))
+            {
+                File.Create(fileName).Close();
+            }
             string passwordHash = File.ReadAllText(fileName);
             if (string.IsNullOrEmpty(passwordHash))
             {
