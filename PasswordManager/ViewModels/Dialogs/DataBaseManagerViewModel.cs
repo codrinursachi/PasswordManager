@@ -47,7 +47,7 @@ namespace PasswordManager.ViewModels.Dialogs
         {
             MessageToDisplay = false;
             DatabaseSelectionMode = true;
-            CurrentMode = "Ok";
+            CurrentMode = "OK";
         }
 
         [RelayCommand]
@@ -126,9 +126,9 @@ namespace PasswordManager.ViewModels.Dialogs
 
             if (MessageToDisplay)
             {
-                DatabaseAddingMode = true;
+                DatabaseAddingMode = false;
                 MessageToDisplay = false;
-                CurrentMode = "Ok";
+                CurrentMode = "OK";
                 return;
             }
 

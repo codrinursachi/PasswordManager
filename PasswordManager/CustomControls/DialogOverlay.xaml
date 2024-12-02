@@ -14,7 +14,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.4*" />
                 <ColumnDefinition Width="0.2*"
-                                  MinWidth="400" />
+                                  MinWidth="340" />
                 <ColumnDefinition Width="0.4*" />
             </Grid.ColumnDefinitions>
             <ContentControl x:Name="dialog"

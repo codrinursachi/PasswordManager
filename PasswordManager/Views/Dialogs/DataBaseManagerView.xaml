@@ -27,8 +27,7 @@
         </Storyboard>
     </UserControl.Resources>
     <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-            Width="320"
-            Height="180"
+            Height="200"
             x:Name="dtbManager">
         <Grid HorizontalAlignment="Center"
               VerticalAlignment="Center">
@@ -48,7 +47,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="auto" />
+                        <RowDefinition Height="40" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
@@ -79,14 +78,14 @@
                                Grid.ColumnSpan="3"
                                Visibility="{Binding MessageToDisplay,Converter={StaticResource BooleanToVisibilityConverter}}"
                                Text="{Binding Message}"
-                               TextWrapping="Wrap" />
+                               TextWrapping="WrapWithOverflow" />
                 </Grid>
             </StackPanel>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="170" />
                     <ColumnDefinition Width="10" />
-                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="170" />
                 </Grid.ColumnDefinitions>
                 <Button Content="{Binding CurrentMode}"
                         Command="{Binding CurrentModeActionCommand}"
