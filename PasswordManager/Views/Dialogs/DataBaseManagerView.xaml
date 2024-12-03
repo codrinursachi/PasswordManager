@@ -78,7 +78,7 @@
                                Grid.ColumnSpan="3"
                                Visibility="{Binding MessageToDisplay,Converter={StaticResource BooleanToVisibilityConverter}}"
                                Text="{Binding Message}"
-                               TextWrapping="WrapWithOverflow" />
+                               TextWrapping="Wrap" />
                 </Grid>
             </StackPanel>
             <Grid Grid.Row="1">

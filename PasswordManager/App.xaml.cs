@@ -8,7 +8,6 @@ using PasswordManager.Repositories;
 using PasswordManager.Services;
 using PasswordManager.ViewModels;
 using PasswordManager.ViewModels.Dialogs;
-using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views;
 using PasswordManager.Views.Dialogs;
 using System.Diagnostics;
@@ -79,7 +78,7 @@ namespace PasswordManager
             services.AddSingleton<IPasswordEncryptionService, PasswordEncryptionService>();
             services.AddSingleton<IDbContextPoolService, DbContextPoolService>();
 
-            services.AddSingleton<PasswordManagerDbContext>();
+            services.AddTransient<PasswordManagerDbContext>();
 
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => viewModelType => (ObservableObject)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, Window>>(serviceProvider => dialogType => (Window)serviceProvider.GetRequiredService(dialogType));
