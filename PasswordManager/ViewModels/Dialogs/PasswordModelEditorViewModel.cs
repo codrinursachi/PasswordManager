@@ -22,7 +22,6 @@ namespace PasswordManager.ViewModels.Dialogs
         private bool overlayVisibility;
         [ObservableProperty]
         [Required(ErrorMessage = "Field cannot be empty")]
-        [MinLength(4, ErrorMessage = "Username must be at least 4 characters")]
         private string username;
         [ObservableProperty]
         [Required(ErrorMessage = "Field cannot be empty")]
