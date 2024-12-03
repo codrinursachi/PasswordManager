@@ -1,6 +1,6 @@
 ﻿using PasswordManager.Models;
 
-namespace PasswordManagerTests.DTOs
+namespace PasswordManagerTests.Models
 {
     public class PasswordImportDTOTests
     {

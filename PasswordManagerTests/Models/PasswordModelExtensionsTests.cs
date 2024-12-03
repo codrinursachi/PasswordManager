@@ -1,12 +1,12 @@
 ﻿using PasswordManager.Models;
 using PasswordManager.Models.Extensions;
 
-namespace PasswordManagerTests.DTOs
+namespace PasswordManagerTests.Models
 {
     public class PasswordDTOExtensionsTests
     {
         [Fact]
-        public void ShouldConvertToPasswordToShowDTOWhenNoExpirationDate()
+        public void ShouldConvertToPasswordToShowModelWhenNoExpirationDate()
         {
             PasswordModel passwordModel = new()
             {
@@ -20,20 +20,20 @@ namespace PasswordManagerTests.DTOs
                 Favorite = true,
                 Notes = "admin notes"
             };
-            PasswordToShowModel passwordDTO = passwordModel.ToPasswordToShowModel();
-            Assert.Equal(1, passwordDTO.Id);
-            Assert.Equal("admin", passwordDTO.Username);
-            Assert.Equal("admin".ToCharArray(), passwordDTO.Password);
-            Assert.Equal("admin.com", passwordDTO.Url);
-            Assert.Equal("No expiration", passwordDTO.ExpirationDate);
-            Assert.Equal("admin/admin", passwordDTO.CategoryPath);
-            Assert.Equal("#tag1 #tag2 #tag3", passwordDTO.Tags);
-            Assert.True(passwordDTO.Favorite);
-            Assert.Equal("admin notes", passwordDTO.Notes);
+            PasswordToShowModel password = passwordModel.ToPasswordToShowModel();
+            Assert.Equal(1, password.Id);
+            Assert.Equal("admin", password.Username);
+            Assert.Equal("admin".ToCharArray(), password.Password);
+            Assert.Equal("admin.com", password.Url);
+            Assert.Equal("No expiration", password.ExpirationDate);
+            Assert.Equal("admin/admin", password.CategoryPath);
+            Assert.Equal("#tag1 #tag2 #tag3", password.Tags);
+            Assert.True(password.Favorite);
+            Assert.Equal("admin notes", password.Notes);
         }
 
         [Fact]
-        public void ShouldConvertToPasswordToShowDTOWhenPasswordExpires()
+        public void ShouldConvertToPasswordToShowModelWhenPasswordExpires()
         {
             PasswordModel passwordModel = new()
             {
@@ -47,16 +47,16 @@ namespace PasswordManagerTests.DTOs
                 Favorite = true,
                 Notes = "admin notes"
             };
-            PasswordToShowModel passwordDTO = passwordModel.ToPasswordToShowModel();
-            Assert.Equal(1, passwordDTO.Id);
-            Assert.Equal("admin", passwordDTO.Username);
-            Assert.Equal("admin".ToCharArray(), passwordDTO.Password);
-            Assert.Equal("admin.com", passwordDTO.Url);
-            Assert.Equal((DateTime.Now + TimeSpan.FromDays(1)).ToShortDateString(), passwordDTO.ExpirationDate);
-            Assert.Equal("admin/admin", passwordDTO.CategoryPath);
-            Assert.Equal("#tag1 #tag2 #tag3", passwordDTO.Tags);
-            Assert.True(passwordDTO.Favorite);
-            Assert.Equal("admin notes", passwordDTO.Notes);
+            PasswordToShowModel password = passwordModel.ToPasswordToShowModel();
+            Assert.Equal(1, password.Id);
+            Assert.Equal("admin", password.Username);
+            Assert.Equal("admin".ToCharArray(), password.Password);
+            Assert.Equal("admin.com", password.Url);
+            Assert.Equal((DateTime.Now + TimeSpan.FromDays(1)).ToShortDateString(), password.ExpirationDate);
+            Assert.Equal("admin/admin", password.CategoryPath);
+            Assert.Equal("#tag1 #tag2 #tag3", password.Tags);
+            Assert.True(password.Favorite);
+            Assert.Equal("admin notes", password.Notes);
         }
 
         [Fact]

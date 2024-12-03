@@ -18,8 +18,7 @@ namespace PasswordManager.Views
             IAutoLockerService autoLockerService,
             IUserControlProviderService userControlProviderService,
             IDialogOverlayService dialogOverlayService,
-            INavigationService navigationService,
-            IRefreshService refreshService)
+            INavigationService navigationService)
         {
             InitializeComponent();
             MouseMove += autoLockerService.OnActivity;

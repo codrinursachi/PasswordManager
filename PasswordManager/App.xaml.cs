@@ -21,6 +21,7 @@ namespace PasswordManager
     public partial class App : Application
     {
         private ServiceProvider serviceProvider;
+
         public App()
         {
             IServiceCollection services = new ServiceCollection();
