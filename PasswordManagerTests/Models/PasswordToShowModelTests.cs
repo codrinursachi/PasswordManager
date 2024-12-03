@@ -1,12 +1,12 @@
 ﻿using PasswordManager.Models;
 
-namespace PasswordManagerTests.DTOs
+namespace PasswordManagerTests.Models
 {
-    public class PasswordToShowDTOTests
+    public class PasswordToShowModelTests
     {
 
         [Fact]
-        public void ShouldStorePasswordDTOData()
+        public void ShouldStorePasswordToShowModelData()
         {
             PasswordToShowModel password = new()
             {

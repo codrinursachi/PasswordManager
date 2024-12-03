@@ -3,7 +3,7 @@ using PasswordManager.Models.Extensions;
 
 namespace PasswordManagerTests.Models
 {
-    public class PasswordDTOExtensionsTests
+    public class PasswordModelExtensionsTests
     {
         [Fact]
         public void ShouldConvertToPasswordToShowModelWhenNoExpirationDate()
@@ -60,7 +60,7 @@ namespace PasswordManagerTests.Models
         }
 
         [Fact]
-        public void ShouldConvertToPasswordToShowDTOWhenPasswordExpired()
+        public void ShouldConvertToPasswordToShowModelWhenPasswordExpired()
         {
             PasswordModel passwordModel = new()
             {
@@ -87,7 +87,7 @@ namespace PasswordManagerTests.Models
         }
 
         [Fact]
-        public void ShouldConvertPasswordImportDTOToPasswordModel()
+        public void ShouldConvertPasswordImportModelToPasswordModel()
         {
             PasswordImportModel PasswordImportDTO = new()
             {

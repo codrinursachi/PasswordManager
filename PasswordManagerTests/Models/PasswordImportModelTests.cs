@@ -2,10 +2,10 @@
 
 namespace PasswordManagerTests.Models
 {
-    public class PasswordImportDTOTests
+    public class PasswordImportModelTests
     {
         [Fact]
-        public void ShouldStorePasswordImportDTOData()
+        public void ShouldStorePasswordImportModelData()
         {
             PasswordImportModel password = new()
             {
