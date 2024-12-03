@@ -1,5 +1,4 @@
-﻿using PasswordManager.Interfaces;
-using PasswordManager.ViewModels;
+﻿using PasswordManager.ViewModels;
 using System.Windows;
 
 namespace PasswordManager.Views

@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using PasswordManager.Interfaces;
+﻿using PasswordManager.Interfaces;
 using System.IO;
 
 namespace PasswordManager.Services
@@ -7,12 +6,15 @@ namespace PasswordManager.Services
     public partial class DatabaseStorageService : IDatabaseStorageService
     {
         private string programDbPath;
+
         public DatabaseStorageService(IPathProviderService pathProviderService)
         {
             programDbPath = Path.Combine(pathProviderService.ProgramPath, "Databases");
             Refresh();
         }
+
         public List<string> Databases { get; set; } = [];
+
         public void Refresh()
         {
             Databases.Clear();

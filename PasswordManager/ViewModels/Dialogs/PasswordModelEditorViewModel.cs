@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
-using PasswordManager.Views;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Windows.Media;
@@ -62,6 +61,7 @@ namespace PasswordManager.ViewModels.Dialogs
         private IDialogOverlayService dialogOverlayService;
         private IPasswordManagementService passwordManagementService;
         private IRefreshService refreshService;
+
         public PasswordModelEditorViewModel(
             IDialogOverlayService dialogOverlayService,
             [FromKeyedServices("GeneratedPassword")] IMessenger generatedPassMessenger,
@@ -71,7 +71,7 @@ namespace PasswordManager.ViewModels.Dialogs
         {
             this.passwordManagementService = passwordManagementService;
             this.dialogOverlayService = dialogOverlayService;
-            this.refreshService=refreshService;
+            this.refreshService = refreshService;
 
             generatedPassMessenger.Register<PasswordModelEditorViewModel, char[]>(this, (r, m) =>
             {
@@ -113,6 +113,7 @@ namespace PasswordManager.ViewModels.Dialogs
         public char[] PasswordAsCharArray { get; set; } = [];
         public Brush RandomBrush { get => new SolidColorBrush(Color.FromRgb((byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240), (byte)Random.Shared.Next(1, 240))); }
         public string CategoryPathEndingChar => CategoryPath.TrimEnd('\\') + "\\";
+
         partial void OnCategoryPathChanged(string value)
         {
             OnPropertyChanged(nameof(CategoryPathEndingChar));
@@ -141,7 +142,7 @@ namespace PasswordManager.ViewModels.Dialogs
             };
             passwordManagementService.Add(newPassword);
             Array.Fill(PasswordAsCharArray, '0');
-            dialogOverlayService.PasswordEditorOverlay=null;
+            dialogOverlayService.PasswordEditorOverlay = null;
             dialogOverlayService.Close();
             refreshService.RefreshMain();
         }
@@ -216,13 +217,13 @@ namespace PasswordManager.ViewModels.Dialogs
         }
 
         [RelayCommand]
-        private void ShowPasswordGenerator()
+        public void ShowPasswordGenerator()
         {
             dialogOverlayService.Show<PasswordGeneratorViewModel>();
         }
 
         [RelayCommand]
-        private void AddTag()
+        public void AddTag()
         {
             if (string.IsNullOrWhiteSpace(Tag) || CompletedTags.Contains("#" + Tag.Trim().Trim('#')))
             {
@@ -234,25 +235,25 @@ namespace PasswordManager.ViewModels.Dialogs
         }
 
         [RelayCommand]
-        private void RemoveTag(string tagToRemove)
+        public void RemoveTag(string tagToRemove)
         {
             CompletedTags.Remove(tagToRemove);
         }
 
         [RelayCommand]
-        private void ClearDate()
+        public void ClearDate()
         {
             ExpirationDate = null;
         }
 
         [RelayCommand]
-        private void Close()
+        public void Close()
         {
-            dialogOverlayService.PasswordEditorOverlay=null;
+            dialogOverlayService.PasswordEditorOverlay = null;
             dialogOverlayService.Close();
         }
 
-        private void SetValidationErrorsStrings()
+        public void SetValidationErrorsStrings()
         {
             UsernameErrorMessage = string.Empty;
             UrlErrorMessage = string.Empty;

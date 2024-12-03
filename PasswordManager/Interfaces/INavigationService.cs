@@ -1,5 +1,4 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using PasswordManager.ViewModels;
 using System.Windows.Controls;
 
 namespace PasswordManager.Interfaces

@@ -7,7 +7,8 @@ namespace PasswordManager.Services
     {
         private Func<Type, Window> WindowFactory;
 
-        public WindowProviderService(Func<Type, Window> WindowFactory)
+        public WindowProviderService(
+            Func<Type, Window> WindowFactory)
         {
             this.WindowFactory = WindowFactory;
         }

@@ -1,5 +1,4 @@
 ﻿using PasswordManager.Interfaces;
-using PasswordManager.Services;
 using System.IO;
 
 namespace PasswordManager.Repositories

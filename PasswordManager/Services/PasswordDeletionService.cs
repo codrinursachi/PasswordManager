@@ -1,9 +1,4 @@
 ﻿using PasswordManager.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PasswordManager.Services
 {
@@ -11,7 +6,8 @@ namespace PasswordManager.Services
     {
         private IPasswordManagementService passwordManagementService;
 
-        public PasswordDeletionService(IPasswordManagementService passwordManagementService)
+        public PasswordDeletionService(
+            IPasswordManagementService passwordManagementService)
         {
             this.passwordManagementService = passwordManagementService;
         }

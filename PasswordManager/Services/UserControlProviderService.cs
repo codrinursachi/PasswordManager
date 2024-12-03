@@ -7,7 +7,8 @@ namespace PasswordManager.Services
     {
         private Func<Type, UserControl> userControlFactory;
 
-        public UserControlProviderService(Func<Type, UserControl> userControlFactory)
+        public UserControlProviderService(
+            Func<Type, UserControl> userControlFactory)
         {
             this.userControlFactory = userControlFactory;
         }

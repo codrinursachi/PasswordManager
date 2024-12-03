@@ -1,13 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using PasswordManager.CustomControls;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
-using PasswordManager.Services;
 using PasswordManager.ViewModels.Dialogs;
-using PasswordManager.ViewModels.Dialogs;
-using PasswordManager.Views;
-using PasswordManager.Views.Dialogs;
 using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
@@ -31,6 +26,7 @@ namespace PasswordManager.ViewModels
         private IPasswordImporterService passwordImporterService;
         private IPasswordManagementService passwordManagementService;
         private IRefreshService refreshService;
+
         public MainViewModel(
             IDatabaseInfoProviderService databaseInfoProviderService,
             INavigationService navigationService,
@@ -83,7 +79,7 @@ namespace PasswordManager.ViewModels
         }
 
         [RelayCommand]
-        private void ShowCategoryView()
+        public void ShowCategoryView()
         {
             if (navigationService.CurrentViewModel is CategoryViewModel)
             {
@@ -95,33 +91,33 @@ namespace PasswordManager.ViewModels
         }
 
         [RelayCommand]
-        private void ShowFavoritesView()
+        public void ShowFavoritesView()
         {
             navigationService.NavigateTo<FavoritesViewModel>();
             Caption = "Favorites";
         }
 
         [RelayCommand]
-        private void ShowAllPasswordsView()
+        public void ShowAllPasswordsView()
         {
             navigationService.NavigateTo<AllPasswordsViewModel>();
             Caption = "All Passwords";
         }
 
         [RelayCommand]
-        private void OpenDatabaseManager()
+        public void OpenDatabaseManager()
         {
             dialogOverlayService.Show<DatabaseManagerViewModel>();
         }
 
         [RelayCommand]
-        private void ShowPasswordCreationView()
+        public void ShowPasswordCreationView()
         {
             dialogOverlayService.Show<PasswordModelEditorViewModel>();
         }
 
         [RelayCommand]
-        private void ShowPasswordFilePickerDialogView()
+        public void ShowPasswordFilePickerDialogView()
         {
             passwordImporterService.StartPasswordImport();
             Refresh();

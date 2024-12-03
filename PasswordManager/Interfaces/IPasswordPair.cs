@@ -1,6 +1,6 @@
 ﻿namespace PasswordManager.Interfaces
 {
-    interface IPasswordPair
+    public interface IPasswordPair
     {
         char[] PasswordAsCharArray { get; set; }
         string Password { get; set; }

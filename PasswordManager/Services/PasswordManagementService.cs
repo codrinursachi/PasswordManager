@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PasswordManager.Data;
-using PasswordManager.Interfaces;
+﻿using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Models.Extensions;
 
@@ -9,17 +7,15 @@ namespace PasswordManager.Services
     public class PasswordManagementService : IPasswordManagementService
     {
         private IDatabaseInfoProviderService databaseInfoProviderService;
-        private IPathProviderService pathProviderService;
         private IPasswordEncryptionService passwordEncryptionService;
         private IDbContextPoolService dbContextPoolService;
+
         public PasswordManagementService(
             IDatabaseInfoProviderService databaseInfoProviderService,
-            IPathProviderService pathProviderService,
             IPasswordEncryptionService passwordEncryptionService,
             IDbContextPoolService dbContextPoolService)
         {
             this.databaseInfoProviderService = databaseInfoProviderService;
-            this.pathProviderService = pathProviderService;
             this.passwordEncryptionService = passwordEncryptionService;
             this.dbContextPoolService = dbContextPoolService;
         }

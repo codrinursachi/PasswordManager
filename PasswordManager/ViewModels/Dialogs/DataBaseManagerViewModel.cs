@@ -29,6 +29,7 @@ namespace PasswordManager.ViewModels.Dialogs
         private IDatabaseInfoProviderService databaseInfoProviderService;
         private IDialogOverlayService dialogOverlayService;
         private IRefreshService refreshService;
+
         public DatabaseManagerViewModel(
             IDatabaseStorageService databaseStorageService,
             IDatabaseInfoProviderService databaseInfoProviderService,

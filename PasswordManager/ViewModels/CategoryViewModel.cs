@@ -13,6 +13,7 @@ namespace PasswordManager.ViewModels
         private CategoryNodeModel filter;
         private IPasswordManagementService passwordManagementService;
         private IMessenger passwordListMessenger;
+
         public CategoryViewModel(
             IPasswordManagementService passwordManagementService,
             [FromKeyedServices("PasswordList")] IMessenger passwordListMessenger)
@@ -41,6 +42,7 @@ namespace PasswordManager.ViewModels
             List<string> path = [];
             var node = Filter;
             path.Add(node.Name);
+
             while (node.Parent.Name != "Categories")
             {
                 node = node.Parent;

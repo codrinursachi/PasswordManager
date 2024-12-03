@@ -1,16 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PasswordManager.Data;
+﻿using PasswordManager.Data;
 using PasswordManager.Interfaces;
-using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PasswordManager.Services
 {
-    public class DbContextPoolService:IDbContextPoolService
+    public class DbContextPoolService : IDbContextPoolService
     {
         private int maxSize = 20;
         private Dictionary<string, ConcurrentBag<PasswordManagerDbContext>> contextsMap = [];

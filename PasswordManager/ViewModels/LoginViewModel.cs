@@ -20,6 +20,7 @@ namespace PasswordManager.ViewModels
         private string buttonText;
         private IDatabaseInfoProviderService databaseInfoProviderService;
         private IUserRepository userRepository;
+
         public LoginViewModel(
             IDatabaseInfoProviderService databaseInfoProviderService,
             IPathProviderService pathProviderService,

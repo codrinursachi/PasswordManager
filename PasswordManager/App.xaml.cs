@@ -10,7 +10,6 @@ using PasswordManager.ViewModels;
 using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views;
 using PasswordManager.Views.Dialogs;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -62,7 +61,6 @@ namespace PasswordManager
             services.AddSingleton<IDatabaseInfoProviderService, DatabaseInfoProviderService>();
             services.AddSingleton<IUserControlProviderService, UserControlProviderService>();
             services.AddSingleton<IPasswordImporterService, PasswordImporterService>();
-            services.AddSingleton<IPasswordRepository, PasswordRepository>();
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IPasswordManagementService, PasswordManagementService>();
             services.AddSingleton<IClipboardService, ClipboardService>();
@@ -87,6 +85,7 @@ namespace PasswordManager
 
             serviceProvider = services.BuildServiceProvider();
         }
+
         protected void ApplicationStart(object sender, StartupEventArgs e)
         {
             serviceProvider.GetRequiredService<IAppStartupService>().Start(e.Args.Length > 0 && e.Args[0] == "--start-minimized");

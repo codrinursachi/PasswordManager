@@ -3,13 +3,16 @@ using System.IO;
 
 namespace PasswordManager.Services
 {
-    class ProgramFoldersCreatorService : IProgramFoldersCreatorService
+    public class ProgramFoldersCreatorService : IProgramFoldersCreatorService
     {
         IPathProviderService pathProviderService;
-        public ProgramFoldersCreatorService(IPathProviderService pathProviderService)
+
+        public ProgramFoldersCreatorService(
+            IPathProviderService pathProviderService)
         {
             this.pathProviderService = pathProviderService;
         }
+
         public void CreateFoldersIfNecessary()
         {
             List<string> folderNames = ["", "Databases", "Backups"];

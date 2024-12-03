@@ -9,13 +9,14 @@ namespace PasswordManager.Services
 {
     public class PasswordImporterService : IPasswordImporterService
     {
-        private IDatabaseInfoProviderService databaseInfoProviderService;
         private IPasswordManagementService passwordManagementService;
-        public PasswordImporterService(IDatabaseInfoProviderService databaseInfoProviderService, IPasswordManagementService passwordManagementService)
+
+        public PasswordImporterService(
+            IPasswordManagementService passwordManagementService)
         {
-            this.databaseInfoProviderService = databaseInfoProviderService;
             this.passwordManagementService = passwordManagementService;
         }
+
         public void StartPasswordImport()
         {
             OpenFileDialog openFileDialog = new();
@@ -34,7 +35,6 @@ namespace PasswordManager.Services
                     passwordManagementService.Add(password.ToPasswordModel());
                 }
             }
-
         }
     }
 }

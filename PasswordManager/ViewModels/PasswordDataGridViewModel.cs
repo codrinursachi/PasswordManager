@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.ViewModels.Dialogs;
-using PasswordManager.Views.Dialogs;
 using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
@@ -23,6 +22,7 @@ namespace PasswordManager.ViewModels
         private IPasswordManagementService passwordManagementService;
         private IDialogOverlayService dialogOverlayService;
         private IPasswordDeletionService passwordDeletionService;
+
         public PasswordDataGridViewModel(
             [FromKeyedServices(key: "PasswordModel")] IMessenger passwordModelMessenger,
             [FromKeyedServices(key: "PasswordList")] IMessenger passwordListMessenger,
@@ -43,6 +43,7 @@ namespace PasswordManager.ViewModels
                 IsEditorVisible = false;
             });
         }
+
         partial void OnSelectedPassChanged(PasswordToShowModel value)
         {
             if (value == null)

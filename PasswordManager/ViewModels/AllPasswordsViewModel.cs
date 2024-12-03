@@ -13,6 +13,7 @@ namespace PasswordManager.ViewModels
         string searchFilter;
         private IPasswordManagementService passwordManagementService;
         private IMessenger passwordListMessenger;
+
         public AllPasswordsViewModel(
             IPasswordManagementService passwordManagementService,
             [FromKeyedServices(key: "PasswordList")] IMessenger passwordListMessenger)

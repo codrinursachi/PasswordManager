@@ -12,7 +12,7 @@ namespace PasswordManager.Views
     public partial class AllPasswordsView : UserControl
     {
         public AllPasswordsView(
-            IUserControlProviderService userControlProviderService, 
+            IUserControlProviderService userControlProviderService,
             AllPasswordsViewModel allPasswordsViewModel)
         {
             InitializeComponent();

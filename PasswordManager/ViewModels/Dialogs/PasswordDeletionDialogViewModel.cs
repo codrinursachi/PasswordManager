@@ -21,7 +21,7 @@ namespace PasswordManager.ViewModels.Dialogs
         }
 
         [RelayCommand]
-        private void Yes()
+        public void Yes()
         {
             passwordDeletionService.Delete();
             refreshService.RefreshMain();
@@ -29,7 +29,7 @@ namespace PasswordManager.ViewModels.Dialogs
         }
 
         [RelayCommand]
-        private void No()
+        public void No()
         {
             dialogOverlayService.Close();
         }

@@ -1,6 +1,4 @@
-﻿using PasswordManager.Models;
-
-namespace PasswordManager.Models.Extensions
+﻿namespace PasswordManager.Models.Extensions
 {
     public static class PasswordModelExtensions
     {

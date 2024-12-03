@@ -1,9 +1,7 @@
 ﻿using PasswordManager.Interfaces;
 using PasswordManager.ViewModels;
-using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views.Dialogs;
 using System.Windows.Controls;
-using System.Windows.Threading;
 
 namespace PasswordManager.Views
 {

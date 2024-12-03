@@ -48,14 +48,14 @@ namespace PasswordManager.ViewModels
         public void DecrementSymbolsCount() => SymbolsCount = SymbolsCount > 0 ? SymbolsCount - 1 : 0;
 
         [RelayCommand]
-        private void AcceptPassword(object obj)
+        public void AcceptPassword(object obj)
         {
             generatedPassMessenger.Send(GeneratedPassword);
             dialogOverlayService.Close();
         }
 
         [RelayCommand]
-        private void GeneratePassword(object obj)
+        public void GeneratePassword(object obj)
         {
             ValidateAllProperties();
             if (HasErrors)
@@ -85,12 +85,12 @@ namespace PasswordManager.ViewModels
         }
 
         [RelayCommand]
-        private void Close()
+        public void Close()
         {
             dialogOverlayService.Close();
         }
 
-        private void SetValidationErrorsStrings()
+        public void SetValidationErrorsStrings()
         {
             AlphaNumCountErrorMessage = string.Empty;
             SymbolsCountErrorMessage = string.Empty;

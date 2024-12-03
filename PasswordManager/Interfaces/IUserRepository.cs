@@ -2,6 +2,6 @@
 {
     public interface IUserRepository
     {
-        public bool AuthenticateUser(char[] password);
+        bool AuthenticateUser(char[] password);
     }
 }

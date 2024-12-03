@@ -13,6 +13,7 @@ namespace PasswordManager.Services
         private Func<Type, ObservableObject> viewModelFactory;
         private IUserControlProviderService userControlProviderService;
         private IRefreshService refreshService;
+
         public NavigationService(
             Func<Type, ObservableObject> viewModelFactory,
             IUserControlProviderService userControlProviderService,
