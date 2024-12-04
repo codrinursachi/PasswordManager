@@ -47,7 +47,7 @@ namespace PasswordManager.Services
             var pathToBackups = Path.Combine(programPath, "Backups");
             foreach (var db in Directory.GetFiles(pathToBackups))
             {
-                if (db[(pathToBackups + "\\").Length..^"01.01.0001.bak".Length] == DbName + "_")
+                if (Path.GetFileName(db)[..^"_01.01.0001.bak".Length] == DbName)
                 {
                     backupCount++;
                     latestBackupTime = File.GetCreationTime(db) > latestBackupTime ? File.GetCreationTime(db) : latestBackupTime;
