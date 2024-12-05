@@ -54,7 +54,6 @@ namespace PasswordManager
             services.AddSingleton<IAppShutdownService, AppShutdownService>();
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<IWindowProviderService, WindowProviderService>();
-            services.AddSingleton<IModalDialogClosingService, ModalDialogClosingService>();
             services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("GeneratedPassword");
             services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("PasswordModel");
             services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("PasswordList");
@@ -68,7 +67,6 @@ namespace PasswordManager
             services.AddSingleton<IPathProviderService, PathProviderService>();
             services.AddSingleton<IBackupManagementService, BackupManagementService>();
             services.AddSingleton<IProgramFoldersCreatorService, ProgramFoldersCreatorService>();
-            services.AddSingleton<IModalDialogResultProviderService, ModalDialogResultProviderService>();
             services.AddSingleton<IAutoLockerService, AutoLockerService>();
             services.AddSingleton<ISecretHasherService, SecretHasherService>();
             services.AddSingleton<IDialogOverlayService, DialogOverlayService>();
