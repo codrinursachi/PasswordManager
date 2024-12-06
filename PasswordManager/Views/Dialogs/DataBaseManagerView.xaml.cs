@@ -8,11 +8,9 @@ namespace PasswordManager.Views.Dialogs
     /// </summary>
     public partial class DatabaseManagerView : UserControl
     {
-        public DatabaseManagerView(
-            DatabaseManagerViewModel databaseManagerViewModel)
+        public DatabaseManagerView()
         {
             InitializeComponent();
-            DataContext = databaseManagerViewModel;
         }
     }
 }

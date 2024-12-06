@@ -10,11 +10,9 @@ namespace PasswordManager.Views
     public partial class CategoryView : UserControl
     {
         public CategoryView(
-            IUserControlProviderService userControlProviderService,
-            CategoryViewModel categoryViewModel)
+            IUserControlProviderService userControlProviderService)
         {
             InitializeComponent();
-            DataContext = categoryViewModel;
             var dataGrid = userControlProviderService.ProvideUserControl<PasswordDataGrid>();
             pwdDataGrid.Content = dataGrid;
         }

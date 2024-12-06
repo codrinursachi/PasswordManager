@@ -14,7 +14,6 @@ namespace PasswordManager.Views
     public partial class MainView : Window
     {
         public MainView(
-            MainViewModel mainViewModel,
             IAutoLockerService autoLockerService,
             IUserControlProviderService userControlProviderService,
             IDialogOverlayService dialogOverlayService,
@@ -23,12 +22,11 @@ namespace PasswordManager.Views
             InitializeComponent();
             MouseMove += autoLockerService.OnActivity;
             KeyDown += autoLockerService.OnActivity;
-            DataContext = mainViewModel;
             var dialog = userControlProviderService.ProvideUserControl<DialogOverlay>();
             dialogOverlay.Content = dialog;
             dialogOverlayService.MainViewOverlay = (DialogOverlay)dialog;
             navigationService.CurrentView = childView;
-            ((MainViewModel)DataContext).ShowAllPasswordsViewCommand.Execute(null);
+            //((MainViewModel)DataContext).ShowAllPasswordsViewCommand.Execute(null);
             importFormat.ToolTip = """
                                       [
                                         {

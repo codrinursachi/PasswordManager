@@ -12,11 +12,9 @@ namespace PasswordManager.Views
     public partial class FavoritesView : UserControl
     {
         public FavoritesView(
-            IUserControlProviderService userControlProviderService,
-            FavoritesViewModel favoritesViewModel)
+            IUserControlProviderService userControlProviderService)
         {
             InitializeComponent();
-            DataContext = favoritesViewModel;
             var search = userControlProviderService.ProvideUserControl<PasswordSearch>();
             pwdSearch.Content = search;
             Binding searchBind = new("SearchFilter")

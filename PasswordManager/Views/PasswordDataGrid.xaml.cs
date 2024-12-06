@@ -12,11 +12,9 @@ namespace PasswordManager.Views
     {
         public PasswordDataGrid(
             IUserControlProviderService userControlProviderService,
-            PasswordDataGridViewModel passwordDataGridViewModel,
             IPasswordManagementService passwordManagementService)
         {
             InitializeComponent();
-            DataContext = passwordDataGridViewModel;
             var passwordModelEditor = userControlProviderService.ProvideUserControl<PasswordModelEditor>();
             pwdEditor.Content = passwordModelEditor;
         }

@@ -8,11 +8,9 @@ namespace PasswordManager.Views
     /// </summary>
     public partial class LoginView : Window
     {
-        public LoginView(
-            LoginViewModel loginViewModel)
+        public LoginView()
         {
             InitializeComponent();
-            DataContext = loginViewModel;
         }
     }
 }

@@ -13,12 +13,10 @@ namespace PasswordManager.Views.Dialogs
     public partial class PasswordModelEditor : UserControl
     {
         public PasswordModelEditor(
-            PasswordModelEditorViewModel passwordModelEditorViewModel,
             IUserControlProviderService userControlProviderService,
             IDialogOverlayService dialogOverlayService)
         {
             InitializeComponent();
-            DataContext = passwordModelEditorViewModel;
             passGenOverlay.Content = userControlProviderService.ProvideUserControl<DialogOverlay>();
         }
 

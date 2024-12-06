@@ -25,18 +25,60 @@ namespace PasswordManager
         public App()
         {
             IServiceCollection services = new ServiceCollection();
-            services.AddSingleton<LoginView>();
-            services.AddSingleton<MainView>();
+            services.AddSingleton<LoginView>(serviceProvider=>new LoginView()
+            {
+                DataContext=serviceProvider.GetRequiredService<LoginViewModel>()
+            });
+            services.AddSingleton<MainView>(serviceProvider=>new MainView(
+                serviceProvider.GetRequiredService<IAutoLockerService>(),
+                serviceProvider.GetRequiredService<IUserControlProviderService>(),
+                serviceProvider.GetRequiredService<IDialogOverlayService>(),
+                serviceProvider.GetRequiredService<INavigationService>()
+                )
+            {
+                DataContext = serviceProvider.GetRequiredService<MainViewModel>()
+            });
 
-            services.AddTransient<PasswordGeneratorView>();
-            services.AddTransient<DatabaseManagerView>();
-            services.AddTransient<PasswordDeletionDialogView>();
-            services.AddSingleton<AllPasswordsView>();
-            services.AddSingleton<FavoritesView>();
-            services.AddSingleton<CategoryView>();
+            services.AddTransient<PasswordGeneratorView>(serviceProvider=>new PasswordGeneratorView()
+            {
+                DataContext = serviceProvider.GetRequiredService<PasswordGeneratorViewModel>()
+            });
+            services.AddTransient<DatabaseManagerView>(serviceProvider=>new DatabaseManagerView()
+            {
+                DataContext = serviceProvider.GetRequiredService<DatabaseManagerViewModel>()
+            });
+            services.AddTransient<PasswordDeletionDialogView>(serviceProvider=>new PasswordDeletionDialogView()
+            {
+                DataContext = serviceProvider.GetRequiredService<PasswordDeletionDialogViewModel>()
+            });
+            services.AddSingleton<AllPasswordsView>(serviceProvider=>new AllPasswordsView(
+                serviceProvider.GetRequiredService<IUserControlProviderService>())
+            {
+                DataContext = serviceProvider.GetRequiredService<AllPasswordsViewModel>()
+            });
+            services.AddSingleton<FavoritesView>(serviceProvider=>new FavoritesView(
+                serviceProvider.GetRequiredService<IUserControlProviderService>())
+            {
+                DataContext = serviceProvider.GetRequiredService<FavoritesViewModel>()
+            });
+            services.AddSingleton<CategoryView>(serviceProvider=>new CategoryView(
+                serviceProvider.GetRequiredService<IUserControlProviderService>())
+            {
+                DataContext = serviceProvider.GetRequiredService<CategoryViewModel>()
+            });
             services.AddTransient<PasswordSearch>();
-            services.AddTransient<PasswordDataGrid>();
-            services.AddTransient<PasswordModelEditor>();
+            services.AddTransient<PasswordDataGrid>(serviceProvider=>new PasswordDataGrid(
+                serviceProvider.GetRequiredService<IUserControlProviderService>(),
+                serviceProvider.GetRequiredService<IPasswordManagementService>())
+            {
+                DataContext = serviceProvider.GetRequiredService<PasswordDataGridViewModel>()
+            });
+            services.AddTransient<PasswordModelEditor>(serviceProvider=>new PasswordModelEditor(
+                serviceProvider.GetRequiredService<IUserControlProviderService>(),
+                serviceProvider.GetRequiredService<IDialogOverlayService>())
+            {
+                DataContext = serviceProvider.GetRequiredService<PasswordModelEditorViewModel>()
+            });
             services.AddTransient<DialogOverlay>();
 
             services.AddSingleton<LoginViewModel>();

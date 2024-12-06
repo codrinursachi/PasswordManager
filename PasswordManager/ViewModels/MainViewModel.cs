@@ -50,6 +50,7 @@ namespace PasswordManager.ViewModels
             backupManagementService.CreateBackupIfNecessary();
             this.refreshService = refreshService;
             refreshService.Main = this;
+            ShowAllPasswordsViewCommand.Execute(null);
         }
 
         public CategoryNodeModel Filter

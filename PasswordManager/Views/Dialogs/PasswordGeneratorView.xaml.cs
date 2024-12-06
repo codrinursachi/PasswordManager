@@ -8,11 +8,9 @@ namespace PasswordManager.Views.Dialogs
     /// </summary>
     public partial class PasswordGeneratorView : UserControl
     {
-        public PasswordGeneratorView(
-            PasswordGeneratorViewModel passwordGeneratorViewModel)
+        public PasswordGeneratorView()
         {
             InitializeComponent();
-            DataContext = passwordGeneratorViewModel;
         }
     }
 }
