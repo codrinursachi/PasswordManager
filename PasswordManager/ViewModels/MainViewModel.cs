@@ -51,6 +51,7 @@ namespace PasswordManager.ViewModels
             this.refreshService = refreshService;
             refreshService.Main = this;
             ShowAllPasswordsViewCommand.Execute(null);
+            Refresh();
         }
 
         public CategoryNodeModel Filter
@@ -76,7 +77,6 @@ namespace PasswordManager.ViewModels
             SelectedDb = databaseInfoProviderService.CurrentDatabase;
             var rootNode = passwordManagementService.GetPasswordsCategoryRoot();
             Categories = [rootNode];
-            refreshService.RefreshPasswords();
         }
 
         [RelayCommand]

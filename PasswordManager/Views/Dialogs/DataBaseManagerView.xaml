@@ -28,6 +28,7 @@
     </UserControl.Resources>
     <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
             Height="200"
+            Width="340"
             x:Name="dtbManager">
         <Grid HorizontalAlignment="Center"
               VerticalAlignment="Center">

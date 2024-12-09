@@ -7,10 +7,10 @@ using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
 {
-    public partial class AllPasswordsViewModel : ObservableObject, IRefreshable
+    public partial class AllPasswordsViewModel : ObservableObject, IRefreshable, INavigationAware
     {
         [ObservableProperty]
-        string searchFilter;
+        private string searchFilter;
         private IPasswordManagementService passwordManagementService;
         private IMessenger passwordListMessenger;
 
@@ -33,6 +33,18 @@ namespace PasswordManager.ViewModels
         {
             Passwords.Clear();
             passwordManagementService.GetFilteredPasswords(SearchFilter).ForEach(Passwords.Add);
+            passwordListMessenger.Send(Passwords);
+        }
+
+        public void OnNavigatedTo()
+        {
+            Refresh();
+        }
+
+        public void OnNavigatedFrom()
+        {
+            SearchFilter = string.Empty;
+            Passwords.Clear();
             passwordListMessenger.Send(Passwords);
         }
     }

@@ -5,8 +5,8 @@ namespace PasswordManager.Interfaces
 {
     public interface INavigationService
     {
-        ObservableObject CurrentViewModel { get; set; }
+        ObservableObject CurrentViewModel { get; }
         ContentControl CurrentView { get; set; }
-        void NavigateTo<TViewModel>() where TViewModel : ObservableObject;
+        void NavigateTo<TViewModel>() where TViewModel : INavigationAware;
     }
 }

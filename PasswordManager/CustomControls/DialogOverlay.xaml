@@ -14,13 +14,13 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="0.4*" />
                 <ColumnDefinition Width="0.2*"
-                                  MinWidth="340" />
+                                  MinWidth="400" />
                 <ColumnDefinition Width="0.4*" />
             </Grid.ColumnDefinitions>
             <ContentControl x:Name="dialog"
                             Grid.Column="1"
                             VerticalContentAlignment="Center"
-                            HorizontalContentAlignment="Center"/>
+                            HorizontalContentAlignment="Stretch"/>
         </Grid>
     </Border>
 </UserControl>

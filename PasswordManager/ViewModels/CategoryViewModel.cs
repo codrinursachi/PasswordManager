@@ -7,7 +7,7 @@ using System.Collections.ObjectModel;
 
 namespace PasswordManager.ViewModels
 {
-    public partial class CategoryViewModel : ObservableObject, IRefreshable
+    public partial class CategoryViewModel : ObservableObject, IRefreshable, INavigationAware
     {
         [ObservableProperty]
         private CategoryNodeModel filter;
@@ -28,6 +28,7 @@ namespace PasswordManager.ViewModels
         {
             Refresh();
         }
+
         public void Refresh()
         {
             Passwords.Clear();
@@ -63,6 +64,18 @@ namespace PasswordManager.ViewModels
                 Passwords.Add(password);
             }
 
+            passwordListMessenger.Send(Passwords);
+        }
+
+        public void OnNavigatedTo()
+        {
+            Refresh();
+        }
+
+        public void OnNavigatedFrom()
+        {
+            Filter = null;
+            Passwords.Clear();
             passwordListMessenger.Send(Passwords);
         }
     }

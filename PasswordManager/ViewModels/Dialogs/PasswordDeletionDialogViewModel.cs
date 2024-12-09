@@ -25,6 +25,7 @@ namespace PasswordManager.ViewModels.Dialogs
         {
             passwordDeletionService.Delete();
             refreshService.RefreshMain();
+            refreshService.RefreshPasswords();
             dialogOverlayService.Close();
         }
 

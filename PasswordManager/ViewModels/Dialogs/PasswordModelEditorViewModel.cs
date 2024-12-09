@@ -144,6 +144,7 @@ namespace PasswordManager.ViewModels.Dialogs
             dialogOverlayService.PasswordEditorOverlay = null;
             dialogOverlayService.Close();
             refreshService.RefreshMain();
+            refreshService.RefreshPasswords();
         }
 
         [RelayCommand]

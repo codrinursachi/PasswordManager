@@ -8,41 +8,45 @@ namespace PasswordManager.Services
 {
     public partial class NavigationService : INavigationService
     {
-        public ObservableObject CurrentViewModel { get; set; }
-        public ContentControl CurrentView { get; set; }
-        private Func<Type, ObservableObject> viewModelFactory;
         private IUserControlProviderService userControlProviderService;
         private IRefreshService refreshService;
 
         public NavigationService(
-            Func<Type, ObservableObject> viewModelFactory,
             IUserControlProviderService userControlProviderService,
             IRefreshService refreshService)
         {
-            this.viewModelFactory = viewModelFactory;
             this.userControlProviderService = userControlProviderService;
             this.refreshService = refreshService;
         }
 
-        public void NavigateTo<TViewModel>() where TViewModel : ObservableObject
+        public ContentControl CurrentView { get; set; }
+        public ObservableObject CurrentViewModel =>(ObservableObject)((UserControl)CurrentView.Content).DataContext;
+
+        public void NavigateTo<TViewModel>() where TViewModel : INavigationAware
         {
-            ObservableObject viewModel = viewModelFactory.Invoke(typeof(TViewModel));
-            CurrentViewModel = viewModel;
-            if (CurrentViewModel is AllPasswordsViewModel)
+            UserControl view = (UserControl)CurrentView.Content;
+            if(view != null)
             {
-                CurrentView.Content = userControlProviderService.ProvideUserControl<AllPasswordsView>();
+                ((INavigationAware)view.DataContext).OnNavigatedFrom();
             }
-            if (CurrentViewModel is FavoritesViewModel)
+            if (typeof(TViewModel) == typeof(AllPasswordsViewModel))
             {
-                CurrentView.Content = userControlProviderService.ProvideUserControl<FavoritesView>();
+                view = userControlProviderService.ProvideUserControl<AllPasswordsView>();
             }
-            if (CurrentViewModel is CategoryViewModel)
+            else if (typeof(TViewModel) == typeof(FavoritesViewModel))
             {
-                CurrentView.Content = userControlProviderService.ProvideUserControl<CategoryView>();
+                view = userControlProviderService.ProvideUserControl<FavoritesView>();
+            }
+            else if (typeof(TViewModel) == typeof(CategoryViewModel))
+            {
+                view = userControlProviderService.ProvideUserControl<CategoryView>();
             }
 
-            refreshService.View = (IRefreshable)CurrentViewModel;
+            CurrentView.Content = view;
+            ((INavigationAware)view.DataContext).OnNavigatedTo();
+            refreshService.View = (IRefreshable)view.DataContext;
             refreshService.RefreshMain();
+            refreshService.RefreshPasswords();
         }
     }
 }
