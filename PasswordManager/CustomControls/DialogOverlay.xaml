@@ -19,8 +19,8 @@
             </Grid.ColumnDefinitions>
             <ContentControl x:Name="dialog"
                             Grid.Column="1"
-                            VerticalContentAlignment="Center"
-                            HorizontalContentAlignment="Stretch"/>
+                            VerticalAlignment="Center"
+                            />
         </Grid>
     </Border>
 </UserControl>
