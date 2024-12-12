@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
+using PasswordManager.State;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -10,10 +11,10 @@ namespace PasswordManager.Data
     public class PasswordManagerDbContext : DbContext
     {
         private IPathProviderService pathProviderService;
-        private IDatabaseInfoProviderService databaseInfoProviderService;
+        private DatabaseState databaseInfoProviderService;
         public PasswordManagerDbContext(
             IPathProviderService pathProviderService,
-            IDatabaseInfoProviderService databaseInfoProviderService)
+            DatabaseState databaseInfoProviderService)
         {
             this.pathProviderService = pathProviderService;
             this.databaseInfoProviderService = databaseInfoProviderService;

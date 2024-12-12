@@ -1,8 +1,8 @@
 ﻿using PasswordManager.Interfaces;
 
-namespace PasswordManager.Services
+namespace PasswordManager.State
 {
-    public class DatabaseInfoProviderService : IDatabaseInfoProviderService
+    public class DatabaseState
     {
         public string CurrentDatabase { get; set; }
         public byte[] DBPass { get; set; }

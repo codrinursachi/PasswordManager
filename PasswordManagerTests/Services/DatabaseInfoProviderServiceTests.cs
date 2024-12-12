@@ -1,4 +1,4 @@
-﻿using PasswordManager.Services;
+﻿using PasswordManager.State;
 
 namespace PasswordManagerTests.Services
 {
@@ -7,7 +7,7 @@ namespace PasswordManagerTests.Services
         [Fact]
         public void ShouldStoreDBPassAndCurrentDatabase()
         {
-            DatabaseInfoProviderService databaseInfoProviderService = new();
+            DatabaseState databaseInfoProviderService = new();
             databaseInfoProviderService.CurrentDatabase = "Test";
             databaseInfoProviderService.DBPass = [1, 2, 3];
             Assert.Equal("Test", databaseInfoProviderService.CurrentDatabase);

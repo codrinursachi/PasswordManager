@@ -1,4 +1,5 @@
 ﻿using PasswordManager.Interfaces;
+using PasswordManager.State;
 using PasswordManager.Views;
 using System.Windows;
 
@@ -8,11 +9,11 @@ namespace PasswordManager.Services
     {
         private IProgramFoldersCreatorService programFoldersCreatorService;
         private IWindowProviderService windowProviderService;
-        private IDatabaseInfoProviderService databaseInfoProviderService;
+        private DatabaseState databaseInfoProviderService;
         public AppStartupService(
             IProgramFoldersCreatorService programFoldersCreatorService,
             IWindowProviderService windowProviderService,
-            IDatabaseInfoProviderService databaseInfoProviderService)
+            DatabaseState databaseInfoProviderService)
         {
             this.programFoldersCreatorService = programFoldersCreatorService;
             this.windowProviderService = windowProviderService;

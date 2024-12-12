@@ -1,17 +1,18 @@
 ﻿using PasswordManager.Interfaces;
 using PasswordManager.Models;
 using PasswordManager.Models.Extensions;
+using PasswordManager.State;
 
 namespace PasswordManager.Services
 {
     public class PasswordManagementService : IPasswordManagementService
     {
-        private IDatabaseInfoProviderService databaseInfoProviderService;
+        private DatabaseState databaseInfoProviderService;
         private IPasswordEncryptionService passwordEncryptionService;
         private IDbContextPoolService dbContextPoolService;
 
         public PasswordManagementService(
-            IDatabaseInfoProviderService databaseInfoProviderService,
+            DatabaseState databaseInfoProviderService,
             IPasswordEncryptionService passwordEncryptionService,
             IDbContextPoolService dbContextPoolService)
         {

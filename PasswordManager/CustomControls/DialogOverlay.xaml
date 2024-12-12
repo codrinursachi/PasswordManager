@@ -19,8 +19,7 @@
             </Grid.ColumnDefinitions>
             <ContentControl x:Name="dialog"
                             Grid.Column="1"
-                            VerticalAlignment="Center"
-                            />
+                            VerticalAlignment="Center" />
         </Grid>
     </Border>
 </UserControl>

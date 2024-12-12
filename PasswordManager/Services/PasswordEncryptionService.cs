@@ -1,4 +1,5 @@
 ﻿using PasswordManager.Interfaces;
+using PasswordManager.State;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -6,10 +7,10 @@ namespace PasswordManager.Services
 {
     public class PasswordEncryptionService : IPasswordEncryptionService
     {
-        private IDatabaseInfoProviderService databaseInfoProviderService;
+        private DatabaseState databaseInfoProviderService;
 
         public PasswordEncryptionService(
-            IDatabaseInfoProviderService databaseInfoProviderService)
+            DatabaseState databaseInfoProviderService)
         {
             this.databaseInfoProviderService = databaseInfoProviderService;
         }

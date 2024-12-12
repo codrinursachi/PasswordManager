@@ -46,7 +46,6 @@ namespace PasswordManager.Services
             ((INavigationAware)view.DataContext).OnNavigatedTo();
             refreshService.View = (IRefreshable)view.DataContext;
             refreshService.RefreshMain();
-            refreshService.RefreshPasswords();
         }
     }
 }

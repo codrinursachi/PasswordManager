@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PasswordManager.Interfaces;
+using PasswordManager.State;
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
@@ -18,11 +19,11 @@ namespace PasswordManager.ViewModels
         private string password;
         [ObservableProperty]
         private string buttonText;
-        private IDatabaseInfoProviderService databaseInfoProviderService;
+        private DatabaseState databaseInfoProviderService;
         private IUserRepository userRepository;
 
         public LoginViewModel(
-            IDatabaseInfoProviderService databaseInfoProviderService,
+            DatabaseState databaseInfoProviderService,
             IPathProviderService pathProviderService,
             IUserRepository userRepository)
         {

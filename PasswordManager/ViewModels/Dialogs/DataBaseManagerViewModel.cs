@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using PasswordManager.Interfaces;
+using PasswordManager.State;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -26,13 +27,13 @@ namespace PasswordManager.ViewModels.Dialogs
         [ObservableProperty]
         private string message;
         private IDatabaseStorageService databaseStorageService;
-        private IDatabaseInfoProviderService databaseInfoProviderService;
+        private DatabaseState databaseInfoProviderService;
         private IDialogOverlayService dialogOverlayService;
         private IRefreshService refreshService;
 
         public DatabaseManagerViewModel(
             IDatabaseStorageService databaseStorageService,
-            IDatabaseInfoProviderService databaseInfoProviderService,
+            DatabaseState databaseInfoProviderService,
             IDialogOverlayService dialogOverlayService,
             IRefreshService refreshService)
         {

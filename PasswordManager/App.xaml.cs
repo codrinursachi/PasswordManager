@@ -6,6 +6,7 @@ using PasswordManager.Data;
 using PasswordManager.Interfaces;
 using PasswordManager.Repositories;
 using PasswordManager.Services;
+using PasswordManager.State;
 using PasswordManager.ViewModels;
 using PasswordManager.ViewModels.Dialogs;
 using PasswordManager.Views;
@@ -100,7 +101,6 @@ namespace PasswordManager
             services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("PasswordModel");
             services.AddKeyedSingleton<IMessenger, WeakReferenceMessenger>("PasswordList");
             services.AddSingleton<IDatabaseStorageService, DatabaseStorageService>();
-            services.AddSingleton<IDatabaseInfoProviderService, DatabaseInfoProviderService>();
             services.AddSingleton<IUserControlProviderService, UserControlProviderService>();
             services.AddSingleton<IPasswordImporterService, PasswordImporterService>();
             services.AddSingleton<IUserRepository, UserRepository>();
@@ -117,6 +117,7 @@ namespace PasswordManager
             services.AddSingleton<IPasswordEncryptionService, PasswordEncryptionService>();
             services.AddSingleton<IDbContextPoolService, DbContextPoolService>();
 
+            services.AddSingleton<DatabaseState>();
             services.AddTransient<PasswordManagerDbContext>();
 
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => viewModelType => (ObservableObject)serviceProvider.GetRequiredService(viewModelType));

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using PasswordManager.Interfaces;
 using PasswordManager.Models;
+using PasswordManager.State;
 using PasswordManager.ViewModels.Dialogs;
 using System.Collections.ObjectModel;
 
@@ -9,6 +10,7 @@ namespace PasswordManager.ViewModels
 {
     public partial class MainViewModel : ObservableObject, IRefreshable
     {
+        public INavigationService navigationService;
         [ObservableProperty]
         private string caption;
         [ObservableProperty]
@@ -17,18 +19,17 @@ namespace PasswordManager.ViewModels
         private bool overlayVisibility;
         [ObservableProperty]
         private List<CategoryNodeModel> categories;
-        public INavigationService navigationService;
         [ObservableProperty]
         private ObservableCollection<string> databases = [];
         private IDatabaseStorageService databaseStorageService;
         private IDialogOverlayService dialogOverlayService;
-        private IDatabaseInfoProviderService databaseInfoProviderService;
+        private DatabaseState databaseInfoProviderService;
         private IPasswordImporterService passwordImporterService;
         private IPasswordManagementService passwordManagementService;
         private IRefreshService refreshService;
 
         public MainViewModel(
-            IDatabaseInfoProviderService databaseInfoProviderService,
+            DatabaseState databaseInfoProviderService,
             INavigationService navigationService,
             IDialogOverlayService dialogOverlayService,
             IDatabaseStorageService databaseStorageService,
