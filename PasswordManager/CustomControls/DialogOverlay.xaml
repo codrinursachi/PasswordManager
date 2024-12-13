@@ -4,9 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:PasswordManager.CustomControls"
+             xmlns:behaviors="http://schemas.microsoft.com/xaml/behaviors"
              mc:Ignorable="d"
              d:DesignHeight="450"
              d:DesignWidth="800">
+    <UserControl.Resources>
+        <Storyboard x:Key="DialogStoryboard">
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0"
+                             To="0" />
+            <DoubleAnimation Duration="0:0:0.3"
+                             Storyboard.TargetProperty="Opacity"
+                             From="0.2"
+                             BeginTime="0:0:0.3" />
+            <ThicknessAnimation Duration="0:0:0.3"
+                                Storyboard.TargetProperty="Margin"
+                                From="0,20,0,0"
+                                BeginTime="0:0:0.3" />
+            <Storyboard.TargetName>dialog</Storyboard.TargetName>
+        </Storyboard>
+    </UserControl.Resources>
     <Border x:Name="borderOverlay"
             Background="{StaticResource BorderOverlayBackgroundColor}"
             Visibility="Collapsed">
@@ -20,6 +38,11 @@
             <ContentControl x:Name="dialog"
                             Grid.Column="1"
                             VerticalAlignment="Center" />
+            <behaviors:Interaction.Triggers>
+                <behaviors:PropertyChangedTrigger Binding="{Binding Content, ElementName=dialog}">
+                    <behaviors:ControlStoryboardAction Storyboard="{StaticResource DialogStoryboard}" />
+                </behaviors:PropertyChangedTrigger>
+            </behaviors:Interaction.Triggers>
         </Grid>
     </Border>
 </UserControl>
