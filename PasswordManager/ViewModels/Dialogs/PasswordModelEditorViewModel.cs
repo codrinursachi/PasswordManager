@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace PasswordManager.ViewModels.Dialogs
 {
-    public partial class PasswordModelEditorViewModel : ObservableValidator, IPasswordPair
+    public partial class PasswordModelEditorViewModel : ObservableValidator
     {
         [ObservableProperty]
         private List<string> categoryPaths = [];

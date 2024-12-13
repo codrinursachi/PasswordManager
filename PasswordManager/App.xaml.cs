@@ -26,7 +26,8 @@ namespace PasswordManager
         public App()
         {
             IServiceCollection services = new ServiceCollection();
-            services.AddSingleton<LoginView>(serviceProvider=>new LoginView()
+            services.AddSingleton<LoginView>(serviceProvider=>new LoginView(
+                serviceProvider.GetRequiredService<IUserControlProviderService>())
             {
                 DataContext=serviceProvider.GetRequiredService<LoginViewModel>()
             });
@@ -75,8 +76,7 @@ namespace PasswordManager
                 DataContext = serviceProvider.GetRequiredService<PasswordDataGridViewModel>()
             });
             services.AddTransient<PasswordModelEditor>(serviceProvider=>new PasswordModelEditor(
-                serviceProvider.GetRequiredService<IUserControlProviderService>(),
-                serviceProvider.GetRequiredService<IDialogOverlayService>())
+                serviceProvider.GetRequiredService<IUserControlProviderService>())
             {
                 DataContext = serviceProvider.GetRequiredService<PasswordModelEditorViewModel>()
             });
@@ -119,6 +119,7 @@ namespace PasswordManager
 
             services.AddSingleton<DatabaseState>();
             services.AddTransient<PasswordManagerDbContext>();
+            services.AddTransient<PasswordTextBox>();
 
             services.AddSingleton<Func<Type, ObservableObject>>(serviceProvider => viewModelType => (ObservableObject)serviceProvider.GetRequiredService(viewModelType));
             services.AddSingleton<Func<Type, Window>>(serviceProvider => dialogType => (Window)serviceProvider.GetRequiredService(dialogType));

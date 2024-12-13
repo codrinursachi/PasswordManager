@@ -79,13 +79,9 @@
                    FontSize="12"
                    FontWeight="Medium"
                    Margin="0,15,0,0" />
-        <customcontrols:PasswordTextBox FontSize="13"
-                                        FontWeight="Medium"
-                                        VerticalContentAlignment="Center"
-                                        BorderThickness="0"
-                                        Height="28"
-                                        ToolTip="Password must be at least 3 characters."
-                                        ToolTipService.InitialShowDelay="0" />
+        <ContentControl x:Name="pwdTxtBox"
+                        ToolTip="Password must be at least 3 characters."
+                        ToolTipService.InitialShowDelay="0" />
         <TextBlock Text="{Binding ErrorMessage}"
                    Foreground="Red"
                    FontSize="12"

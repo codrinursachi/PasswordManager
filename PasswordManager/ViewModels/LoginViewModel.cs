@@ -8,7 +8,7 @@ using System.Text;
 
 namespace PasswordManager.ViewModels
 {
-    public partial class LoginViewModel : ObservableValidator, IPasswordPair
+    public partial class LoginViewModel : ObservableValidator
     {
         [ObservableProperty]
         private string errorMessage;
@@ -41,12 +41,14 @@ namespace PasswordManager.ViewModels
             this.userRepository = userRepository;
         }
 
-        public char[] PasswordAsCharArray { get; set; } = [];
+        [ObservableProperty]
+        [NotifyCanExecuteChangedFor(nameof(LoginUserCommand))]
+        public char[] passwordAsCharArray;
 
         private bool CanLogin()
         {
             bool validData;
-            if (PasswordAsCharArray.Length < 3)
+            if (PasswordAsCharArray == null || PasswordAsCharArray.Length < 3)
             {
                 validData = false;
             }

@@ -3,6 +3,7 @@ using PasswordManager.Interfaces;
 using PasswordManager.ViewModels.Dialogs;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace PasswordManager.Views.Dialogs
@@ -13,60 +14,41 @@ namespace PasswordManager.Views.Dialogs
     public partial class PasswordModelEditor : UserControl
     {
         public PasswordModelEditor(
-            IUserControlProviderService userControlProviderService,
-            IDialogOverlayService dialogOverlayService)
+            IUserControlProviderService userControlProviderService)
         {
             InitializeComponent();
-            passGenOverlay.Content = userControlProviderService.ProvideUserControl<DialogOverlay>();
+            passGenOverlay.Content = userControlProviderService.ProvideUserControl<DialogOverlay>(); 
+            DataContextChanged += OnDataContextChanged;
+            pwdTxtBox.Content = userControlProviderService.ProvideUserControl<PasswordTextBox>();
         }
 
-        private void TextBox_KeyUp(object sender, KeyEventArgs e)
-        {
-            int position = ((TextBox)sender).CaretIndex - 1;
-            var password = ((PasswordModelEditorViewModel)DataContext).PasswordAsCharArray;
-            if ((e.Key == Key.Back || e.Key == Key.Delete) && !string.IsNullOrEmpty(((TextBox)sender).Text))
-            {
-                ((PasswordModelEditorViewModel)DataContext).PasswordAsCharArray = [.. password[..(position + 1)], .. password[(position + 2)..]];
-            }
-        }
 
-        private void TextBox_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void OnDataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (string.IsNullOrEmpty(((TextBox)sender).Text))
+            if (DataContext != null)
             {
-                Array.Fill(((PasswordModelEditorViewModel)DataContext).PasswordAsCharArray, '0');
-                ((PasswordModelEditorViewModel)DataContext).PasswordAsCharArray = [];
-            }
-            if (e.IsRepeat)
-            {
-                e.Handled = true;
-            }
-        }
+                var passwordTextBox = (PasswordTextBox)pwdTxtBox.Content;
+                Binding pwdCharArrayBind = new("PasswordAsCharArray")
+                {
+                    Source = DataContext,
+                    Mode = BindingMode.TwoWay
+                };
 
-        private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            int position = ((TextBox)sender).CaretIndex;
-            var password = ((PasswordModelEditorViewModel)DataContext).PasswordAsCharArray;
-            var passwordChar = e.Text[0];
-            if (char.IsControl(passwordChar))
-            {
-                return;
-            }
+                Binding pwdMaskBind = new("Password")
+                {
+                    Source = DataContext,
+                    Mode = BindingMode.TwoWay
+                };
 
-            ((PasswordModelEditorViewModel)DataContext).PasswordAsCharArray = [.. password[..position], passwordChar, .. password[position..]];
-            var length = ((PasswordModelEditorViewModel)DataContext).PasswordAsCharArray.Length;
-            ((PasswordModelEditorViewModel)DataContext).Password = string.Concat(Enumerable.Repeat('*', length));
-            ((TextBox)sender).CaretIndex = position + 1;
-            e.Handled = true;
-        }
+                Binding isReadOnlyBind=new("IsReadOnly")
+                {
+                    Source = DataContext,
+                    Mode = BindingMode.OneWay
+                };
 
-        private void pass_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (((PasswordModelEditorViewModel)DataContext).UneditedPass && !((PasswordModelEditorViewModel)DataContext).IsReadOnly)
-            {
-                ((PasswordModelEditorViewModel)DataContext).Password = string.Empty;
-                ((PasswordModelEditorViewModel)DataContext).PasswordAsCharArray = [];
-                ((PasswordModelEditorViewModel)DataContext).UneditedPass = false;
+                passwordTextBox.SetBinding(PasswordTextBox.PasswordAsCharArrayProperty, pwdCharArrayBind);
+                passwordTextBox.SetBinding(PasswordTextBox.PasswordProperty, pwdMaskBind);
+                passwordTextBox.SetBinding(PasswordTextBox.ReadOnlyProperty, isReadOnlyBind);
             }
         }
     }

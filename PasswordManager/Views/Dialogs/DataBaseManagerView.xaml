@@ -27,11 +27,10 @@
         </Storyboard>
     </UserControl.Resources>
     <Border Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
-            Height="200"
+            Height="auto"
             Width="340"
             x:Name="dtbManager">
-        <Grid HorizontalAlignment="Center"
-              VerticalAlignment="Center">
+        <Grid>
             <behaviors:Interaction.Triggers>
                 <behaviors:EventTrigger EventName="Loaded"
                                         SourceObject="{Binding ElementName=dtbManager}">
@@ -48,7 +47,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />
-                        <RowDefinition Height="40" />
+                        <RowDefinition Height="auto" />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />

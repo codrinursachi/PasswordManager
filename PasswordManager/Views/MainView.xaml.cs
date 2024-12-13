@@ -26,7 +26,6 @@ namespace PasswordManager.Views
             dialogOverlay.Content = dialog;
             dialogOverlayService.MainViewOverlay = (DialogOverlay)dialog;
             navigationService.CurrentView = childView;
-            //((MainViewModel)DataContext).ShowAllPasswordsViewCommand.Execute(null);
             importFormat.ToolTip = """
                                       [
                                         {
