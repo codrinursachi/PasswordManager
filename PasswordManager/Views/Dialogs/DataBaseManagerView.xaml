@@ -21,8 +21,6 @@
                 <RowDefinition Height="auto" />
             </Grid.RowDefinitions>
             <StackPanel Margin="20">
-                <TextBlock Text="Select Database:" />
-                <Separator Style="{StaticResource separatorHorizontalSpacing}" />
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="*" />

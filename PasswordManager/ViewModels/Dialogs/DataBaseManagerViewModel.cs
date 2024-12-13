@@ -49,7 +49,7 @@ namespace PasswordManager.ViewModels.Dialogs
         {
             MessageToDisplay = false;
             DatabaseSelectionMode = true;
-            CurrentMode = "OK";
+            CurrentMode = "Select Database";
         }
 
         [RelayCommand]
@@ -92,6 +92,7 @@ namespace PasswordManager.ViewModels.Dialogs
             {
                 databaseInfoProviderService.CurrentDatabase = SelectedDatabase;
                 refreshService.RefreshMain();
+                refreshService.RefreshPasswords();
                 dialogOverlayService.Close();
                 return;
             }
@@ -121,7 +122,7 @@ namespace PasswordManager.ViewModels.Dialogs
                 NewDbName = string.Empty;
                 DatabaseSelectionMode = true;
                 DatabaseAddingMode = false;
-                CurrentMode = "OK";
+                CurrentMode = "Select Database";
                 MessageToDisplay = false;
                 return;
             }
@@ -130,7 +131,7 @@ namespace PasswordManager.ViewModels.Dialogs
             {
                 DatabaseAddingMode = false;
                 MessageToDisplay = false;
-                CurrentMode = "OK";
+                CurrentMode = "Select Database";
                 return;
             }
 
