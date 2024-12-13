@@ -178,6 +178,7 @@ namespace PasswordManager.ViewModels.Dialogs
             Password = "******";
             Array.Fill(PasswordAsCharArray, '0');
             refreshService.RefreshMain();
+            refreshService.RefreshPasswords();
             DisableEditing();
         }
 

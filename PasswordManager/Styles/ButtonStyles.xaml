@@ -2,6 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style x:Key="menuButton"
            TargetType="RadioButton">
+        <Setter Property="Cursor"
+                Value="Hand" />
         <Setter Property="Height"
                 Value="35" />
         <Setter Property="Padding"
